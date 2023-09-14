@@ -19,14 +19,14 @@ const PlusBtn = styled.button`
   // 버튼
   width: 360px;
   height: 55px;
+  font-family: Pretendard;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 0.8px solid #3369ff;
+  border: 0.8px solid #05b70c;
   background: #fff;
   cursor: pointer;
 
-  color: #06f;
-  font-family: Pretendard;
+  color: #05b70c;
   font-size: 1rem;
   font-style: normal;
   font-weight: 700;

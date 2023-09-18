@@ -49,6 +49,10 @@ function Join() {
         <Image src={`/images/google.png`} alt="Google"></Image>
         <Text>구글로 시작</Text>
       </Box>
+      <Box>
+        <Image src={`/images/naver.png`} alt="Naver"></Image>
+        <Text>네이버로 시작</Text>
+      </Box>
     </div>
   );
 }

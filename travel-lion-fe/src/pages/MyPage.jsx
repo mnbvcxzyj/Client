@@ -1,10 +1,11 @@
 import React from 'react';
-import { styled } from 'styled-components';
 import Nav from '../components/MainPage/Nav';
+import MyPageMain from '../components/MyPage/MyPageMain';
+import MyPageHeader from '../components/MyPage/MyPageHeader';
 export default function MyPage() {
   return (
     <>
-      <div>마이페이지</div>
+      <MyPageMain />
       <Nav />
     </>
   );

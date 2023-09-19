@@ -1,26 +1,24 @@
 import React from 'react';
 import { styled, css } from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useMatch, useLocation } from 'react-router-dom';
 import HomeGreen from '../../images/MainPage/HomeGreen.svg';
 import HomeGray from '../../images/MainPage/HomeGray.svg';
 import MypageGreen from '../../images/MainPage/MypageGreen.svg';
 import MypageGray from '../../images/MainPage/MypageGray.svg';
 
 export default function Nav() {
-  const currentPage = window.location.pathname;
+  const homeMatch = useMatch('/');
+  const mypageMatch = useLocation().pathname.startsWith('/mypage');
 
   return (
     <NavContainer>
       <NavBtn>
-        <NavStyle to="/" isActive={currentPage === '/'}>
-          <img src={currentPage === '/' ? HomeGreen : HomeGray} alt="home" />
+        <NavStyle to="/" isActive={homeMatch}>
+          <img src={homeMatch ? HomeGreen : HomeGray} alt="home" />
         </NavStyle>
 
-        <NavStyle to="/mypage" isActive={currentPage === '/mypage'}>
-          <img
-            src={currentPage === '/mypage' ? MypageGreen : MypageGray}
-            alt="mypage"
-          />
+        <NavStyle to="/mypage" isActive={mypageMatch}>
+          <img src={mypageMatch ? MypageGreen : MypageGray} alt="mypage" />
         </NavStyle>
       </NavBtn>
     </NavContainer>
@@ -28,10 +26,14 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
+  position: fixed;
+  bottom: 42px;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 160px 0 auto;
+  z-index: 9999;
 `;
 
 const NavBtn = styled.div`

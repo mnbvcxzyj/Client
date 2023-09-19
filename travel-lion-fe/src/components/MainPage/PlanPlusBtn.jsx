@@ -13,9 +13,7 @@ const PlusBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
-  margin-top: 20px;
-
+  margin: 20px auto;
   // 버튼
   width: 360px;
   height: 55px;

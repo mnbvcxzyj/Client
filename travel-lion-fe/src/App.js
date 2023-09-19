@@ -12,7 +12,7 @@ import NormalJoin2 from './components/Login/NormalJoin2';
 function App() {
   return (
     <>
-      <Login />
+      <NormalJoin />
     </>
   );
 }

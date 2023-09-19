@@ -143,7 +143,7 @@ function NormalJoin2() {
           <WarningText>
             {age.length === 0 && isNaN(age)
               ? '필수 입력사항입니다'
-              : '3자리 이하의 숫자만 입력해주세요.'}
+              : '2자리 이하의 숫자만 입력해주세요.'}
           </WarningText>
         ) : null}
       </WarningDiv>

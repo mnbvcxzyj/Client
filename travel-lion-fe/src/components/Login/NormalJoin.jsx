@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 const BigDiv = styled.div`
@@ -37,6 +37,10 @@ const Box = styled.div`
   display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
   align-items: center; /* 수직 가운데 정렬 */
   justify-content: center;
+
+  span {
+    display: inline-block;
+  }
 `;
 
 const WarningMessage = styled.span`
@@ -67,6 +71,15 @@ const SentText = styled.div`
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
+  line-height: normal;
+`;
+
+const CountDown = styled.span`
+  color: #f00;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
   line-height: normal;
 `;
 
@@ -113,6 +126,8 @@ function NormalJoin() {
   const [emailMessage, setEmailMessage] = useState('');
   const [isEmail, setIsEmail] = useState(false);
   const [boxes, setBoxes] = useState([]); // Box 요소를 관리하는 배열
+  const [countdown, setCountdown] = useState(0); // 카운트 다운 상태 변수 추가
+  const [isCounting, setIsCounting] = useState(false); // 카운트 다운 중 여부
 
   //어쩌구@저쩌구.co 까지만 해도 true 됨
   const onChangeEmail = useCallback((e) => {
@@ -131,15 +146,47 @@ function NormalJoin() {
     }
   }, []);
 
+  useEffect(() => {
+    let timer;
+
+    if (isCounting && countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000); // 1초마다 1씩 감소
+    } else if (countdown === 0) {
+      setIsCounting(false);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isCounting, countdown]);
+
   const onSendBtnClick = useCallback(() => {
     if (isEmail) {
       // 현재 이메일이 올바를 때만 Box 추가
+
+      const isBoxAlreadyAdded = boxes.length > 0;
+
       const newBox = (
         <Box key={boxes.length + 1}>
-          {<CheckNumInput type="text" placeholder="인증번호"></CheckNumInput>}
+          <CheckNumInput type="text" placeholder="인증번호"></CheckNumInput>
+          <CountDown>
+            {Math.floor(countdown / 60)}:{countdown % 60}
+          </CountDown>
         </Box>
       );
-      setBoxes((prevBoxes) => [...prevBoxes, newBox]);
+
+      // 이미 추가된 상태라면 카운트 다운만 업데이트
+      if (isBoxAlreadyAdded) {
+        setCountdown(300);
+        setIsCounting(true);
+      } else {
+        // 처음 추가될 때만 Box 추가 및 카운트 다운 시작
+        setCountdown(300);
+        setIsCounting(true);
+        setBoxes([newBox]);
+      }
     }
   }, [isEmail, boxes]);
 

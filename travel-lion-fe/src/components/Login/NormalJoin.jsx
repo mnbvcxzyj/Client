@@ -11,7 +11,6 @@ function NormalJoin() {
   const [countdown, setCountdown] = useState(0); // 카운트 다운 상태 변수 추가
   const [isCounting, setIsCounting] = useState(false); // 카운트 다운 중 여부
 
-  //어쩌구@저쩌구.co 까지만 해도 true 됨
   const onChangeEmail = useCallback((e) => {
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -174,7 +173,7 @@ function NormalJoin() {
       </Box>
       <div>{passwordConfirmMessage}</div>
 
-      <CheckDiv>
+      <CheckDiv style={{ marginTop: '77px' }}>
         <CheckBtn onClick={handleCheckAge}>
           {checkAge ? (
             <svg
@@ -332,7 +331,7 @@ function NormalJoin() {
         <CheckText>서비스 약관에 동의합니다.</CheckText>
       </CheckDiv>
 
-      <CheckDiv>
+      <CheckDiv style={{ marginBottom: '91px' }}>
         <CheckBtn onClick={handleCheckInfo}>
           {checkInfo ? (
             <svg
@@ -572,6 +571,8 @@ const CheckBtn = styled.span`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-right: 9px;
+  margin-top: 5px;
 `;
 
 const CheckDiv = styled.div`

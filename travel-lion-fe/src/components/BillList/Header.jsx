@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <>
       <HeaderContainer>
-        <NavLeft to="/billlist">
+        <NavLeft to="/">
           <GoBackImg src={goBack} />
         </NavLeft>
         <TravelInfoDiv>

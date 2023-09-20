@@ -17,6 +17,9 @@ const AccountManage = () => {
     </>
   );
 };
+
+export default AccountManage;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -82,5 +85,3 @@ const ChangeBtn = styled.div`
   border-radius: 3px;
   background: #05b70c;
 `;
-
-export default AccountManage;

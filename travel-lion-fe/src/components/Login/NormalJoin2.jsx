@@ -48,7 +48,7 @@ const CompleteBtn = styled.div`
   margin-right: auto;
   margin-top: 418px;
   margin-bottom: 50px;
-  display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
+  display: flex; /* Flexbox를 사fuwefw용하여 내부 요소를 가운데 정렬합니다. */
   align-items: center; /* 수직 가운데 정렬 */
   justify-content: center;
 `;

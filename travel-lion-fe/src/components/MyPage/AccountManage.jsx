@@ -17,6 +17,9 @@ const AccountManage = () => {
     </>
   );
 };
+
+export default AccountManage;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,7 +44,6 @@ const Text = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-
   margin-bottom: 7px;
 `;
 
@@ -82,5 +84,3 @@ const ChangeBtn = styled.div`
   border-radius: 3px;
   background: #05b70c;
 `;
-
-export default AccountManage;

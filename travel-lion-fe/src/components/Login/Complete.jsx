@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Div = styled.div`
   position: relative;
   width: 340px;
+  height: 844px;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -30,7 +32,36 @@ const Text = styled.div`
   margin: auto;
 `;
 
+const Btn = styled.div`
+  position: absolute;
+  top: 734px;
+  width: 340px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #05b70c;
+  display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center;
+  cursor: pointer;
+`;
+
+const BtnText = styled.div`
+  color: #ffffff;
+  font-family: SUIT;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
+
 function Complete() {
+  const navigate = useNavigate();
+
+  const goLogin = () => {
+    navigate('/login');
+  };
+
   return (
     <Div>
       <Logo>
@@ -69,6 +100,9 @@ function Complete() {
         </svg>
       </Logo>
       <Text>회원가입이 완료되었습니다.</Text>
+      <Btn onClick={goLogin}>
+        <BtnText>로그인하러 가기</BtnText>
+      </Btn>
     </Div>
   );
 }

@@ -13,14 +13,12 @@ const Box = styled.div`
   height: 55px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1.5px solid
-    ${(props) => (props.error ? 'red' : 'var(--Gray, #adb6bd)')};
+  border: 1.5px solid ${(props) => (props.error ? 'red' : '#05B70C')};
   margin-top: 4px;
   margin-left: auto;
   margin-right: auto;
   display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
   align-items: center; /* 수직 가운데 정렬 */
-  justify-content: center;
 
   &:first-child {
     margin-top: 146px;
@@ -34,6 +32,10 @@ const TextInput = styled.input`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  border: none; /* 테두리를 없앱니다. */
+  outline: none; /* 포커스 테두리를 없앱니다. */
+  position: relative;
+  left: 25px;
 `;
 
 const CompleteBtn = styled.div`
@@ -46,7 +48,7 @@ const CompleteBtn = styled.div`
   margin-right: auto;
   margin-top: 418px;
   margin-bottom: 50px;
-  display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
+  display: flex; /* Flexbox를 사fuwefw용하여 내부 요소를 가운데 정렬합니다. */
   align-items: center; /* 수직 가운데 정렬 */
   justify-content: center;
 `;
@@ -84,32 +86,32 @@ const WarningDiv = styled.div`
 function NormalJoin2() {
   const [nickname, setNickname] = useState('');
   const [age, setAge] = useState('');
-  const [nicknameError, setNicknameError] = useState(true);
-  const [ageError, setAgeError] = useState(true);
+  const [nicknameError, setNicknameError] = useState(false);
+  const [ageError, setAgeError] = useState(false);
 
   const handleNicknameChange = (e) => {
     const value = e.target.value;
     setNickname(value);
 
+    //7자 이상 & 비어있는 경우를 에러 처리
     if (value.length > 7 || value === '') {
-      setNicknameError(true); // 7글자 초과 시 에러 표시
+      setNickname(value);
+      setNicknameError(true);
     } else {
-      setNicknameError(false); // 7글자 이하이고 비어있지 않은 경우 에러 해제
+      setNicknameError(false);
     }
   };
 
+  //10자리가 넘어가면 에러 처리
   const handleAgeChange = (e) => {
     const value = e.target.value;
 
-    if (/^\d{0,3}$/.test(value)) {
+    if (/^\d{0,11}$/.test(value)) {
       setAge(value);
       setAgeError(false); // 올바른 형식이면 에러 해제
     } else {
       setAgeError(true); // 형식이 올바르지 않으면 에러 표시
     }
-
-    // setAge(value);
-    // setAgeError(value === ''); // 입력이 비어있으면 에러
   };
 
   return (
@@ -141,9 +143,9 @@ function NormalJoin2() {
       <WarningDiv>
         {ageError ? (
           <WarningText>
-            {age.length === 0 && isNaN(age)
-              ? '필수 입력사항입니다'
-              : '2자리 이하의 숫자만 입력해주세요.'}
+            {age.length == 0
+              ? '필수 사항입니다'
+              : '10자리 이하의 숫자만 입력해주세요.'}
           </WarningText>
         ) : null}
       </WarningDiv>

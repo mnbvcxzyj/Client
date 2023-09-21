@@ -44,7 +44,6 @@ const Text = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-
   margin-bottom: 7px;
 `;
 

@@ -31,69 +31,79 @@ export default function ListBlock() {
   useEffect(() => {
     const sortedDdays = travelDatas
       .slice()
-      .sort((a, b) => a.firstDate - b.firstDate);
+      .sort((a, b) => calculateDday(a.firstDate) - calculateDday(b.firstDate));
     setTravelDatas(sortedDdays);
   }, []);
+
+  const sortedTravelDatas = travelDatas
+    .slice()
+    .sort((a, b) => calculateDday(a.firstDate) - calculateDday(b.firstDate));
+
+  const minRemainingTime = calculateDday(sortedTravelDatas[0].firstDate);
 
   return (
     <>
       <M.ListContainer>
         <M.ListText>리스트</M.ListText>
+        {travelDatas.map((travelData) => {
+          const remainingTime = calculateDday(travelData.firstDate);
+          const isExpired = remainingTime <= 0;
+          const isMinRemainingTime = remainingTime === minRemainingTime;
 
-        {travelDatas.map((travelData) => (
-          <M.TravelItem
-            key={travelData.title}
-            isExpired={calculateDday(travelData.firstDate) <= 0}
-          >
-            <M.TopDiv>
-              <M.DdayText>
-                {getDdayText(calculateDday(travelData.firstDate))}
-              </M.DdayText>
-              <M.ShareLogo>
-                <img
-                  src={
-                    calculateDday(travelData.firstDate) <= 0
-                      ? shareLogoWhite
-                      : shareLogoGreen
-                  }
-                  alt="sharelogo"
-                />
-              </M.ShareLogo>
-            </M.TopDiv>
+          return (
+            !isExpired && (
+              <M.TravelItem
+                key={travelData.title}
+                isExpired={isExpired}
+                isMinRemainingTime={isMinRemainingTime}
+              >
+                <M.TopDiv>
+                  <M.DdayText>{getDdayText(remainingTime)}</M.DdayText>
+                  <M.ShareLogo>
+                    <img
+                      src={isExpired ? shareLogoWhite : shareLogoGreen}
+                      alt="sharelogo"
+                    />
+                  </M.ShareLogo>
+                </M.TopDiv>
 
-            <M.TravelContainer>
-              <M.FlagEmoji>{getFlagEmoji(travelData.countryCode)}</M.FlagEmoji>
+                <M.TravelContainer>
+                  <M.FlagEmoji>
+                    {getFlagEmoji(travelData.countryCode)}
+                  </M.FlagEmoji>
 
-              <M.TravelInfo>
-                <M.TravelTitle>{travelData.title}</M.TravelTitle>
-                <M.TravelInfo2>
-                  <div>
-                    {travelData.country} - {travelData.city}
-                  </div>
-                  |
-                  <div>
-                    {travelData.firstDate.toLocaleDateString('en-US', {
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                    &nbsp;-&nbsp;
-                    {travelData.lastDate.toLocaleDateString('en-US', {
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </div>
-                </M.TravelInfo2>
-              </M.TravelInfo>
-            </M.TravelContainer>
+                  <M.TravelInfo>
+                    <M.TravelTitle>{travelData.title}</M.TravelTitle>
+                    <M.TravelInfo2>
+                      <div>
+                        {travelData.country} - {travelData.city}
+                      </div>
+                      |
+                      <div>
+                        {travelData.firstDate.toLocaleDateString('en-US', {
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                        &nbsp;-&nbsp;
+                        {travelData.lastDate.toLocaleDateString('en-US', {
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                      </div>
+                    </M.TravelInfo2>
+                  </M.TravelInfo>
+                </M.TravelContainer>
 
-            <M.TravelDetail>
-              <M.Participants>사진사진사진</M.Participants>
-              <M.AmountText>
-                {travelData.amount.toLocaleString()}원
-              </M.AmountText>
-            </M.TravelDetail>
-          </M.TravelItem>
-        ))}
+                <M.TravelDetail>
+                  <M.Participants>사진사진사진</M.Participants>
+                  <M.AmountText>
+                    {travelData.amount.toLocaleString()}원
+                  </M.AmountText>
+                </M.TravelDetail>
+              </M.TravelItem>
+            )
+          );
+        })}
       </M.ListContainer>
     </>
   );

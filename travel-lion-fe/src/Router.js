@@ -7,6 +7,8 @@ import TravelManage from './components/MyPage/TravelManage';
 import AccountManage from './components/MyPage/AccountManage';
 import BillUpdatePage from './pages/BillUpdatePage';
 import BillListPage from './pages/BIllListPage';
+import TravelAccountBookPage from './pages/TravelAccountBookPage';
+
 export default function Router() {
   return (
     <>
@@ -19,8 +21,9 @@ export default function Router() {
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
-        </Routes>
-      </BrowserRouter>
+          <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
+        </Routes >
+      </BrowserRouter >
     </>
   );
 }

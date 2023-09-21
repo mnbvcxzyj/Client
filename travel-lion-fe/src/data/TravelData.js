@@ -19,7 +19,7 @@ export const travelData = [
     },
     {
         title: '졸업 여행',
-        firstDate: new Date('2023-08-24'),
+        firstDate: new Date('2023-09-24'),
         lastDate: new Date('2023-09-01'),
         country: '호주',
         city: '시드니',

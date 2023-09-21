@@ -1,17 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../components/NewBillPage/header';
-import Emoji from '../components/NewBillPage/Emoji';
-import Who from '../components/NewBillPage/Who.jsx';
-import Category from '../components/NewBillPage/Category';
 import BillMemo from '../components/NewBillPage/BillMemo';
-import Btn from '../components/NewBillPage/Btn';
+import Btn from '../components/BillUpdate/Btn';
+import Who from '../components/NewBillPage/Who.jsx';
+import Emoji from '../components/NewBillPage/Emoji';
+import Category from '../components/NewBillPage/Category';
 
-export default function NewBillPage() {
-  const [selectedBillInfo, setSelectedBillInfo] = useState({
-    bill: '',
-    memo: '',
-  });
-
+export default function BillUpdatePage() {
   function onClickEmoji(selectedEmoji) {
     console.log('선택한 이모지:', selectedEmoji);
   }
@@ -24,21 +19,13 @@ export default function NewBillPage() {
     console.log('선택한 카테고리:', selectedCategory);
   }
 
-  function handleMemoSelection(billInfo) {
-    console.log('입력한 가격:', billInfo.bill);
-    console.log('입력한 메모:', billInfo.memo);
-
-    // 가격과 메모 정보를 상태로 저장
-    setSelectedBillInfo(billInfo);
-  }
-
   return (
     <>
       <Header />
       <Emoji onClickEmoji={onClickEmoji} />
       <Who onClickWho={onClickWho} />
       <Category onClickCategory={handleCategorySelection} />
-      <BillMemo onBillChange={handleMemoSelection} />
+      <BillMemo />
       <Btn />
     </>
   );

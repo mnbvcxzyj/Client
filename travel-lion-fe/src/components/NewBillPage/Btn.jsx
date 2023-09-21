@@ -5,21 +5,33 @@ import { NavLink } from 'react-router-dom';
 export default function NewBillBtn() {
   return (
     <>
-      <NewBtn>확인</NewBtn>
+      <NewBtn>
+        <NavList to="/billlist">확인</NavList>
+      </NewBtn>
     </>
   );
 }
 
+const NavList = styled(NavLink)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  flex-shrink: 0;
+`;
+
 const NewBtn = styled.button`
   //형태
-  width: 90%;
+  width: 87%;
   height: 60px;
   border-radius: 10px;
-  background-color: #3369ff;
+  background-color: #05b70c;
   color: #ffffff;
 
   //배치
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;

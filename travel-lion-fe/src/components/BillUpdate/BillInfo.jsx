@@ -2,11 +2,20 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+const emojiOptions = [
+  { text: '😀', alt: '이모티콘 1' },
+  { text: '😄', alt: '이모티콘 2' },
+  { text: '😊', alt: '이모티콘 3' },
+  { text: '😁', alt: '이모티콘 4' },
+  { text: '😆', alt: '이모티콘 5' },
+  { text: '😂', alt: '이모티콘 6' },
+];
+
 const participantsData = [
-  { name: '박신형', profileImg: '../../images/person.svg' },
-  { name: '김예지', profileImg: '../../images/person.svg' },
-  { name: '한현서', profileImg: '../../images/person.svg' },
-  { name: '장윤경', profileImg: '../../images/person.svg' },
+  { name: '박신형', profileImg: '../../../public/images/Ellipse.png' },
+  { name: '김예지', profileImg: '../../../public/images/person.svg' },
+  { name: '한현서', profileImg: '../../../public/images/Ellipse.png' },
+  { name: '장윤경', profileImg: '../../../public/images/person.svg' },
 ];
 
 const initialCategories = ['식비', '교통비', '숙소', '기타'];
@@ -44,28 +53,37 @@ export default function BillInfo() {
   return (
     <>
       <InputContainer>
-        <SelectImg></SelectImg>
+        <SelectImg>
+          {emojiOptions.map((option, index) => (
+            <option key={index} value={option.text}>
+              {option.text}
+            </option>
+          ))}
+        </SelectImg>
         <Demand>
           작성자를 선택해주세요<Req>(필수)</Req>
         </Demand>
-        <Divforstyle>
+        <StyleDiv>
           <Select required>
             <option value="" disabled selected>
               선택해주세요
             </option>
             {participantsData.map((participant, index) => (
               <option key={index} value={participant.name}>
+                {/*
+                <ProfileImage src={participant.profileImg} /> 이모지 넣기 실패~
+                */}
                 {participant.name}
               </option>
             ))}
           </Select>
-        </Divforstyle>
+        </StyleDiv>
         <Demand>
           카테고리를 선택해주세요<Req>(필수)</Req>
         </Demand>
         <div style={{ alignItems: 'center' }}>
           {selectedCategory === '직접 입력하기' ? (
-            <Divforstyle>
+            <StyleDiv>
               <InputCategory
                 type="text"
                 placeholder="새로운 카테고리 입력"
@@ -73,31 +91,33 @@ export default function BillInfo() {
                 onChange={(e) => setNewCategory(e.target.value)}
               />
               <AddCategoryBtn onClick={handleAddCategory}>추가</AddCategoryBtn>
-            </Divforstyle>
+            </StyleDiv>
           ) : (
             <div>
-              <Divforstyle>
+              <StyleDiv>
                 <Select
                   required
                   value={selectedCategory}
                   onChange={handleCategoryChange}
                 >
-                  <option value="" disabled>
+                  <option required value="" disabled>
                     선택하세요
                   </option>
                   {predefinedCategories.map((category, index) => (
-                    <option key={index} value={category}>
+                    <option required key={index} value={category}>
                       {category}
                     </option>
                   ))}
                   {userCategories.map((category, index) => (
-                    <option key={index} value={category}>
+                    <option required key={index} value={category}>
                       {category}
                     </option>
                   ))}
-                  <option value="직접 입력하기">직접 입력하기</option>
+                  <option required value="직접 입력하기">
+                    직접 입력하기
+                  </option>
                 </Select>
-              </Divforstyle>
+              </StyleDiv>
               {userCategories.includes(selectedCategory) &&
                 selectedCategory !== '' && (
                   <DelCategoryBtn
@@ -113,15 +133,15 @@ export default function BillInfo() {
         <Demand>
           사용 금액을 입력해주세요<Req>(필수)</Req>
         </Demand>
-        <Divforstyle>
-          <InputInt type="number" required></InputInt>
-        </Divforstyle>
+        <StyleDiv>
+          <InputInt required type="number"></InputInt>
+        </StyleDiv>
         <Demand>
           메모사항<Req>(선택)</Req>
         </Demand>
-        <Divforstyle>
+        <StyleDiv>
           <InputText></InputText>
-        </Divforstyle>
+        </StyleDiv>
       </InputContainer>
     </>
   );
@@ -132,16 +152,17 @@ const InputContainer = styled.div`
   align-items: center;
   margin: 0 auto;
   margin-top: 20px;
+  margin-bottom: 70px;
 `;
 
 const SelectImg = styled.select`
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 const Demand = styled.p`
@@ -212,11 +233,53 @@ const InputText = styled.textarea`
   border: none;
 `;
 
-const Divforstyle = styled.div`
+const StyleDiv = styled.div`
   width: 100%;
   margin-top: 4px;
   padding: 5px;
   border-radius: 5px;
 
   background: #f3f3f3;
+`;
+
+const ProfileImage = styled.img`
+  width: 20px;
+  height: 20px; /* 이미지의 높이를 조절합니다. */
+  margin-right: 5px; /* 이미지와 텍스트 사이의 여백을 조절합니다. */
+`;
+
+// 이미지 드롭다운 스타일을 정의합니다.
+const ImageDropdownItem = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #525252;
+
+  input[type='radio'] {
+    display: none;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    img {
+      width: 30px; /* 이미지의 크기를 조정하세요. */
+      height: 30px; /* 이미지의 크기를 조정하세요. */
+      margin-right: 8px;
+    }
+  }
+
+  input[type='radio']:checked + label {
+    background-color: #3369ff;
+    color: #fff;
+  }
 `;

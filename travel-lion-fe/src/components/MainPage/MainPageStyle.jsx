@@ -26,8 +26,9 @@ export const TravelItem = styled.div`
   margin-top: 20px;
 
   // d-day 변화에 따른 css
-  color: ${(props) => (props.isExpired ? '#FFF;' : 'black')};
-  background-color: ${(props) => (props.isExpired ? '#05B70C;' : 'white')};
+  color: ${(props) => (props.isMinRemainingTime ? '#FFF;' : 'black')};
+  background-color: ${(props) =>
+    props.isMinRemainingTime ? '#05B70C;' : 'white'};
 `;
 
 export const TopDiv = styled.div`

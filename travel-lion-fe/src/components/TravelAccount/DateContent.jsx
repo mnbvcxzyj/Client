@@ -1,43 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
+import arrow from '../../images/TravelAccount/arrow.svg';
+import BottomSheet from './BottomModal';
 const DateContent = () => {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState(null);
+  const toggleBottomSheet = () => {
+    setIsBottomSheetOpen(!isBottomSheetOpen);
+  };
   return (
     <>
       <Container>
         <TopWrapper>
           <AmountDiv>
             <Text>여행 경비 총합</Text>
-            <TravelExpense>1,800,000원 /</TravelExpense>
+            <TravelExpense>
+              1,800,000{selectedCurrency ? ` ${selectedCurrency.unit}` : '원'} /
+            </TravelExpense>
           </AmountDiv>
           &nbsp;
           <AmountDiv>
             <Text>예산</Text>
-            <Budget>1,700,000원</Budget>
+            <Budget>
+              1,700,000{selectedCurrency ? ` ${selectedCurrency.unit}` : '원'}
+            </Budget>
           </AmountDiv>
+          <ExchangeRate onClick={toggleBottomSheet}>
+            {selectedCurrency ? selectedCurrency.eng : 'KRW'}
+            <img src={arrow} alt=">" />
+          </ExchangeRate>
+          {isBottomSheetOpen && <BottomSheet />}
         </TopWrapper>
+        <DayWrapper>
+          <DayText>
+            <div>1일차</div>
+            <div>08/14(월)</div>
+          </DayText>
+
+          <CategoryWrapper>
+            <CategoryIcon>{categoryData[0].icon}</CategoryIcon>
+            <CategoryText>식비</CategoryText>
+            <Amount>30,000원</Amount>
+          </CategoryWrapper>
+
+          <InputBtn>사용 금액 입력</InputBtn>
+        </DayWrapper>{' '}
       </Container>
-
-      <DayWrapper>
-        <DayText>
-          <div>1일차</div>
-          <div>08/14(월)</div>
-        </DayText>
-
-        <CategoryWrapper>
-          <CategoryIcon>{categoryData[0].icon}</CategoryIcon>
-          <CategoryText>식비</CategoryText>
-          <Amount>30,000원</Amount>
-        </CategoryWrapper>
-
-        <InputBtn>사용 금액 입력</InputBtn>
-      </DayWrapper>
     </>
   );
 };
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
 `;
@@ -78,6 +94,26 @@ const Budget = styled.div`
   color: #05b70c;
 `;
 
+const ExchangeRate = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0 0 10px;
+
+  width: 49px;
+  height: 25px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: #f3f3f3;
+  color: #616161;
+
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  cursor: pointer;
+`;
 const DayWrapper = styled.div`
   display: flex;
   flex-direction: column;

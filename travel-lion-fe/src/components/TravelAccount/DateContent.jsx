@@ -2,35 +2,39 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
-import BottomSheet from './BottomModal';
+import BottomModal from './BottomModal';
+
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState('KRW');
+
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
   };
+  const handleCurrencyChange = (currencyCode) => {
+    setSelectedCurrency(currencyCode); // 통화 단위 변경
+  };
+
   return (
     <>
       <Container>
         <TopWrapper>
           <AmountDiv>
             <Text>여행 경비 총합</Text>
-            <TravelExpense>
-              1,800,000{selectedCurrency ? ` ${selectedCurrency.unit}` : '원'} /
-            </TravelExpense>
+            <TravelExpense>1,800,000원 /</TravelExpense>
           </AmountDiv>
           &nbsp;
           <AmountDiv>
             <Text>예산</Text>
-            <Budget>
-              1,700,000{selectedCurrency ? ` ${selectedCurrency.unit}` : '원'}
-            </Budget>
+            <Budget>1,700,000원</Budget>
           </AmountDiv>
           <ExchangeRate onClick={toggleBottomSheet}>
-            {selectedCurrency ? selectedCurrency.eng : 'KRW'}
+            {selectedCurrency}
             <img src={arrow} alt=">" />
           </ExchangeRate>
-          {isBottomSheetOpen && <BottomSheet />}
+          {isBottomSheetOpen && (
+            <BottomModal onCurrencyChange={handleCurrencyChange} />
+          )}
         </TopWrapper>
         <DayWrapper>
           <DayText>
@@ -45,7 +49,7 @@ const DateContent = () => {
           </CategoryWrapper>
 
           <InputBtn>사용 금액 입력</InputBtn>
-        </DayWrapper>{' '}
+        </DayWrapper>
       </Container>
     </>
   );

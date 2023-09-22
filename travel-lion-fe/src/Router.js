@@ -9,6 +9,7 @@ import BillUpdatePage from './pages/BillUpdatePage';
 import BillListPage from './pages/BIllListPage';
 import TravelAccountBookPage from './pages/TravelAccountBookPage';
 import CurrencyUnitList from './components/TravelAccount/CurrencyUnitList';
+import ModalExtend from './components/TravelAccount/ModalExtend';
 
 export default function Router() {
   return (
@@ -23,7 +24,7 @@ export default function Router() {
           <Route path="/billupdate" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
           <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
-          <Route path="/modalextend" element={<CurrencyUnitList />} />
+          <Route path="/selectunit" element={<ModalExtend />} />
         </Routes >
       </BrowserRouter >
     </>

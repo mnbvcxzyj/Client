@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
+import ModalExtend from './ModalExtend';
 
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -11,8 +12,9 @@ const DateContent = () => {
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
   };
+
   const handleCurrencyChange = (currencyCode) => {
-    setSelectedCurrency(currencyCode); // 통화 단위 변경
+    setSelectedCurrency(currencyCode);
   };
 
   return (
@@ -32,9 +34,6 @@ const DateContent = () => {
             {selectedCurrency}
             <img src={arrow} alt=">" />
           </ExchangeRate>
-          {isBottomSheetOpen && (
-            <BottomModal onCurrencyChange={handleCurrencyChange} />
-          )}
         </TopWrapper>
         <DayWrapper>
           <DayText>
@@ -51,6 +50,9 @@ const DateContent = () => {
           <InputBtn>사용 금액 입력</InputBtn>
         </DayWrapper>
       </Container>
+      {isBottomSheetOpen && (
+        <BottomModal onCurrencyChange={handleCurrencyChange} />
+      )}
     </>
   );
 };

@@ -2,12 +2,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import modalplus from '../../images/TravelAccount/modalplus.svg';
 import check from '../../images/TravelAccount/check.svg';
+import ModalExtend from './ModalExtend';
 
 function BottomModal({ onCurrencyChange }) {
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedCountry, setSelectedCountry] = useState(null); // 선택된 나라 상태
-
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [isExtend, setExtend] = useState(false);
   const bottomSheetRef = useRef(null);
+
+  const toggleExtend = () => {
+    setExtend(!isExtend);
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -46,7 +51,7 @@ function BottomModal({ onCurrencyChange }) {
           <BottomSheetContent>
             <TextDiv>
               통화 단위 선택
-              <ModalPlusBtn to="selectunit">
+              <ModalPlusBtn onClick={toggleExtend}>
                 <img src={modalplus} alt="+" />
               </ModalPlusBtn>
             </TextDiv>
@@ -64,6 +69,7 @@ function BottomModal({ onCurrencyChange }) {
           </BottomSheetContent>
         </BottomSheetWrapper>
       )}
+      {isExtend && <ModalExtend onCurrencyChange={handleCountrySelect} />}
     </>
   );
 }

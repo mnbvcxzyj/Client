@@ -17,7 +17,7 @@ export default function Router() {
           <Route path="/mypage/account" element={<AccountManage />} />
           <Route path="/mypage/travel" element={<TravelManage />} />
           <Route path="/newbill" element={<NewBillPage />} />
-          <Route path="/billupdate" element={<BillUpdatePage />} />
+          <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
         </Routes>
       </BrowserRouter>

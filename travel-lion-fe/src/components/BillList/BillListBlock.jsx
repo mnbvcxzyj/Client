@@ -1,36 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-import categoryImg from '../../images/BillList/userImg.png';
-// 더미 데이터
-const billDataset = [
-  {
-    id: 1,
-    emoji: '😢',
-    authorName: '박신형',
-    userImage: 'user1.jpg',
-    category: '식비',
-    categoryImg: categoryImg,
-    amount: 250000,
-    memo: '엄청 맛있는 무언가',
-  },
-  {
-    id: 2,
-    emoji: '😢',
-    authorName: '박신형2',
-    userImage: 'user1.jpg',
-    category: '교통',
-    categoryImg: categoryImg,
-    amount: 990000,
-    memo: '엄청 호화로운 무언가',
-  },
-];
+import CategoryImgFood from '../../images/Newbill/food.png';
+import CategoryImgHotel from '../../images/Newbill/hotel.png';
+import CategoryImgTransportation from '../../images/Newbill/car.png';
+import CategoryImgEtc from '../../images/Newbill/etc.png';
+import CategoryImgSelf from '../../images/Newbill/white.png';
 
-export default function BillListBlock({
-  selectedEmoji,
-  selectedCategory,
-  inputBill,
-  inputMemo,
-}) {
+export default function BillListBlock() {
+  const categoryImages = {
+    Food: CategoryImgFood,
+    Hotel: CategoryImgHotel,
+    Transportation: CategoryImgTransportation,
+    Etc: CategoryImgEtc,
+    Self: CategoryImgSelf,
+  };
+
+  const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
+
   return (
     <div>
       <BackgroundDiv>
@@ -43,47 +30,54 @@ export default function BillListBlock({
           </DateInfo>
           <hr />
           <BillList>
-            {billDataset.map((bill) => (
-              <BillItem key={bill.id}>
-                <BillInfo>
-                  <Table>
-                    <tr>
-                      <td
-                        rowSpan={2}
-                        style={{
-                          textAlign: 'center',
-                          width: '23%',
-                          verticalAlign: 'middle',
-                        }}
-                      >
-                        <BillImage src={bill.categoryImg} alt={bill.category} />
-                      </td>
-                      <td
-                        style={{
-                          width: '50%',
-                          borderBottom: '0.4px solid #ADB6BD',
-                        }}
-                      >
-                        <BillCategory>{bill.category}</BillCategory>
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: '0.4px solid #ADB6BD',
-                        }}
-                      >
-                        <BillAmount>{bill.amount}원</BillAmount>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <BillMemo>{bill.memo}</BillMemo>
-                      </td>
-                      <td>
-                        <BillAuthor>{bill.authorName}</BillAuthor>
-                      </td>
-                    </tr>
-                  </Table>
-                </BillInfo>
+            {savedData.map((item, index) => (
+              <BillItem key={index}>
+                <Link to={`/billupdate/${index}`}>
+                  <BillInfo>
+                    <Table>
+                      <tbody>
+                        <tr>
+                          <td
+                            rowSpan={2}
+                            style={{
+                              textAlign: 'center',
+                              width: '23%',
+                              verticalAlign: 'middle',
+                            }}
+                          >
+                            <BillImage
+                              src={categoryImages[item.selectedCategory]}
+                              alt={item.selectedCategor}
+                            />
+                          </td>
+                          <td
+                            style={{
+                              width: '50%',
+                              borderBottom: '0.4px solid #ADB6BD',
+                            }}
+                          >
+                            <BillCategory>{item.selectedCategory}</BillCategory>
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: '0.4px solid #ADB6BD',
+                            }}
+                          >
+                            <BillAmount>{item.billValue}원</BillAmount>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <BillMemo>{item.memoValue}</BillMemo>
+                          </td>
+                          <td>
+                            <BillAuthor>{item.whoValue}</BillAuthor>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </BillInfo>
+                </Link>
               </BillItem>
             ))}
           </BillList>
@@ -171,7 +165,6 @@ const BillAuthor = styled.div`
 `;
 
 const BillCategory = styled.div`
-  width: 43px;
   height: 19px;
   top: 326px;
   left: 126px;

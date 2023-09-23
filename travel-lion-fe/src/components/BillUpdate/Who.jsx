@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import userImg from '../../images/BillList/userImg.png';
 
 const billDataset = [
   {
     id: 1,
     image: 'image1.jpg',
     authorName: '박신형',
-    userImage: 'user1.jpg',
+    userImage: userImg,
     category: '식비',
     amount: 25000,
     memo: '식사 비용',
@@ -15,7 +16,7 @@ const billDataset = [
     id: 2,
     image: 'image2.jpg',
     authorName: '박신형2',
-    userImage: 'user2.jpg',
+    userImage: userImg,
     category: '교통',
     amount: 15000,
     memo: '대중교통 비용',
@@ -24,7 +25,7 @@ const billDataset = [
     id: 3,
     image: 'image3.jpg',
     authorName: '박신형3',
-    userImage: 'user3.jpg',
+    userImage: userImg,
     category: '쇼핑',
     amount: 75000,
     memo: '의류 구매',
@@ -33,7 +34,7 @@ const billDataset = [
     id: 4,
     image: 'image4.jpg',
     authorName: '박신형4',
-    userImage: 'user4.jpg',
+    userImage: userImg,
     category: '의료',
     amount: 35000,
   },
@@ -41,7 +42,7 @@ const billDataset = [
     id: 5,
     image: 'image5.jpg',
     authorName: '박신형5',
-    userImage: 'user5.jpg',
+    userImage: userImg,
     category: '문화',
     amount: 20000,
     memo: '영화 관람',
@@ -50,11 +51,13 @@ const billDataset = [
     id: 6,
     image: 'image6.jpg',
     authorName: '박신형6',
-    userImage: 'user6.jpg',
+    userImage: userImg,
     category: '기타',
     amount: 10000,
   },
 ];
+
+const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
 
 export default function Who({ onClickWho }) {
   const [isDropDown, setIsDropDown] = useState(false);
@@ -80,12 +83,15 @@ export default function Who({ onClickWho }) {
         <DropDown>
           {billDataset.map((bill) => (
             <Option
-              src="../../images/AU.png"
               value={bill.authorName}
               key={bill.id}
               onClick={onClickOption}
             >
-              <img src={bill.userImage} alt={bill.authorName} />
+              <img
+                src={bill.userImage}
+                alt={bill.authorName}
+                style={{ width: '5%' }}
+              />
               {bill.authorName}
             </Option>
           ))}
@@ -117,7 +123,6 @@ const SelectButton = styled.button`
   padding: 15px;
   background-color: #f3f3f3;
   border-radius: 5px;
-  border: 1px solid #05b70c;
   cursor: pointer;
 
   font-family: Pretendard;
@@ -131,7 +136,6 @@ const SelectButton = styled.button`
 const DropDown = styled.div`
   width: 87%;
   position: absolute;
-  top: 36.7%;
   background-color: #ffffff;
   border-radius: 5px;
   overflow-y: auto;

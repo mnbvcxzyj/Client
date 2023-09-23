@@ -8,8 +8,8 @@ import AccountManage from './components/MyPage/AccountManage';
 import BillUpdatePage from './pages/BillUpdatePage';
 import BillListPage from './pages/BIllListPage';
 import TravelAccountBookPage from './pages/TravelAccountBookPage';
-import CurrencyUnitList from './components/TravelAccount/CurrencyUnitList';
 import ModalExtend from './components/TravelAccount/ModalExtend';
+import AddSchedulePage from './pages/AddSchedulePage';
 
 export default function Router() {
   return (
@@ -25,6 +25,7 @@ export default function Router() {
           <Route path="/billlist" element={<BillListPage />} />
           <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
           <Route path="/selectunit" element={<ModalExtend />} />
+          <Route path="/addSchedule" element={<AddSchedulePage />} />
         </Routes >
       </BrowserRouter >
     </>

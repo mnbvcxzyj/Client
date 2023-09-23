@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
-import ModalExtend from './ModalExtend';
 
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

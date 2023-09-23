@@ -7,6 +7,10 @@ import TravelManage from './components/MyPage/TravelManage';
 import AccountManage from './components/MyPage/AccountManage';
 import BillUpdatePage from './pages/BillUpdatePage';
 import BillListPage from './pages/BIllListPage';
+import TravelAccountBookPage from './pages/TravelAccountBookPage';
+import ModalExtend from './components/TravelAccount/ModalExtend';
+import AddSchedulePage from './pages/AddSchedulePage';
+
 export default function Router() {
   return (
     <>
@@ -19,8 +23,11 @@ export default function Router() {
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
-        </Routes>
-      </BrowserRouter>
+          <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
+          <Route path="/selectunit" element={<ModalExtend />} />
+          <Route path="/addSchedule" element={<AddSchedulePage />} />
+        </Routes >
+      </BrowserRouter >
     </>
   );
 }

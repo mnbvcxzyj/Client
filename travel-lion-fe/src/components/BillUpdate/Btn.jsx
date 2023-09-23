@@ -1,44 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Emoji from '../NewBillPage/Emoji';
+import Who from './Who';
+import Category from './Category';
+import Bill from './bill';
+import Memo from './Memo';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 export default function BillUpdateBtn() {
+  const [selectedEmoji, setSelectedEmoji] = useState('');
+  const [whoValue, setWhoValue] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [billValue, setBillValue] = useState('');
+  const [memoValue, setMemoValue] = useState('');
+
+  // 수정한 내용을 저장하는 부분
+  const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
+
   return (
-    <ButtonContainer>
-      <UpdateBtn>
-        <NavList to="/billlist">수정</NavList>
-      </UpdateBtn>
-      <DelBtn>
-        <NavList to="/billlist">삭제</NavList>
-      </DelBtn>
-    </ButtonContainer>
+    <>
+      <Emoji onClickEmoji={setSelectedEmoji} />
+      <Who onClickWho={setWhoValue} />
+      <Category onClickCategory={onClickCategory} />
+      <Bill setValue={handleBillValueChange} />
+      <Memo setValue={setMemoValue} />
+      <ButtonContainer>
+        <NavListUpdate to="/billlist">
+          <UpdateBtn onClick={handleSaveToStorage}>수정</UpdateBtn>
+        </NavListUpdate>
+        <NavListDel to="/billlist">
+          <DelBtn onClick={handleSaveToStorage}>삭제</DelBtn>
+        </NavListDel>
+      </ButtonContainer>
+    </>
   );
 }
 
-const NavList = styled(NavLink)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  flex-shrink: 0;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-`;
-
-const UpdateBtn = styled.button`
+const NavListUpdate = styled(NavLink)`
   // 형태
   width: 40%;
   height: 60px;
   border-radius: 10px;
   background-color: #3369ff;
   color: #ffffff;
-
   // 배치
   margin: 0 10px;
   text-align: center;
@@ -53,7 +57,7 @@ const UpdateBtn = styled.button`
   letter-spacing: 0em;
 `;
 
-const DelBtn = styled.button`
+const NavListDel = styled(NavLink)`
   // 형태
   width: 40%;
   height: 60px;
@@ -75,3 +79,13 @@ const DelBtn = styled.button`
   line-height: 20px;
   letter-spacing: 0em;
 `;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+`;
+
+const UpdateBtn = styled.button``;
+
+const DelBtn = styled.button``;

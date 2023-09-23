@@ -19,7 +19,7 @@ export default function Router() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
           <Route path="/newbill" element={<NewBillPage />} />
-          <Route path="/billupdate" element={<BillUpdatePage />} />
+          <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
           <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
           <Route path="/selectunit" element={<ModalExtend />} />

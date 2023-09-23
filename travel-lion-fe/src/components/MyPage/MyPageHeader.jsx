@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import backarrow from '../../images/MyPage/backarrow.svg';
+
 const MyPageHeader = () => {
   return (
     <>
@@ -26,28 +26,28 @@ const MyPageHeader = () => {
 };
 
 const HeaderWrapper = styled.div`
-  display: flex;
+  position: relative;
   align-content: center;
   font-family: Pretendard;
   justify-content: center;
   width: 390px;
-  margin: auto;
-  margin-top: 52px;
+  height: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #ff0000;
 `;
 
 const BackArrow = styled.div`
-  display: flex;
   position: relative;
-  text-align: left; /* 이 부분은 텍스트 정렬에 영향을 미칩니다. */
-  justify-content: flex-start; /* 왼쪽 정렬을 위해 추가 */
   width: 22px;
   height: 22px;
-  flex-shrink: 0;
-  margin-right: 103px;
-  margin-left: 25px;
+  left: 25px;
+  top: 26px;
 `;
 
 const Text = styled.div`
+  position: relative;
+  left: 150px;
   color: var(--Darkgray, #353a40);
   font-size: 24px;
   font-style: normal;

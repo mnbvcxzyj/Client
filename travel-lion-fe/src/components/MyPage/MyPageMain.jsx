@@ -107,7 +107,7 @@ const Name = styled.div`
 const GoBtn = styled.div`
   position: absolute;
   top: 46px;
-  right: 18px;
+  right: 35px;
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -119,11 +119,10 @@ const GreenBtn = styled.div`
   display: flex;
   align-content: center;
   font-family: Pretendard;
-  width: 390px;
+  width: 355px;
   margin: auto;
   background: #05b70c;
   border-radius: 15px;
-  width: 390px;
   height: 109px;
 `;
 

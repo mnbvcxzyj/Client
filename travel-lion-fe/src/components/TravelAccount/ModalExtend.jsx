@@ -57,21 +57,27 @@ const ModalWrapper = styled.div``;
 
 const SearchWrapper = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-left: 25px;
+  padding: 1rem;
+  border-bottom: 1px solid #adb6bd;
 `;
+
 const ImgDiv = styled.div`
-  align-items: center;
+  display: flex;
+  margin-right: 10px;
 `;
 
 const SearchInput = styled.input`
-  margin: 10px 0;
-  padding: 5px;
+  width: 100%;
+  margin-left: 20px;
   font-size: 19px;
   outline: none;
   border: 0;
 `;
+
 const CurrencyList = styled.ul`
+  margin-top: 28px;
   margin-left: 30px;
 `;
 
@@ -88,7 +94,7 @@ const SelectBtn = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-right: 32px;
+  margin-right: 30px;
 
   width: 46px;
   height: 23px;

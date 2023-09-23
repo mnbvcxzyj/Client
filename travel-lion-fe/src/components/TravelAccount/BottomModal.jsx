@@ -33,7 +33,6 @@ function BottomModal({ onCurrencyChange }) {
 
   const handleCountrySelect = (country) => {
     setSelectedCountry(country);
-    console.log(country);
     onCurrencyChange(country);
   };
 

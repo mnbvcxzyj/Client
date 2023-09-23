@@ -3,6 +3,7 @@ import shareLogoWhite from '../../images/MainPage/share_white.svg';
 import shareLogoGreen from '../../images/MainPage/share_green.svg';
 import * as M from './MainPageStyle';
 import { travelData } from '../../data/TravelData';
+import { Link } from 'react-router-dom';
 
 export default function ListBlock() {
   // 국기 이모지
@@ -52,55 +53,57 @@ export default function ListBlock() {
 
           return (
             !isExpired && (
-              <M.TravelItem
-                key={travelData.title}
-                isExpired={isExpired}
-                isMinRemainingTime={isMinRemainingTime}
-              >
-                <M.TopDiv>
-                  <M.DdayText>{getDdayText(remainingTime)}</M.DdayText>
-                  <M.ShareLogo>
-                    <img
-                      src={isExpired ? shareLogoWhite : shareLogoGreen}
-                      alt="sharelogo"
-                    />
-                  </M.ShareLogo>
-                </M.TopDiv>
+              <Link to="/travelaccountbook">
+                <M.TravelItem
+                  key={travelData.title}
+                  isExpired={isExpired}
+                  isMinRemainingTime={isMinRemainingTime}
+                >
+                  <M.TopDiv>
+                    <M.DdayText>{getDdayText(remainingTime)}</M.DdayText>
+                    <M.ShareLogo>
+                      <img
+                        src={isExpired ? shareLogoWhite : shareLogoGreen}
+                        alt="sharelogo"
+                      />
+                    </M.ShareLogo>
+                  </M.TopDiv>
 
-                <M.TravelContainer>
-                  <M.FlagEmoji>
-                    {getFlagEmoji(travelData.countryCode)}
-                  </M.FlagEmoji>
+                  <M.TravelContainer>
+                    <M.FlagEmoji>
+                      {getFlagEmoji(travelData.countryCode)}
+                    </M.FlagEmoji>
 
-                  <M.TravelInfo>
-                    <M.TravelTitle>{travelData.title}</M.TravelTitle>
-                    <M.TravelInfo2>
-                      <div>
-                        {travelData.country} - {travelData.city}
-                      </div>
-                      |
-                      <div>
-                        {travelData.firstDate.toLocaleDateString('en-US', {
-                          month: '2-digit',
-                          day: '2-digit',
-                        })}
-                        &nbsp;-&nbsp;
-                        {travelData.lastDate.toLocaleDateString('en-US', {
-                          month: '2-digit',
-                          day: '2-digit',
-                        })}
-                      </div>
-                    </M.TravelInfo2>
-                  </M.TravelInfo>
-                </M.TravelContainer>
+                    <M.TravelInfo>
+                      <M.TravelTitle>{travelData.title}</M.TravelTitle>
+                      <M.TravelInfo2>
+                        <div>
+                          {travelData.country} - {travelData.city}
+                        </div>
+                        |
+                        <div>
+                          {travelData.firstDate.toLocaleDateString('en-US', {
+                            month: '2-digit',
+                            day: '2-digit',
+                          })}
+                          &nbsp;-&nbsp;
+                          {travelData.lastDate.toLocaleDateString('en-US', {
+                            month: '2-digit',
+                            day: '2-digit',
+                          })}
+                        </div>
+                      </M.TravelInfo2>
+                    </M.TravelInfo>
+                  </M.TravelContainer>
 
-                <M.TravelDetail>
-                  <M.Participants>사진사진사진</M.Participants>
-                  <M.AmountText>
-                    {travelData.amount.toLocaleString()}원
-                  </M.AmountText>
-                </M.TravelDetail>
-              </M.TravelItem>
+                  <M.TravelDetail>
+                    <M.Participants>사진사진사진</M.Participants>
+                    <M.AmountText>
+                      {travelData.amount.toLocaleString()}원
+                    </M.AmountText>
+                  </M.TravelDetail>
+                </M.TravelItem>
+              </Link>
             )
           );
         })}

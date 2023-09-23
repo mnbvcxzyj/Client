@@ -69,10 +69,10 @@ const CancelText = styled.div`
   margin: auto;
 `;
 
-function ModalBasic({ setModalOpen }) {
+function ModalBasic({ setLogoutModalOpen }) {
   // 모달 끄기 (X버튼 onClick 이벤트 핸들러)
   const closeModal = () => {
-    setModalOpen(false); //state변경하면 렌더링 되는거 아니었냐고!!!
+    setLogoutModalOpen(false); //state변경하면 렌더링 되는거 아니었냐고!!!
     console.log('취소 버튼 클릭');
   };
 
@@ -85,7 +85,7 @@ function ModalBasic({ setModalOpen }) {
     const handler = (event) => {
       // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setModalOpen(false);
+        setLogoutModalOpen(false);
       }
     };
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MyPageHeader from './MyPageHeader';
-import ModalBasic from './ModalBasic';
+import ModalLogout from './ModalLogout';
+import ModalWithdrawal from './ModalWithdrawal';
 
 const AccountManage = () => {
   const [data, setData] = useState('');
@@ -20,12 +21,20 @@ const AccountManage = () => {
     return '*'.repeat(data.length);
   }
 
-  // 모달창 노출 여부 state
-  const [modalOpen, setModalOpen] = useState(false);
+  // 로그아웃 모달창 노출 여부 state
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   // 모달창 노출
-  const showModal = () => {
-    setModalOpen(true);
+  const showLogoutModal = () => {
+    setLogoutModalOpen(true);
+  };
+
+  // 탈퇴 모달창 노출 여부 state
+  const [withdrawalModalOpen, setWithdrawalModalOpen] = useState(false);
+
+  // 모달창 노출
+  const showWithdrawalModal = () => {
+    setWithdrawalModalOpen(true);
   };
 
   return (
@@ -53,12 +62,17 @@ const AccountManage = () => {
           </InputWrapper>
         </div>
 
-        <LogoutBtn onClick={showModal}>
-          {modalOpen && <ModalBasic setModalOpen={setModalOpen} />}
+        <LogoutBtn onClick={showLogoutModal}>
           <LogoutText>로그아웃</LogoutText>
+          {logoutModalOpen && (
+            <ModalLogout setLogoutModalOpen={setLogoutModalOpen} />
+          )}
         </LogoutBtn>
-        <Withdrawal>
+        <Withdrawal onClick={showWithdrawalModal}>
           <WithdrawalText>계정 탈퇴</WithdrawalText>
+          {withdrawalModalOpen && (
+            <ModalWithdrawal setWithdrawalModalOpen={setWithdrawalModalOpen} />
+          )}
         </Withdrawal>
       </Container>
     </>

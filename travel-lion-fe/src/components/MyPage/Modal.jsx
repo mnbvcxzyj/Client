@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import ModalBasic from './ModalBasic';
+import ModalBasic from './ModalLogout';
 
+//삭제할 파일
 // 모달을 노출하는 페이지
 function Modal() {
   // 모달창 노출 여부 state

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MyPageHeader from './MyPageHeader';
-
-//css 이상함... 갈아엎어야 할것 같음...
+import ModalBasic from './ModalBasic';
 
 const AccountManage = () => {
   const [data, setData] = useState('');
@@ -20,6 +19,14 @@ const AccountManage = () => {
   function renderStars() {
     return '*'.repeat(data.length);
   }
+
+  // 모달창 노출 여부 state
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // 모달창 노출
+  const showModal = () => {
+    setModalOpen(true);
+  };
 
   return (
     <>
@@ -46,7 +53,8 @@ const AccountManage = () => {
           </InputWrapper>
         </div>
 
-        <LogoutBtn>
+        <LogoutBtn onClick={showModal}>
+          {modalOpen && <ModalBasic setModalOpen={setModalOpen} />}
           <LogoutText>로그아웃</LogoutText>
         </LogoutBtn>
         <Withdrawal>
@@ -137,6 +145,7 @@ const LogoutBtn = styled.div`
   border-radius: 10px;
   background: #05b70c;
   margin-top: 322px;
+  cursor: pointer;
 `;
 
 const LogoutText = styled.div`
@@ -149,6 +158,7 @@ const LogoutText = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const Withdrawal = styled.div`
@@ -158,6 +168,7 @@ const Withdrawal = styled.div`
   border-radius: 10px;
   border: 1px solid #05b70c;
   background: #fff;
+  cursor: pointer;
 `;
 
 const WithdrawalText = styled.div`
@@ -170,4 +181,5 @@ const WithdrawalText = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;

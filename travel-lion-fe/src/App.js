@@ -7,12 +7,13 @@ import MyPageMain from './components/MyPage/MyPageMain';
 import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
+import Modal from './components/MyPage/Modal';
 
 function App() {
   return (
     <>
       <GlobalStyles />
-      <ChangeName />
+      <AccountManage />
     </>
   );
 }

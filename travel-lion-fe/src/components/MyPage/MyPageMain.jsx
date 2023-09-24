@@ -1,12 +1,20 @@
+//경로: /mainpage
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const MyPageMain = () => {
+  const navigate = useNavigate();
+
+  const handlePageNavigation = () => {
+    navigate('/mypage/account');
+  };
+
   return (
     <>
       <Container>
         <Header>마이페이지</Header>
-        <GoInfo>
+        <GoInfo onClick={handlePageNavigation}>
           <ProfileImg src="/images/google.png"></ProfileImg>
           <Name>닉네임</Name>
           <GoBtn>

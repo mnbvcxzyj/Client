@@ -34,7 +34,7 @@ const HeaderWrapper = styled.div`
   height: 80px;
   margin-left: auto;
   margin-right: auto;
-  background: #ff0000;
+  background: #fff;
 `;
 
 const BackArrow = styled.div`

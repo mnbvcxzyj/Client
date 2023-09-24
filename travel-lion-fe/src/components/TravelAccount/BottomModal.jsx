@@ -10,6 +10,7 @@ function BottomModal({ onCurrencyChange }) {
   const bottomSheetRef = useRef(null);
   const navigate = useNavigate();
 
+  console.log(onCurrencyChange);
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -28,6 +29,7 @@ function BottomModal({ onCurrencyChange }) {
   }, []);
 
   const handleCountrySelect = (country) => {
+    // console.log(country);
     setSelectedCountry(country);
     onCurrencyChange(country);
   };
@@ -37,8 +39,9 @@ function BottomModal({ onCurrencyChange }) {
     { name: '일본', code: 'JPY', unit: '엔' },
     { name: '미국', code: 'USD', unit: '달러' },
   ];
+
   const handleModalPlusClick = () => {
-    navigate('/selectUnit', { state: { selectedCountry } });
+    navigate('/selectUnit');
   };
 
   return (

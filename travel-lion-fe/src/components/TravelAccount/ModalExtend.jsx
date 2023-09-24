@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { currencyunitdata } from '../../data/CurrencyUnitData';
 import search from '../../images/TravelAccount/search.svg';
 import backarrow from '../../images/TravelAccount/backarrow.svg';
 
 function ModalExtend({ onCurrencyChange }) {
-  const [selectedCurrency, setSelectedCurrency] = useState(null);
-
   // 사용자 입력값
   const [searchTerm, setSearchTerm] = useState('');
 
+  console.log(onCurrencyChange);
   const handleCurrencySelect = (country) => {
-    setSelectedCurrency(country);
+    // console.log(country);
     onCurrencyChange(country);
   };
 
@@ -24,9 +24,11 @@ function ModalExtend({ onCurrencyChange }) {
   return (
     <ModalWrapper>
       <SearchWrapper>
-        <ImgDiv>
-          <img src={backarrow} alt="<" />
-        </ImgDiv>
+        <Link to="/travelaccountbook">
+          <ImgDiv>
+            <img src={backarrow} alt="<" />
+          </ImgDiv>
+        </Link>
         <SearchInput
           type="text"
           placeholder="국가명 또는 통화 검색"
@@ -41,11 +43,10 @@ function ModalExtend({ onCurrencyChange }) {
         {searchData.map((country) => (
           <CurrencyItem
             key={country.code}
-            isSelected={selectedCurrency === country}
             onClick={() => handleCurrencySelect(country.code)}
           >
-            {country.country} - {country.code} ({country.unit}){' '}
-            <SelectBtn>선택</SelectBtn>
+            {country.country}
+            {country.code} ({country.unit})<SelectBtn>선택</SelectBtn>
           </CurrencyItem>
         ))}
       </CurrencyList>

@@ -1,10 +1,12 @@
 import React from 'react';
 import { styled } from 'styled-components';
-
+import { Link } from 'react-router-dom';
 export default function PlanPlusBtn() {
   return (
     <>
-      <PlusBtn>플랜 추가하기</PlusBtn>
+      <Link to="/addschedule">
+        <PlusBtn>플랜 추가하기</PlusBtn>
+      </Link>
     </>
   );
 }

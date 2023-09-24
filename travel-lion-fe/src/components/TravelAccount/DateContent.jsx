@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
+import { Link } from 'react-router-dom';
 
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -46,11 +47,16 @@ const DateContent = () => {
             <Amount>30,000원</Amount>
           </CategoryWrapper>
 
-          <InputBtn>사용 금액 입력</InputBtn>
+          <Link to="/newbill">
+            <InputBtn>사용 금액 입력</InputBtn>
+          </Link>
         </DayWrapper>
       </Container>
       {isBottomSheetOpen && (
-        <BottomModal onCurrencyChange={handleCurrencyChange} />
+        <BottomModal
+          onCurrencyChange={handleCurrencyChange}
+          selectedCurrency={selectedCurrency}
+        />
       )}
     </>
   );
@@ -201,6 +207,7 @@ const CategoryText = styled.div`
 `;
 
 const Amount = styled.div`
+  margin-left: 160px;
   color: #05b70c;
   font-family: Pretendard;
   font-size: 14px;

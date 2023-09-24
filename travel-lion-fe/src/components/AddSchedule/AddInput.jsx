@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import 'react-calendar/dist/Calendar.css';
 import { countryData } from '../../data/CountryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import Calendar from 'react-calendar';
 
 const AddInput = () => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
 
   const toggleDateModal = () => {
     setIsDateModalOpen(!isDateModalOpen);
   };
 
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
+  const handleDateChange = (dates) => {
+    setDateRange(dates);
     setIsDateModalOpen(!isDateModalOpen);
+  };
+
+  const formatSelectedDateRange = (range) => {
+    const startDate = range[0];
+    const endDate = range[1];
+    const startDateString = `${startDate.getFullYear()}/${
+      startDate.getMonth() + 1
+    }/${startDate.getDate()}`;
+    const endDateString = `${endDate.getFullYear()}/${
+      endDate.getMonth() + 1
+    }/${endDate.getDate()}`;
+    return `${startDateString} - ${endDateString}`;
   };
 
   return (
@@ -52,7 +65,7 @@ const AddInput = () => {
         <InputWrapper>
           <Input
             type="text"
-            value={selectedDate.toDateString()}
+            value={formatSelectedDateRange(dateRange)}
             placeholder="날짜 선택"
             readOnly
           />
@@ -61,9 +74,42 @@ const AddInput = () => {
         {isDateModalOpen && (
           <DateModal>
             <Calendar
-              onChange={handleDateSelect}
-              value={selectedDate}
+              onChange={handleDateChange}
+              value={dateRange}
               selectRange={true}
+              formatDay={(locale, date) => date.getDate()}
+              prevLabel={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                >
+                  <path
+                    d="M11.3437 15.8248L5.02499 9.5248C4.94999 9.4498 4.89674 9.36856 4.86524 9.28105C4.83374 9.19355 4.81824 9.0998 4.81874 8.9998C4.81874 8.89981 4.83424 8.80606 4.86524 8.71855C4.89624 8.63105 4.94949 8.5498 5.02499 8.4748L11.3437 2.15605C11.5187 1.98105 11.7375 1.89355 12 1.89355C12.2625 1.89355 12.4875 1.9873 12.675 2.1748C12.8625 2.3623 12.9562 2.58105 12.9562 2.83105C12.9562 3.08105 12.8625 3.2998 12.675 3.4873L7.16249 8.9998L12.675 14.5123C12.85 14.6873 12.9375 14.9031 12.9375 15.1596C12.9375 15.4161 12.8437 15.6378 12.6562 15.8248C12.4687 16.0123 12.25 16.1061 12 16.1061C11.75 16.1061 11.5312 16.0123 11.3437 15.8248Z"
+                    fill="#353A40"
+                  />
+                </svg>
+              }
+              nextLabel={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                >
+                  <path
+                    d="M6.65625 15.8248L12.975 9.5248C13.05 9.4498 13.1032 9.36856 13.1347 9.28105C13.1662 9.19355 13.1817 9.0998 13.1812 8.9998C13.1812 8.89981 13.1657 8.80606 13.1347 8.71855C13.1037 8.63105 13.0505 8.5498 12.975 8.4748L6.65625 2.15605C6.48125 1.98105 6.2625 1.89355 6 1.89355C5.7375 1.89355 5.5125 1.9873 5.325 2.1748C5.1375 2.3623 5.04375 2.58105 5.04375 2.83105C5.04375 3.08105 5.1375 3.2998 5.325 3.4873L10.8375 8.9998L5.325 14.5123C5.15 14.6873 5.0625 14.9031 5.0625 15.1596C5.0625 15.4161 5.15625 15.6378 5.34375 15.8248C5.53125 16.0123 5.75 16.1061 6 16.1061C6.25 16.1061 6.46875 16.0123 6.65625 15.8248Z"
+                    fill="#353A40"
+                  />
+                </svg>
+              }
+              next2Label={null}
+              prev2Label={null}
+              showNeighboringMonth={false}
+              calendarType="US"
             />
           </DateModal>
         )}
@@ -167,7 +213,9 @@ const DateModal = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 
+  // 달력 커스텀
   .react-calendar {
+    // 흰 창
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -177,24 +225,94 @@ const DateModal = styled.div`
     max-width: 100%;
     background-color: #fff;
     border-radius: 8px;
+    font-family: Pretendard;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
-
-  .react-calendar__navigation button {
-    min-width: 44px;
-    background: none;
-    font-size: 16px;
-    margin-top: 8px;
+  .react-calendar__navigation__label {
+    margin-top: 23px;
   }
 
+  .react-calendar__navigation__arrow,
+  .react-calendar__navigation__next-button {
+    margin-top: 23px;
+  }
+
+  .react-calendar__tile--now {
+    // 오늘 날짜
+    background: none;
+  }
+
+  .react-calendar__tile--now:enabled:hover,
+  .react-calendar__tile--now:enabled:focus {
+    background-color: #05b70c;
+  }
+
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: #05b70c;
+    color: white;
+  }
+
+  // 년,월 글자
   .react-calendar__navigation__label > span {
     color: var(--Darkgray, #353a40);
     text-align: center;
-
+    margin: 0 75px 0 75px;
+    font-family: Pretendard;
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+  }
+
+  // 요일
+  .react-calendar__month-view__weekdays {
+    margin-top: 19px;
+    abbr {
+      font-family: Pretendard;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 12px;
+      letter-spacing: 0.36px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+  }
+
+  // 한 칸
+  .react-calendar__tile {
+    display: flex;
+    height: 42px;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 157.143% */
+  }
+
+  // 기간 설정하면 배경
+  .react-calendar__tile--active {
+    background: #dff3dd;
+    color: black;
+  }
+
+  // 시작 날짜, 끝 날짜
+  .react-calendar__tile--rangeStart,
+  .react-calendar__tile--rangeEnd {
+    background-color: #05b70c;
+    color: white;
+  }
+
+  // 기간 선택하면 그 사이 배경
+  .react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: #dff3dd;
   }
 `;
 

@@ -12,6 +12,7 @@ import AddSchedulePage from './pages/AddSchedulePage';
 import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
+import BottomModal from './components/TravelAccount/BottomModal';
 
 export default function Router() {
   return (
@@ -42,8 +43,9 @@ export default function Router() {
           />
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
+          <Route path='/currencymodal' element={<BottomModal />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter >
     </>
   );
 }

@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import plusbtn from '../../images/TravelAccount/plus.svg';
+import { Link } from 'react-router-dom';
 const PlusBtn = () => {
   return (
     <>
-      <Plus>
-        <img src={plusbtn} alt="+" />
-      </Plus>
+      <Link to="/addschedule">
+        <Plus>
+          <img src={plusbtn} alt="+" />
+        </Plus>
+      </Link>
     </>
   );
 };

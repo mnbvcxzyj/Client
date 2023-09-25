@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../components/NewBillPage/header';
 
 import Btn from '../components/NewBillPage/Btn';

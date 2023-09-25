@@ -1,14 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import modalplus from '../../images/TravelAccount/modalplus.svg';
 import check from '../../images/TravelAccount/check.svg';
-import { useNavigate } from 'react-router-dom';
+import { CurrencyContext } from './CurrencyProvider';
+import { Link } from 'react-router-dom';
 
-function BottomModal({ onCurrencyChange }) {
+function BottomModal() {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const bottomSheetRef = useRef(null);
-  const navigate = useNavigate();
+
+  const { handleCurrencyChange } = useContext(CurrencyContext);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -27,9 +29,9 @@ function BottomModal({ onCurrencyChange }) {
     };
   }, []);
 
-  const handleCountrySelect = (country) => {
+  const handleCurrencyClick = (country) => {
     setSelectedCountry(country);
-    onCurrencyChange(country);
+    handleCurrencyChange(country);
   };
 
   const previewcountries = [
@@ -37,9 +39,6 @@ function BottomModal({ onCurrencyChange }) {
     { name: '일본', code: 'JPY', unit: '엔' },
     { name: '미국', code: 'USD', unit: '달러' },
   ];
-  const handleModalPlusClick = () => {
-    navigate('/selectUnit', { state: { selectedCountry } });
-  };
 
   return (
     <>
@@ -49,16 +48,18 @@ function BottomModal({ onCurrencyChange }) {
           <BottomSheetContent>
             <TextDiv>
               통화 단위 선택
-              <ModalPlusBtn onClick={handleModalPlusClick}>
-                <img src={modalplus} alt="+" />
-              </ModalPlusBtn>
+              <Link to="/selectunit" rel="noopener noreferrer">
+                <ModalPlusBtn>
+                  <img src={modalplus} alt="+" />
+                </ModalPlusBtn>
+              </Link>
             </TextDiv>
 
             {previewcountries.map((country) => (
               <UnitWrapper
                 key={country.code}
                 selected={selectedCountry === country.code}
-                onClick={() => handleCountrySelect(country.code)}
+                onClick={() => handleCurrencyClick(country.code)}
               >
                 {country.name} - {country.code}({country.unit})
                 <img src={check} alt="✅" />

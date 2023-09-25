@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
+import { Link } from 'react-router-dom';
+import { CurrencyContext } from './CurrencyProvider';
 
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('KRW');
+  const { selectedCurrency } = useContext(CurrencyContext);
 
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
-  };
-
-  const handleCurrencyChange = (currencyCode) => {
-    setSelectedCurrency(currencyCode);
   };
 
   return (
@@ -46,12 +44,12 @@ const DateContent = () => {
             <Amount>30,000원</Amount>
           </CategoryWrapper>
 
-          <InputBtn>사용 금액 입력</InputBtn>
+          <Link to="/newbill">
+            <InputBtn>사용 금액 입력</InputBtn>
+          </Link>
         </DayWrapper>
       </Container>
-      {isBottomSheetOpen && (
-        <BottomModal onCurrencyChange={handleCurrencyChange} />
-      )}
+      {isBottomSheetOpen && <BottomModal />}
     </>
   );
 };
@@ -201,6 +199,7 @@ const CategoryText = styled.div`
 `;
 
 const Amount = styled.div`
+  margin-left: 160px;
   color: #05b70c;
   font-family: Pretendard;
   font-size: 14px;

@@ -21,11 +21,14 @@ export default function Router() {
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
-          <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
+          <Route
+            path="/travelaccountbook"
+            element={<TravelAccountBookPage />}
+          />
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
-        </Routes >
-      </BrowserRouter >
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

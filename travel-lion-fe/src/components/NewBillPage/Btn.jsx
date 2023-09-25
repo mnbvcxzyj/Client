@@ -5,14 +5,17 @@ import Category from './Category';
 import Bill from './Bill';
 import Memo from './Memo';
 import { styled } from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function NewBillBtn() {
+  const navigate = useNavigate();
   const [selectedEmoji, setSelectedEmoji] = useState('');
   const [whoValue, setWhoValue] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [billValue, setBillValue] = useState('');
   const [memoValue, setMemoValue] = useState('');
+  const [showCategoryAlert, setShowCategoryAlert] = useState(false);
+  const [showBillAlert, setShowBillAlert] = useState(false);
 
   const handleBillValueChange = (value) => {
     setBillValue(value);
@@ -24,6 +27,13 @@ export default function NewBillBtn() {
 
   //저장하는 부분
   const handleSaveToStorage = () => {
+    if (selectedCategory === '' || billValue === '') {
+      if (selectedCategory === '') setShowCategoryAlert(true);
+      if (billValue === '') setShowBillAlert(true);
+      return;
+    }
+    setShowCategoryAlert(false);
+    setShowBillAlert(false);
     const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
 
     const newItem = {
@@ -37,19 +47,26 @@ export default function NewBillBtn() {
 
     sessionStorage.setItem('billList', JSON.stringify(storedList));
 
-    console.log('Saved Bill List:', storedList);
+    console.log('저장:', storedList);
+    navigate('/billlist');
   };
 
   return (
     <>
       <Emoji onClickEmoji={setSelectedEmoji} />
       <Who setValue={setWhoValue} />
-      <Category onClickCategory={onClickCategory} />
-      <Bill setValue={handleBillValueChange} />
+      <Category
+        onClickCategory={onClickCategory}
+        showAlert={showCategoryAlert}
+        setShowAlert={setShowCategoryAlert}
+      />
+      <Bill
+        setValue={handleBillValueChange}
+        showAlert={showBillAlert}
+        setShowAlert={setShowBillAlert}
+      />
       <Memo setValue={setMemoValue} />
-      <NavList to="/billlist">
-        <NewBtn onClick={handleSaveToStorage}>확인</NewBtn>
-      </NavList>
+      <NewBtn onClick={handleSaveToStorage}>확인</NewBtn>
     </>
   );
 }

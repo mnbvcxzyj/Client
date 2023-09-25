@@ -3,12 +3,10 @@ import { styled } from 'styled-components';
 
 export default function Memo({ setValue }) {
   const [inputMemo, setInputMemo] = useState('');
-  const [memoError, setMemoError] = useState(false);
 
   const handleMemoChange = (e) => {
     const value = e.target.value;
     setInputMemo(value);
-    setMemoError(value === '');
 
     setValue(value);
   };
@@ -34,7 +32,6 @@ export default function Memo({ setValue }) {
           ref={textareaRef}
           value={inputMemo}
           onChange={handleMemoChange}
-          error={memoError}
         />
       </InputContainer>
     </>
@@ -79,7 +76,7 @@ const TextareaMemo = styled.textarea`
 
   background-color: #f3f3f3;
   border-radius: 5px;
-  border: 1px solid ${(props) => (props.error ? 'red' : '#05b70c')};
+  border: none;
   cursor: pointer;
 
   font-family: Pretendard;

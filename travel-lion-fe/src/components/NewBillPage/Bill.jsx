@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { styled } from 'styled-components';
+import Alert from '../../images/Newbill/alert.png';
 
-export default function Bill({ setValue }) {
+export default function Bill({ setValue, showAlert, setShowAlert }) {
   const [inputBill, setInputBill] = useState('');
-  const [billError, setBillError] = useState(false);
 
   const handleBillChange = (e) => {
     const value = e.target.value;
     setInputBill(value);
-    setBillError(value === '');
-
     setValue(value);
+    if (value !== '') setShowAlert(false);
   };
 
   return (
@@ -19,12 +18,15 @@ export default function Bill({ setValue }) {
         <Demand>
           사용 금액을 입력해주세요.<Rq>(필수)</Rq>
         </Demand>
-        <InputBill
-          type="number"
-          value={inputBill}
-          onChange={handleBillChange}
-          error={billError}
-        />
+        <InputBillWrapper>
+          <InputBill
+            type="number"
+            value={inputBill}
+            onChange={handleBillChange}
+            $error={showAlert}
+          />
+          {showAlert ? <Alertimg src={Alert} /> : null}
+        </InputBillWrapper>
       </InputContainer>
     </>
   );
@@ -60,20 +62,18 @@ const Rq = styled.span`
   width: 29px;
   height: 14px;
 `;
-
+const InputBillWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
 const InputBill = styled.input`
   width: 100%;
   background-color: #f3f3f3;
   border-radius: 5px;
-  border: 1px solid ${(props) => (props.error ? 'red' : '#05b70c')};
+  border: 1px solid ${(props) => (props.$error ? 'red' : '#f3f3f3')};
   cursor: pointer;
   padding: 15px;
-
-  type="number"
-  inputMode="numeric" // 숫자만 입력 가능, 숫자를 조절할 수 있는 버튼은 숨김
-  value={inputBill}
-  onChange={handleBillChange}
-  error={billError}
 
   font-family: Pretendard;
   font-size: 16px;
@@ -84,22 +84,9 @@ const InputBill = styled.input`
   decoration: hidden;
 `;
 
-const TextareaMemo = styled.textarea`
-  width: 100%;
-  resize: none;
-  overflow: hidden;
-
-  background-color: #f3f3f3;
-  border-radius: 5px;
-  border: 1px solid ${(props) => (props.error ? 'red' : '#05b70c')};
-  cursor: pointer;
-
-  font-family: Pretendard;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 19px;
-  letter-spacing: 0em;
-  text-align: left;
-
-  padding: 15px;
+const Alertimg = styled.img`
+  position: absolute;
+  right: 11px;
+  width: 19px;
+  height: 19px;
 `;

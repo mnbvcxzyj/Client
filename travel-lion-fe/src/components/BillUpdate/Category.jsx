@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/white.png';
+import CategoryImgSelf from '../../images/Newbill/tm.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 
@@ -36,13 +36,22 @@ const categoryDataset = [
   },
 ];
 
-export default function Category({ onClickCategory }) {
+export default function Category({ value, onClickCategory }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
 
-  const onClickOption = (e) => {
-    const selectedCategoryName = e.target.innerText;
+  useEffect(() => {
+    if (value === '') return;
+    setSelectedCategory(value);
+    const selectedCategoryInfo = categoryDataset.find(
+      (category) => category.name === value,
+    );
+    setSelectedCategoryImg(selectedCategoryInfo.img);
+  }, [value]);
+
+  const onClickOption = (name) => {
+    const selectedCategoryName = name;
 
     const selectedCategoryInfo = categoryDataset.find(
       (category) => category.name === selectedCategoryName,
@@ -66,7 +75,11 @@ export default function Category({ onClickCategory }) {
         {' '}
         &nbsp; 카테고리를 선택해주세요. <Rq>(필수)</Rq>
       </Demand>
-      <SelectButton type="button" onClick={onClickSelect}>
+      <SelectButton
+        type="button"
+        onClick={onClickSelect}
+        isDropDown={isDropDown}
+      >
         {selectedCategory ? (
           <>
             <table>
@@ -95,7 +108,9 @@ export default function Category({ onClickCategory }) {
             <Option
               value={category.name}
               key={category.id}
-              onClick={onClickOption}
+              onClick={() => {
+                onClickOption(category.name);
+              }}
               isSelected={category.name === selectedCategory}
             >
               <tr>
@@ -163,10 +178,11 @@ const SelectButton = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
+
+  border: ${(props) => (props.isDropDown ? '2px solid #05B70C' : 'none')};
 `;
 
 const DropDown = styled.div`
-  margin-top: 4px;
   width: 87%;
   position: absolute;
 
@@ -174,6 +190,7 @@ const DropDown = styled.div`
   border-radius: 5px;
   overflow-y: auto;
   box-shadow: 0px 0px 4px 0px #0000004d;
+  z-index: 1;
 `;
 
 const Option = styled.button`

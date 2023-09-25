@@ -5,15 +5,16 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/white.png';
+import CategoryImgSelf from '../../images/Newbill/tm.png';
+import Btn from './Btn';
 
 export default function BillListBlock() {
   const categoryImages = {
-    Food: CategoryImgFood,
-    Hotel: CategoryImgHotel,
-    Transportation: CategoryImgTransportation,
-    Etc: CategoryImgEtc,
-    Self: CategoryImgSelf,
+    식비: CategoryImgFood,
+    숙소: CategoryImgHotel,
+    교통비: CategoryImgTransportation,
+    기타: CategoryImgEtc,
+    직접입력하기: CategoryImgSelf,
   };
 
   const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
@@ -41,14 +42,16 @@ export default function BillListBlock() {
                             rowSpan={2}
                             style={{
                               textAlign: 'center',
-                              width: '23%',
+                              width: '70px',
                               verticalAlign: 'middle',
                             }}
                           >
-                            <BillImage
-                              src={categoryImages[item.selectedCategory]}
-                              alt={item.selectedCategor}
-                            />
+                            <CategoryImgStyle>
+                              <BillImage
+                                src={categoryImages[item.selectedCategory]}
+                                alt={item.selectedCategor}
+                              />
+                            </CategoryImgStyle>
                           </td>
                           <td
                             style={{
@@ -81,6 +84,7 @@ export default function BillListBlock() {
               </BillItem>
             ))}
           </BillList>
+          <Btn></Btn>
         </Container>
       </BackgroundDiv>
     </div>
@@ -95,7 +99,7 @@ const BackgroundDiv = styled.div`
 
 const Container = styled.div`
   width: 90%;
-  height: 557px;
+  padding: 30px;
   border-radius: 15px;
 
   margin: auto;
@@ -113,9 +117,8 @@ const Day = styled.span`
   font-weight: 700;
   line-height: 29px;
   letter-spacing: 0em;
-  text-align: left;
 
-  margin: 30px;
+  margin-left: 6%;
 `;
 
 const Date = styled.span`
@@ -128,7 +131,9 @@ const Date = styled.span`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
-  margin: 30px;
+  margin: 15px;
+
+  color: #353a40;
 `;
 
 const Table = styled.table`
@@ -140,7 +145,7 @@ const BillList = styled.div`
 `;
 
 const BillItem = styled.div`
-  width: 80%;
+  width: 90%;
   padding: 10px;
   margin: auto;
   border: 0.6px solid #adb6bd;
@@ -148,8 +153,19 @@ const BillItem = styled.div`
   margin-bottom: 10px;
 `;
 
+const CategoryImgStyle = styled.div`
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  background: #f5f5f5;
+  border-radius: 50%;
+`;
+
 const BillImage = styled.img`
-  width: 60%;
+  width: 50%;
+  background-color: gery;
+  verticalalign: middle;
+  margin-top: 10px;
 `;
 
 const BillInfo = styled.div``;

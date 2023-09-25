@@ -22,8 +22,10 @@ const NewBtn = styled.button`
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  margin-top: 30px;
 
   cursor: pointer;
+  background-color: #ffffff;
 
   //글꼴
   font-family: SUIT;

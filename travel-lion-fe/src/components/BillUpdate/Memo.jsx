@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { styled } from 'styled-components';
 
-export default function Memo({ setValue }) {
+export default function Memo({ value, setValue }) {
   const [inputMemo, setInputMemo] = useState('');
   const [memoError, setMemoError] = useState(false);
 
+  useEffect(() => {
+    setInputMemo(value);
+  }, [value]);
   const handleMemoChange = (e) => {
     const value = e.target.value;
     setInputMemo(value);

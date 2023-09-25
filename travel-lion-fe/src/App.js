@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <GlobalStyles />
-      <NoAccount />
+      <Router />
     </>
   );
 }

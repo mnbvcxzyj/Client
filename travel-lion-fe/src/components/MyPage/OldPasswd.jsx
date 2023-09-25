@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   justify-content: center;
@@ -79,6 +80,7 @@ const Btn = styled.div`
   flex-shrink: 0;
   border-radius: 10px;
   background: #05b70c;
+  cursor: pointer;
 `;
 
 const BtnText = styled.div`
@@ -89,9 +91,16 @@ const BtnText = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;
 
 function OldPasswd() {
+  const navigate = useNavigate();
+
+  const handlePageNavigation = () => {
+    navigate('/mypage/account/changepasswd');
+  };
+
   return (
     <Container>
       <HeaderWrapper>
@@ -115,7 +124,7 @@ function OldPasswd() {
       <PasswdDiv>
         <PasswdInput type="password"></PasswdInput>
       </PasswdDiv>
-      <Btn>
+      <Btn onClick={handlePageNavigation}>
         <BtnText>확인</BtnText>
       </Btn>
     </Container>

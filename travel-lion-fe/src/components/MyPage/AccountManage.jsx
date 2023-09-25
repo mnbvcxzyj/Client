@@ -12,6 +12,10 @@ const AccountManage = () => {
     navigate('/mypage/account/existingpasswd');
   };
 
+  const handlePageNavigation2 = () => {
+    navigate('/mypage/account/changename');
+  };
+
   const [data, setData] = useState('');
 
   useEffect(() => {
@@ -77,7 +81,7 @@ const AccountManage = () => {
           <Text>닉네임</Text>
           <InputWrapper>
             <ChangeDiv>불러온 닉네임</ChangeDiv>
-            <ChangeBtn>
+            <ChangeBtn onClick={handlePageNavigation2}>
               <ChangeText>변경</ChangeText>
             </ChangeBtn>
           </InputWrapper>

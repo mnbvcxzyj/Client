@@ -10,6 +10,8 @@ import TravelAccountBookPage from './pages/TravelAccountBookPage';
 import ModalExtend from './components/TravelAccount/ModalExtend';
 import AddSchedulePage from './pages/AddSchedulePage';
 import OldPasswd from './components/MyPage/OldPasswd';
+import ChangePasswd from './components/MyPage/ChangePasswd';
+import ChangeName from './components/MyPage/ChangeName';
 
 export default function Router() {
   return (
@@ -23,6 +25,14 @@ export default function Router() {
             path="/mypage/account/existingpasswd"
             element={<OldPasswd />}
           />
+          <Route
+            path="/mypage/account/changepasswd"
+            element={<ChangePasswd />}
+          ></Route>
+          <Route
+            path="/mypage/account/changename"
+            element={<ChangeName />}
+          ></Route>
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />

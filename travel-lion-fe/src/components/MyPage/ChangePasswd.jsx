@@ -15,7 +15,7 @@ const HeaderWrapper = styled.div`
   height: 80px;
   margin-left: auto;
   margin-right: auto;
-  background: #adb6bd;
+  background: #fff;
 `;
 
 const HeaderBackArrow = styled.div`

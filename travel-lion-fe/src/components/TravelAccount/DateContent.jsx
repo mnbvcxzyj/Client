@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
 import { Link } from 'react-router-dom';
+import { CurrencyContext } from './CurrencyProvider';
 
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('KRW');
+  const { selectedCurrency } = useContext(CurrencyContext);
 
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
-  };
-
-  const handleCurrencyChange = (currencyCode) => {
-    setSelectedCurrency(currencyCode);
   };
 
   return (
@@ -52,12 +49,7 @@ const DateContent = () => {
           </Link>
         </DayWrapper>
       </Container>
-      {isBottomSheetOpen && (
-        <BottomModal
-          onCurrencyChange={handleCurrencyChange}
-          selectedCurrency={selectedCurrency}
-        />
-      )}
+      {isBottomSheetOpen && <BottomModal />}
     </>
   );
 };

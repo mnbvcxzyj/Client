@@ -9,6 +9,7 @@ import BillListPage from './pages/BIllListPage';
 import TravelAccountBookPage from './pages/TravelAccountBookPage';
 import ModalExtend from './components/TravelAccount/ModalExtend';
 import AddSchedulePage from './pages/AddSchedulePage';
+import BottomModal from './components/TravelAccount/BottomModal';
 
 export default function Router() {
   return (
@@ -24,6 +25,7 @@ export default function Router() {
           <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
+          <Route path='/currencymodal' element={<BottomModal />} />
         </Routes >
       </BrowserRouter >
     </>

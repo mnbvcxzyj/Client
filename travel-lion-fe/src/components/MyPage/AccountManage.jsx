@@ -1,10 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import MyPageHeader from './MyPageHeader';
 import ModalLogout from './ModalLogout';
 import ModalWithdrawal from './ModalWithdrawal';
 
 const AccountManage = () => {
+  const navigate = useNavigate();
+
+  const handlePageNavigation = () => {
+    navigate('/mypage/account/existingpasswd');
+  };
+
+  const handlePageNavigation2 = () => {
+    navigate('/mypage/account/changename');
+  };
+
   const [data, setData] = useState('');
 
   useEffect(() => {
@@ -37,16 +48,40 @@ const AccountManage = () => {
     setWithdrawalModalOpen(true);
   };
 
+  //프로필 이미지 관련 상태
+  //지금은 이미지 엑박 뜸
+  const [profileImage, setProfileImage] = useState(null);
+  const inputRef = useRef(null); // input 요소를 참조할 Ref를 생성 및 초기화
+
+  //프로필 이미지 업로드 핸들러
+  const handleProfileImageUpload = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      // 선택한 이미지를 상태에 저장
+      setProfileImage(URL.createObjectURL(selectedImage));
+    }
+  };
+
   return (
     <>
       <MyPageHeader />
       <Container>
-        <ProfileImg />
+        <ProfileImg
+          src={profileImage || '/images/google.jpg'}
+          onClick={() => inputRef.current.click()}
+        />
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          ref={inputRef}
+          onChange={handleProfileImageUpload}
+        />
         <div>
           <Text>닉네임</Text>
           <InputWrapper>
             <ChangeDiv>불러온 닉네임</ChangeDiv>
-            <ChangeBtn>
+            <ChangeBtn onClick={handlePageNavigation2}>
               <ChangeText>변경</ChangeText>
             </ChangeBtn>
           </InputWrapper>
@@ -56,7 +91,7 @@ const AccountManage = () => {
           <Text>비밀번호</Text>
           <InputWrapper>
             <ChangeDiv>{renderStars()}</ChangeDiv>
-            <ChangeBtn>
+            <ChangeBtn onClick={handlePageNavigation}>
               <ChangeText>변경</ChangeText>
             </ChangeBtn>
           </InputWrapper>
@@ -91,7 +126,7 @@ const Container = styled.div`
   gap: 25px;
 `;
 
-const ProfileImg = styled.div`
+const ProfileImg = styled.img`
   width: 60px;
   height: 60px;
   flex-shrink: 0;
@@ -141,6 +176,7 @@ const ChangeBtn = styled.div`
   padding: 5px 7px;
   border-radius: 3px;
   background: #05b70c;
+  cursor: pointer;
 `;
 
 const ChangeText = styled.div`
@@ -150,6 +186,7 @@ const ChangeText = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const LogoutBtn = styled.div`

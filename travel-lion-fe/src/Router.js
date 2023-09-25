@@ -9,6 +9,9 @@ import BillListPage from './pages/BIllListPage';
 import TravelAccountBookPage from './pages/TravelAccountBookPage';
 import ModalExtend from './components/TravelAccount/ModalExtend';
 import AddSchedulePage from './pages/AddSchedulePage';
+import OldPasswd from './components/MyPage/OldPasswd';
+import ChangePasswd from './components/MyPage/ChangePasswd';
+import ChangeName from './components/MyPage/ChangeName';
 
 export default function Router() {
   return (
@@ -18,14 +21,29 @@ export default function Router() {
           <Route path="/" element={<MainPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
+          <Route
+            path="/mypage/account/existingpasswd"
+            element={<OldPasswd />}
+          />
+          <Route
+            path="/mypage/account/changepasswd"
+            element={<ChangePasswd />}
+          ></Route>
+          <Route
+            path="/mypage/account/changename"
+            element={<ChangeName />}
+          ></Route>
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
-          <Route path="/travelaccountbook" element={<TravelAccountBookPage />} />
+          <Route
+            path="/travelaccountbook"
+            element={<TravelAccountBookPage />}
+          />
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
-        </Routes >
-      </BrowserRouter >
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

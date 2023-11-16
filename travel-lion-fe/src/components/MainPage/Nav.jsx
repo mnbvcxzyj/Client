@@ -27,7 +27,7 @@ export default function Nav() {
 
 const NavContainer = styled.div`
   position: fixed;
-  bottom: 42px;
+  bottom: 10px;
   left: 0;
   right: 0;
   display: flex;

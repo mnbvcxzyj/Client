@@ -88,17 +88,18 @@ export default function BillListBlock() {
 }
 
 const BackgroundDiv = styled.div`
-  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
   background-color: #f3f3f3;
-  padding: 30px;
+  /* padding: 30px; */
 `;
 
 const Container = styled.div`
-  width: 90%;
+  /* width: 90%; */
   height: 557px;
   border-radius: 15px;
 
-  margin: auto;
+  margin: 0 auto;
   background: #ffffff;
 `;
 
@@ -185,7 +186,7 @@ const BillAmount = styled.span`
   font-weight: 600;
   line-height: 19px;
 
-  color: #05b70c;
+  color: #00bc78;
   float: right;
 `;
 

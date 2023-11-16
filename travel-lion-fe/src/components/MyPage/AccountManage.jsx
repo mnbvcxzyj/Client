@@ -175,7 +175,7 @@ const ChangeBtn = styled.div`
   height: 22px;
   padding: 5px 7px;
   border-radius: 3px;
-  background: #05b70c;
+  background: #00bc78;
   cursor: pointer;
 `;
 
@@ -194,7 +194,7 @@ const LogoutBtn = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #05b70c;
+  background: #00bc78;
   margin-top: 322px;
   cursor: pointer;
 `;
@@ -217,7 +217,7 @@ const Withdrawal = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1px solid #05b70c;
+  border: 1px solid #00bc78;
   background: #fff;
   cursor: pointer;
 `;
@@ -226,7 +226,7 @@ const WithdrawalText = styled.div`
   position: relative;
   top: 21px;
   left: 136px;
-  color: #05b70c;
+  color: #00bc78;
   font-family: Pretendard;
   font-size: 18px;
   font-style: normal;

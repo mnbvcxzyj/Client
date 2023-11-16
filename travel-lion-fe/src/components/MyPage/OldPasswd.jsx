@@ -79,7 +79,7 @@ const Btn = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #05b70c;
+  background: #00bc78;
   cursor: pointer;
 `;
 

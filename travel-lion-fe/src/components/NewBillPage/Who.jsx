@@ -6,7 +6,7 @@ export default function Who() {
   return (
     <Component>
       <WriterStyle>
-        <Demand> &nbsp; 작성자</Demand>
+        <Demand>작성자</Demand>
         <tr>
           <td>
             <UserImage src={UserImg} alt="사용자 이미지" />
@@ -21,50 +21,67 @@ export default function Who() {
 }
 
 const Component = styled.div`
-  width: 87%;
+  /* display: flex;
+  width: 340px;
+  padding: 10px 237px 5px 13px;
+  align-items: center;
+  margin: 0 auto; */
+
+  display: flex;
+  align-items: center;
+
+  /* width: 87%;
   align-items: center;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: 30px; */
 `;
 
 const WriterStyle = styled.p`
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
-  text-align: left;
+  /* text-align: left; */
 
   color: #525252;
-  margin-top: 35px;
+  /* margin-top: 35px; */
 `;
 
 const Demand = styled.p`
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
-  text-align: left;
-
+  /* text-align: left; */
+  margin-bottom: 10px;
   color: #525252;
-  margin-top: 35px;
+  /* margin-top: 35px; */
 `;
 
 const UserImage = styled.img`
   width: 35px;
   height: 35px;
-  margin: 3px;
-  margin-left: 15px;
+  /* margin: 3px; */
+  /* margin-left: 15px; */
 `;
 
 const UserName = styled.span`
-  width: 42px;
+  /* width: 42px;
   height: 19px;
   padding: 3px;
   font-weight: bolder;
-  color: #353a40;
+  color: #353a40; */
 
-  font-family: Pretendard;
+  /* font-family: Pretendard;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
   letter-spacing: 0em;
-  text-align: left;
+  text-align: left; */
+
+  margin-left: 13px;
+  color: var(--Darkgray, #353a40);
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 `;

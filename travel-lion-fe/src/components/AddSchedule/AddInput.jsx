@@ -127,14 +127,18 @@ const AddInput = () => {
 
 const Container = styled.div`
   display: flex;
-  margin-top: 46px;
-  gap: 26px;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  max-width: 390px;
+  margin: 0 auto;
+  margin-top: 46px;
+  gap: 26px;
 `;
 
 const Wrapper = styled.div`
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
   gap: 10px;
 `;
@@ -166,7 +170,9 @@ const Text = styled.div`
 `;
 
 const Input = styled.input`
-  width: 90%;
+  width: 339px;
+  height: 55px;
+  flex-shrink: 1;
   border: none;
   outline: none;
   color: #000;
@@ -175,17 +181,21 @@ const Input = styled.input`
   font-weight: 600;
   line-height: normal;
   padding-left: 16px;
+  border-radius: 6px;
+  border: 0.8px solid var(--Gray, #adb6bd);
 `;
 
 const CountryDropdown = styled.select`
-  width: 100%;
-  padding: 10px;
+  width: 339px;
+  height: 55px;
+
+  flex-shrink: 0;
   color: #000;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-
+  padding-left: 10px;
   outline: none;
   border: none;
   -webkit-appearance: none;
@@ -197,6 +207,10 @@ const CountryDropdown = styled.select`
 const CountryOption = styled.option`
   background-color: #fff;
   color: #000;
+  outline: none;
+  border: none;
+  -webkit-appearance: none;
+  appearance: none;
 `;
 
 const DateModal = styled.div`
@@ -244,12 +258,15 @@ const DateModal = styled.div`
 
   .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
-    background-color: #05b70c;
+    background-color: #00bc78;
+    /* border-radius: 30px; */
   }
 
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus {
-    background: #05b70c;
+    background: #00bc78;
+    /* border-radius: 30px; */
+
     color: white;
   }
 
@@ -306,13 +323,15 @@ const DateModal = styled.div`
   // 시작 날짜, 끝 날짜
   .react-calendar__tile--rangeStart,
   .react-calendar__tile--rangeEnd {
-    background-color: #05b70c;
+    background-color: #00bc78;
+    border-radius: 30px;
     color: white;
   }
 
   // 기간 선택하면 그 사이 배경
   .react-calendar--selectRange .react-calendar__tile--hover {
     background-color: #dff3dd;
+    border-radius: 30px;
   }
 `;
 

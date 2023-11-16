@@ -22,7 +22,7 @@ const Plus = styled.div`
   height: 27px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: #05b70c;
+  background-color: #00bc78;
   stroke-width: 0.3px;
   stroke: var(--Skyblue, #95bfff);
 `;

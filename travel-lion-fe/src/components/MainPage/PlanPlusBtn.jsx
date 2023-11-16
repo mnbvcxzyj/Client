@@ -5,7 +5,7 @@ export default function PlanPlusBtn() {
   return (
     <>
       <Link to="/addschedule">
-        <PlusBtn>플랜 추가하기</PlusBtn>
+        <PlusBtn>+</PlusBtn>
       </Link>
     </>
   );
@@ -15,20 +15,23 @@ const PlusBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px auto;
+
+  margin: 30px auto;
+
   // 버튼
   width: 360px;
   height: 55px;
   font-family: Pretendard;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 0.8px solid #05b70c;
+  border: 0.8px solid #00bc78;
   background: #fff;
   cursor: pointer;
+  color: #00bc78;
 
-  color: #05b70c;
-  font-size: 1rem;
+  font-family: Pretendard;
+  font-size: 30px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: normal;
 `;

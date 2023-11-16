@@ -63,8 +63,7 @@ export default function Category({ onClickCategory }) {
   return (
     <Component>
       <Demand>
-        {' '}
-        &nbsp; 카테고리를 선택해주세요. <Rq>(필수)</Rq>
+        카테고리를 선택해주세요. <Rq>(필수)</Rq>
       </Demand>
       <SelectButton type="button" onClick={onClickSelect}>
         {selectedCategory ? (
@@ -122,40 +121,55 @@ export default function Category({ onClickCategory }) {
 }
 
 const Component = styled.div`
-  width: 87%;
+  /* width: 87%;
   align-items: center;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: 30px; */
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const Demand = styled.p`
+  /* font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500; */
+  /* text-align: left; */
+
+  color: #525252;
+  margin-top: 30px;
+
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
-  text-align: left;
-
-  color: #525252;
-  margin-top: 35px;
+  /* text-align: left; */
 `;
 
 const Rq = styled.span`
+  color: #888;
+
+  /* H5 */
   font-family: Pretendard;
   font-size: 12px;
+  font-style: normal;
   font-weight: 400;
-  line-height: 14px;
-  letter-spacing: 0em;
-  text-align: left;
+  line-height: normal;
 
   width: 29px;
   height: 14px;
 `;
 
 const SelectButton = styled.button`
-  width: 100%;
-  padding: 13px;
+  /* width: 100%; */
+  /* padding: 13px;
   background-color: #f3f3f3;
-  border-radius: 5px;
+  border-radius: 5px; */
+
+  width: 340px;
+  height: 50px;
   cursor: pointer;
+  border-radius: 5px;
+  background: #f3f3f3;
 
   font-family: Pretendard;
   font-size: 14px;
@@ -166,9 +180,9 @@ const SelectButton = styled.button`
 `;
 
 const DropDown = styled.div`
-  margin-top: 4px;
+  /* margin-top: 4px;
   width: 87%;
-  position: absolute;
+  position: absolute; */
 
   background-color: #ffffff;
   border-radius: 5px;
@@ -177,11 +191,12 @@ const DropDown = styled.div`
 `;
 
 const Option = styled.button`
-  width: 100%;
+  width: 340px;
+  height: 50px;
   color: #525252;
   background-color: #ffffff;
   border-radius: 5px;
-  text-align: left;
+  /* text-align: left; */
   border-bottom: 0.3px solid #adb6bd;
 
   font-family: Pretendard;
@@ -194,8 +209,6 @@ const Option = styled.button`
   align-items: center;
   justify-content: space-between;
 
-  padding: 15px;
-
   &:hover {
     background-color: #f3f3f3;
     cursor: pointer;
@@ -204,9 +217,10 @@ const Option = styled.button`
   ${(props) =>
     props.isSelected &&
     `
-    color: #05b70c;
+    color: #00BC78;
   `}
 `;
+
 const Downimg = styled.img`
   width: 10px;
 `;

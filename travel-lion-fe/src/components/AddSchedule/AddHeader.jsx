@@ -14,8 +14,9 @@ const AddHeader = () => {
 
 const BackDiv = styled(Link)`
   display: flex;
+  max-width: 390px;
   margin-top: 52px;
-  margin-left: 24px;
+  margin-left: 25px;
 `;
 
 export default AddHeader;

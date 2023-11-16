@@ -42,29 +42,30 @@ export default function NewBillBtn() {
 
   return (
     <>
-      <Emoji onClickEmoji={setSelectedEmoji} />
-      <Who setValue={setWhoValue} />
-      <Category onClickCategory={onClickCategory} />
-      <Bill setValue={handleBillValueChange} />
-      <Memo setValue={setMemoValue} />
-      <NavList to="/billlist">
-        <NewBtn onClick={handleSaveToStorage}>확인</NewBtn>
-      </NavList>
+      <Content>
+        <Emoji onClickEmoji={setSelectedEmoji} />
+        <Who setValue={setWhoValue} />
+        <Category onClickCategory={onClickCategory} />
+        <Bill setValue={handleBillValueChange} />
+        <Memo setValue={setMemoValue} />
+        <NavList to="/billlist">
+          <NewBtn onClick={handleSaveToStorage}>확인</NewBtn>
+        </NavList>
+      </Content>
     </>
   );
 }
 
-const NavList = styled(NavLink)`
-  width: 87%;
-  height: 60px;
-  border-radius: 10px;
-  background-color: #05b70c;
-  color: #ffffff;
+const Content = styled.section`
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 0 20px;
+  margin-bottom: 32px;
+`;
 
+const NavList = styled(NavLink)`
   //배치
-  margin-top: 30px;
   display: flex;
-  justify-content: center;
   align-items: center;
   margin: 0 auto;
 
@@ -73,26 +74,30 @@ const NavList = styled(NavLink)`
 
 const NewBtn = styled.button`
   //형태
-  width: 87%;
-  height: 60px;
   border-radius: 10px;
-  background-color: #05b70c;
+  background-color: #00bc78;
   color: #ffffff;
 
   //배치
-  margin-top: 30px;
+  /* margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  margin: 0 auto; */
+  width: 340px;
+  height: 60px;
+  flex-shrink: 0;
 
+  border-radius: 10px;
+  background-color: #00bc78;
+  color: #ffffff;
   cursor: pointer;
 
   //글꼴
+  color: #fff;
   font-family: SUIT;
-  font-size: 16px;
+  font-size: 18px;
+  font-style: normal;
   font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0em;
-  text-align: left;
+  line-height: normal;
 `;

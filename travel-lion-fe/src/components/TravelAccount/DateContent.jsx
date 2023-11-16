@@ -56,9 +56,14 @@ const DateContent = () => {
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  font-family: Pretendard;
+
+  /* max-width: 390px; */
+  width: 100%;
 `;
 
 const TopWrapper = styled.div`
@@ -94,7 +99,7 @@ const TravelExpense = styled.div`
 `;
 
 const Budget = styled.div`
-  color: #05b70c;
+  color: #00bc78;
 `;
 
 const ExchangeRate = styled.div`
@@ -117,11 +122,12 @@ const ExchangeRate = styled.div`
 
   cursor: pointer;
 `;
+
 const DayWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 24px auto;
-  width: 90%;
+  width: 350px;
   flex-shrink: 0;
   border-radius: 15px;
   background: #f3f3f3;
@@ -158,27 +164,30 @@ const InputBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40%;
-  height: 30px;
+
+  width: 176px;
+  height: 29px;
   margin: 15px auto 13px;
 
-  border-radius: 6px;
-  border: 0.6px solid var(--Gray, #adb6bd);
-  background: var(--White, #fff);
-  color: var(--Darkgray, #353a40);
+  color: var(--White, #fff);
+  text-align: center;
+  font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
 
   cursor: pointer;
+
+  border-radius: 6px;
+  background: #00bc78;
 `;
 
 const CategoryWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 18px auto;
-  width: 90%;
+  width: 304px;
   height: 35px;
   border-radius: 6px;
   border: 0.6px solid var(--Gray, #adb6bd);
@@ -199,8 +208,8 @@ const CategoryText = styled.div`
 `;
 
 const Amount = styled.div`
-  margin-left: 160px;
-  color: #05b70c;
+  margin-left: 170px;
+  color: #00bc78;
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;

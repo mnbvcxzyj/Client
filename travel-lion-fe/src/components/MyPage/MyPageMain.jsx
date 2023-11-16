@@ -59,15 +59,18 @@ export default MyPageMain;
 const Container = styled.div`
   display: flex;
   align-content: center;
-  font-family: Pretendard;
+  flex-direction: column;
   justify-content: center;
-  width: 390px;
-  margin: auto;
+  font-family: Pretendard;
+  margin: 0 auto;
+  max-width: 390px;
+  width: 100%;
+  padding: 0 17px;
 `;
 
 const Header = styled.div`
-  position: relative;
-  top: 52px;
+  margin: 0 auto;
+  margin-top: 47px;
   color: var(--Darkgray, #353a40);
   font-family: Pretendard;
   font-size: 24px;
@@ -77,23 +80,27 @@ const Header = styled.div`
 `;
 
 const GoInfo = styled.div`
-  position: absolute;
-  top: 106px;
+  /* position: absolute; */
+  /* top: 106px; */
+
   display: flex;
-  align-content: center;
-  font-family: Pretendard;
-  width: 390px;
-  margin: auto;
-  background: pink;
+  align-items: center;
   width: 390px;
   height: 109px;
+  margin-top: 33px;
+  flex-shrink: 0;
+  padding: 0 20px;
 `;
 
 const ProfileImg = styled.img`
-  position: absolute;
+  /* position: absolute;
   top: 28px;
   left: 38px;
-  bottom: 21px;
+  bottom: 21px; */
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
   width: 60px;
   height: 60px;
   flex-shrink: 0;
@@ -101,43 +108,54 @@ const ProfileImg = styled.img`
 `;
 
 const Name = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 46px;
-  left: 115px;
+  left: 115px; */
+
+  margin-left: 17px;
   color: var(--Darkgray, #353a40);
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
 `;
 
 const GoBtn = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 46px;
-  right: 35px;
+  right: 35px; */
   width: 24px;
   height: 24px;
+  margin-left: 166px;
   flex-shrink: 0;
 `;
 
 const GreenBtn = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 223px;
   display: flex;
   align-content: center;
   font-family: Pretendard;
   width: 355px;
   margin: auto;
-  background: #05b70c;
   border-radius: 15px;
-  height: 109px;
+  background: #00bc78;
+  height: 109px; */
+
+  display: flex;
+  height: 93px;
+  padding: 0px 18px 0px 35px;
+  align-items: center;
+  gap: 152px;
+  flex-shrink: 0;
+  border-radius: 15px;
+  background: #00bc78;
 `;
 
 const GreenText = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 40px;
-  left: 35px;
+  left: 35px; */
   color: var(--White, #fff);
   font-family: Pretendard;
   font-size: 20px;
@@ -147,9 +165,6 @@ const GreenText = styled.div`
 `;
 
 const GreenGoBtn = styled.div`
-  position: absolute;
-  top: 40px;
-  right: 18px;
   width: 24px;
   height: 24px;
 `;

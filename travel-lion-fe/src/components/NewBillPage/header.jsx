@@ -28,14 +28,14 @@ export default function Header() {
 }
 
 const HeaderContainer = styled.div`
-  width: 100%;
+  width: 390px;
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
 
-  background: #05b70c;
+  background: #00bc78;
   color: #ffffff;
 `;
 

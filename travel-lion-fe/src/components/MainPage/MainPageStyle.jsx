@@ -5,8 +5,13 @@ export const ListContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 60px;
+  padding: 0 40px;
+  padding-top: 60px;
   font-family: Pretendard;
+`;
+
+export const Content = styled.section`
+  max-width: 390px;
 `;
 
 export const ListText = styled.div`
@@ -28,7 +33,7 @@ export const TravelItem = styled.div`
   // d-day 변화에 따른 css
   color: ${(props) => (props.isMinRemainingTime ? '#FFF;' : 'black')};
   background-color: ${(props) =>
-    props.isMinRemainingTime ? '#05B70C;' : 'white'};
+    props.isMinRemainingTime ? '#00BC78;' : 'white'};
 `;
 
 export const TopDiv = styled.div`

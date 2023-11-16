@@ -250,7 +250,7 @@ const SelectButton = styled.button`
   display: flex;
   align-items: center;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 35px;
 
   background-color: #f3f3f3;
   border-radius: 50%;

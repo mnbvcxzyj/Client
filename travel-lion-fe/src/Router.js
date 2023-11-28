@@ -6,6 +6,8 @@ import NewBillPage from './pages/NewBillPage';
 import AccountManage from './components/MyPage/AccountManage';
 import BillUpdatePage from './pages/BillUpdatePage';
 import BillListPage from './pages/BIllListPage';
+import EditCategoryPage from './pages/EditCategoryPage';
+import NewCategoryPage from './pages/NewCategoryPage';
 import TravelAccountBookPage from './pages/TravelAccountBookPage';
 import ModalExtend from './components/TravelAccount/ModalExtend';
 import AddSchedulePage from './pages/AddSchedulePage';

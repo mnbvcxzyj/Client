@@ -133,9 +133,8 @@ const Day = styled.span`
   font-weight: 700;
   line-height: 29px;
   letter-spacing: 0em;
-  text-align: left;
 
-  margin: 30px;
+  margin-left: 6%;
 `;
 
 const Date = styled.span`
@@ -148,7 +147,9 @@ const Date = styled.span`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
-  margin: 30px;
+  margin: 15px;
+
+  color: #353a40;
 `;
 
 const Table = styled.table`
@@ -181,11 +182,11 @@ const CategoryImgStyle = styled.div`
 const BillImage = styled.img`
   width: 28px;
   margin-top: 8px;
-
   margin 0 auto;
-`;
 
-const BillInfo = styled.div``;
+  width: 50%;
+  background-color: gery;
+`;
 
 const BillAuthor = styled.div`
   margin-top: 10px;

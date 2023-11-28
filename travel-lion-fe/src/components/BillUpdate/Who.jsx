@@ -180,6 +180,12 @@ const SelectButton = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
+
+  border: ${(props) => (props.isDropDown ? '2px solid #05B70C' : 'none')};
+`;
+
+const Downimg = styled.img`
+  width: 10px;
 `;
 
 const DropDown = styled.div`
@@ -221,10 +227,6 @@ const Option = styled.button`
     `
     color: #05b70c;
   `}
-`;
-
-const Downimg = styled.img`
-  width: 10px;
 `;
 
 const UserImgStyle = styled.img`

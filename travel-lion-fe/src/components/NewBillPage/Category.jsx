@@ -8,7 +8,10 @@ import CategoryImgSelf from '../../images/Newbill/tm.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
+<<<<<<< HEAD
 import { useNavigate } from 'react-router-dom';
+=======
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
 
 const categoryDataset = [
   {
@@ -107,11 +110,15 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
               value={category.name}
               key={category.id}
               onClick={() => {
+<<<<<<< HEAD
                 if (category.name === '직접 입력하기') {
                   navigate('/newcate');
                 } else {
                   onClickOption(category.name);
                 }
+=======
+                onClickOption(category.name);
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
               }}
               isSelected={category.name === selectedCategory}
             >
@@ -178,8 +185,14 @@ const Rq = styled.span`
 `;
 
 const SelectButton = styled.button`
+<<<<<<< HEAD
   /* width: 100%; */
   /* padding: 13px;
+=======
+  position: relative;
+  width: 100%;
+  padding: 13px;
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
   background-color: #f3f3f3;
   border-radius: 5px; */
 
@@ -206,13 +219,17 @@ const SelectButton = styled.button`
 `;
 
 const DropDown = styled.div`
+<<<<<<< HEAD
   /* margin-top: 4px;
+=======
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
   width: 87%;
   position: absolute; */
 
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 0px 4px 0px #0000004d;
+  z-index: 1;
 `;
 
 const Option = styled.button`

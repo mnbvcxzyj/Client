@@ -194,6 +194,7 @@ const SelectButton = styled.button`
   letter-spacing: 0em;
   text-align: left;
 
+<<<<<<< HEAD
   border: ${(props) =>
     props.isDropDown
       ? '2px solid #05B70C'
@@ -204,12 +205,19 @@ const SelectButton = styled.button`
 
 const DropDown = styled.div`
   /* margin-top: 4px;
+=======
+  border: ${(props) => (props.isDropDown ? '2px solid #05B70C' : 'none')};
+`;
+
+const DropDown = styled.div`
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
   width: 87%;
   position: absolute; */
 
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 0px 4px 0px #0000004d;
+  z-index: 1;
 `;
 
 const Option = styled.button`

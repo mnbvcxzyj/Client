@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Emoji from '../NewBillPage/Emoji';
 import Who from './Who';
 import Category from './Category';
-import Bill from './bill';
+import Bill from './Bill';
 import Memo from './Memo';
 import { styled } from 'styled-components';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
@@ -79,6 +79,7 @@ export default function BillUpdateBtn() {
 
   return (
     <>
+<<<<<<< HEAD
       <Content>
         <Emoji value={selectedEmoji} onClickEmoji={setSelectedEmoji} />
         <Who value={whoValue} onClickWho={setWhoValue} />
@@ -99,10 +100,31 @@ export default function BillUpdateBtn() {
           </NavListDel>
         </ButtonContainer>
       </Content>
+=======
+      <Emoji value={selectedEmoji} onClickEmoji={setSelectedEmoji} />
+      <Who value={whoValue} onClickWho={setWhoValue} />
+      <Category value={selectedCategory} onClickCategory={onClickCategory} />
+      <Bill
+        value={billValue}
+        setValue={handleBillValueChange}
+        showAlert={showBillAlert}
+        setShowAlert={setShowBillAlert}
+      />
+      <Memo value={memoValue} setValue={setMemoValue} />
+      <ButtonContainer>
+        <NavListUpdate>
+          <UpdateBtn onClick={handleUpdateStorage}>수정</UpdateBtn>
+        </NavListUpdate>
+        <NavListDel to="/billlist">
+          <DelBtn onClick={handleDeleteStorage}>삭제</DelBtn>
+        </NavListDel>
+      </ButtonContainer>
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
     </>
   );
 }
 
+<<<<<<< HEAD
 const Content = styled.section`
   max-width: 390px;
   margin: 0 auto;
@@ -110,6 +132,8 @@ const Content = styled.section`
   margin-bottom: 32px;
 `;
 
+=======
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
 const NavListUpdate = styled.div`
   // 형태
   width: 42%;
@@ -162,6 +186,10 @@ const ButtonContainer = styled.div`
 
 const UpdateBtn = styled.button`
   //형태
+<<<<<<< HEAD
+=======
+  width: 87%;
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
   height: 60px;
   border-radius: 10px;
   background-color: #05b70c;
@@ -187,7 +215,12 @@ const UpdateBtn = styled.button`
 
 const DelBtn = styled.button`
   //형태
+<<<<<<< HEAD
   height: 58px;
+=======
+  width: 87%;
+  height: 60px;
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
   border-radius: 10px;
   color: #05b70c;
   background-color: #ffffff;

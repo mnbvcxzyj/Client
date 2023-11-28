@@ -12,7 +12,7 @@ const AddInput = () => {
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
 
   const [title, setTitle] = useState('');
-  const [nation, setNation] = useState('');
+  const [nation, setNation] = useState('미국');
   const [location, setLocation] = useState('');
   const [budget, setBudget] = useState(0);
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const AddInput = () => {
     try {
       const response = await axios.post('http://3.36.156.17/group', formData, {
         headers: {
-          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTU0OTcxLCJpYXQiOjE3MDExNTMxNzEsImp0aSI6IjRlYzgwZDk5ZTAxNjQ1Nzk4Y2E3ZTI0OTU2OWQ1MzI3IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.QTk07egRmvV-9-g-yaYShjsR8szOXw1yO5oFPfk7ARcBearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTU0OTcxLCJpYXQiOjE3MDExNTMxNzEsImp0aSI6IjRlYzgwZDk5ZTAxNjQ1Nzk4Y2E3ZTI0OTU2OWQ1MzI3IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.QTk07egRmvV-9-g-yaYShjsR8szOXw1yO5oFPfk7ARc `,
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTY1ODUyLCJpYXQiOjE3MDExNjQwNTIsImp0aSI6IjhkZTgwNzZiZDZmNjQzMDdhMzJjMmU1YjZhY2QzYjMwIiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0._DE2RWg7wCXT5QKwts7ciwZmTEBW0HOhIWtoUb-gxYI`,
         },
       });
       console.log(response.data);
@@ -388,7 +388,7 @@ const DateModal = styled.div`
   }
 `;
 
-const AddButton = styled.button`
+const AddButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

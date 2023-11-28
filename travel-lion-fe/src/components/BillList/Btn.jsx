@@ -7,7 +7,9 @@ export default function NewBillBtn() {
   return (
     <>
       <NewBtn>
-        <NavList to="/newbill">+</NavList>
+        <NavList to="/newbill">
+          <Plus>+</Plus>
+        </NavList>
       </NewBtn>
     </>
   );
@@ -24,6 +26,15 @@ const NewBtn = styled.div`
   height: 41px;
   flex-shrink: 0;
   background-color: #00bc78;
+  color: white;
+  border-radius: 30px;
+  stroke-width: 0.3px;
+  stroke: var(--Skyblue, #95bfff);
+`;
+
+const Plus = styled.span`
+  vertical-align: middle;
+
   color: white;
   border-radius: 30px;
   stroke-width: 0.3px;

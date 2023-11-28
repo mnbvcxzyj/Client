@@ -6,14 +6,15 @@ import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
 import CategoryImgSelf from '../../images/Newbill/white.png';
+import Btn from './Btn';
 
 export default function BillListBlock() {
   const categoryImages = {
-    Food: CategoryImgFood,
-    Hotel: CategoryImgHotel,
-    Transportation: CategoryImgTransportation,
-    Etc: CategoryImgEtc,
-    Self: CategoryImgSelf,
+    식비: CategoryImgFood,
+    숙소: CategoryImgHotel,
+    교통비: CategoryImgTransportation,
+    기타: CategoryImgEtc,
+    직접입력하기: CategoryImgSelf,
   };
 
   const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
@@ -41,18 +42,20 @@ export default function BillListBlock() {
                             rowSpan={2}
                             style={{
                               textAlign: 'center',
-                              width: '23%',
+                              width: '70px',
                               verticalAlign: 'middle',
                             }}
                           >
-                            <BillImage
-                              src={categoryImages[item.selectedCategory]}
-                              alt={item.selectedCategor}
-                            />
+                            <CategoryImgStyle>
+                              <BillImage
+                                src={categoryImages[item.selectedCategory]}
+                                alt={item.selectedCategor}
+                              />
+                            </CategoryImgStyle>
                           </td>
                           <td
                             style={{
-                              width: '50%',
+                              width: '130px',
                               borderBottom: '0.4px solid #ADB6BD',
                             }}
                           >
@@ -60,15 +63,24 @@ export default function BillListBlock() {
                           </td>
                           <td
                             style={{
+                              textAlign: 'right',
                               borderBottom: '0.4px solid #ADB6BD',
                             }}
                           >
-                            <BillAmount>{item.billValue}원</BillAmount>
+                            <BillAmount>{`${
+                              item.billValue >= 10000000
+                                ? '9999999+'
+                                : item.billValue + '원'
+                            }`}</BillAmount>
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            <BillMemo>{item.memoValue}</BillMemo>
+                            <BillMemo>
+                              {item.memoValue.length > 11
+                                ? `${item.memoValue.slice(0, 10)}...`
+                                : item.memoValue}
+                            </BillMemo>
                           </td>
                           <td>
                             <BillAuthor>{item.whoValue}</BillAuthor>
@@ -81,6 +93,7 @@ export default function BillListBlock() {
               </BillItem>
             ))}
           </BillList>
+          <Btn></Btn>
         </Container>
       </BackgroundDiv>
     </div>
@@ -89,21 +102,27 @@ export default function BillListBlock() {
 
 const BackgroundDiv = styled.div`
   max-width: 390px;
+  min-height: 844px;
   margin: 0 auto;
+  padding-top: 24px;
   background-color: #f3f3f3;
   /* padding: 30px; */
 `;
 
 const Container = styled.div`
   /* width: 90%; */
-  height: 557px;
+  width: 350px;
+  min-height: 557px;
   border-radius: 15px;
 
   margin: 0 auto;
   background: #ffffff;
+  padding-bottom: 20px;
 `;
 
-const DateInfo = styled.div``;
+const DateInfo = styled.div`
+  padding-top: 10px;
+`;
 
 const Day = styled.span`
   width: 62px;
@@ -114,9 +133,8 @@ const Day = styled.span`
   font-weight: 700;
   line-height: 29px;
   letter-spacing: 0em;
-  text-align: left;
 
-  margin: 30px;
+  margin-left: 6%;
 `;
 
 const Date = styled.span`
@@ -129,7 +147,9 @@ const Date = styled.span`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
-  margin: 30px;
+  margin: 15px;
+
+  color: #353a40;
 `;
 
 const Table = styled.table`
@@ -141,7 +161,8 @@ const BillList = styled.div`
 `;
 
 const BillItem = styled.div`
-  width: 80%;
+  width: 304px;
+  height: 86px;
   padding: 10px;
   margin: auto;
   border: 0.6px solid #adb6bd;
@@ -149,11 +170,23 @@ const BillItem = styled.div`
   margin-bottom: 10px;
 `;
 
-const BillImage = styled.img`
-  width: 60%;
+const CategoryImgStyle = styled.div`
+  width: 48px;
+  height: 48px;
+  margin-top: 10px;
+  text-align: center;
+  background: #f5f5f5;
+  border-radius: 50%;
 `;
 
-const BillInfo = styled.div``;
+const BillImage = styled.img`
+  width: 28px;
+  margin-top: 8px;
+  margin 0 auto;
+
+  width: 50%;
+  background-color: gery;
+`;
 
 const BillAuthor = styled.div`
   margin-top: 10px;
@@ -166,10 +199,6 @@ const BillAuthor = styled.div`
 `;
 
 const BillCategory = styled.div`
-  height: 19px;
-  top: 326px;
-  left: 126px;
-
   font-family: Pretendard;
   font-size: 16px;
   font-weight: 600;
@@ -185,9 +214,12 @@ const BillAmount = styled.span`
   font-size: 16px;
   font-weight: 600;
   line-height: 19px;
+  width: 150px;
 
   color: #00bc78;
-  float: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const BillMemo = styled.span`
@@ -204,4 +236,7 @@ const BillMemo = styled.span`
   text-align: left;
 
   color: #adb6bd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

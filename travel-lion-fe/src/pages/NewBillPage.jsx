@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/NewBillPage/header';
+import Header from '../components/BillList/Header';
 
 import Btn from '../components/NewBillPage/Btn';
 

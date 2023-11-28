@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/NewBillPage/header';
+import Header from '../components/BillList/Header';
 import Bill from '../components/NewBillPage/Bill';
 import Btn from '../components/BillUpdate/Btn';
 import Who from '../components/NewBillPage/Who.jsx';

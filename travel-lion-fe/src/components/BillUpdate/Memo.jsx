@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { styled } from 'styled-components';
 
-export default function Memo({ setValue }) {
+export default function Memo({ value, setValue }) {
   const [inputMemo, setInputMemo] = useState('');
   const [memoError, setMemoError] = useState(false);
 
+  useEffect(() => {
+    setInputMemo(value);
+  }, [value]);
   const handleMemoChange = (e) => {
     const value = e.target.value;
     setInputMemo(value);
@@ -42,44 +45,59 @@ export default function Memo({ setValue }) {
 }
 
 const InputContainer = styled.div`
-  width: 87%;
+  /* width: 87%;
   align-items: center;
   margin: 0 auto;
   margin-top: 20px;
-  margin-bottom: 70px;
+  margin-bottom: 70px; */
+
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 111px;
 `;
 
 const Demand = styled.p`
-  font-family: Pretendard;
+  /* font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
   color: #525252;
-  margin-top: 35px;
+  margin-top: 35px; */
+
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #525252;
+  margin-top: 30px;
 `;
 
 const Rq = styled.span`
+  color: #888;
+
+  /* H5 */
+  margin-left: 4px;
   font-family: Pretendard;
   font-size: 12px;
+  font-style: normal;
   font-weight: 400;
-  line-height: 14px;
-  letter-spacing: 0em;
-  text-align: left;
-
-  width: 29px;
-  height: 14px;
+  line-height: normal;
 `;
 
 const TextareaMemo = styled.textarea`
-  width: 100%;
+  /* width: 100%; */
+  width: 340px;
+  padding: 17px;
+  flex-shrink: 0;
+
   resize: none;
   overflow: hidden;
 
   background-color: #f3f3f3;
   border-radius: 5px;
-  border: 1px solid ${(props) => (props.error ? 'red' : '#05b70c')};
+  border: 1px solid ${(props) => (props.error ? 'red' : '#00BC78;')};
   cursor: pointer;
 
   font-family: Pretendard;
@@ -88,6 +106,4 @@ const TextareaMemo = styled.textarea`
   line-height: 19px;
   letter-spacing: 0em;
   text-align: left;
-
-  padding: 15px;
 `;

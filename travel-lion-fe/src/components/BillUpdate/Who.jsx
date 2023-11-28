@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import userImg from '../../images/BillList/userImg.png';
+import ImgV from '../../images/Newbill/v.png';
+import Triangle from '../../images/Newbill/triangle.png';
 
 const billDataset = [
   {
@@ -59,10 +61,13 @@ const billDataset = [
 
 const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
 
-export default function Who({ onClickWho }) {
+export default function Who({ value, onClickWho }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedWho, setSelectedWho] = useState('');
 
+  useEffect(() => {
+    setSelectedWho(value);
+  }, [value]);
   const onClickOption = (e) => {
     onClickWho(e.target.value);
     setSelectedWho(e.target.innerText);
@@ -75,9 +80,37 @@ export default function Who({ onClickWho }) {
 
   return (
     <Component>
-      <Demand>작성자를 선택해주세요.</Demand>
-      <SelectButton type="button" onClick={onClickSelect}>
-        {selectedWho || '선택하세요'}
+      <Demand> &nbsp; 작성자를 선택해주세요.</Demand>
+      <SelectButton
+        type="button"
+        onClick={onClickSelect}
+        isDropDown={isDropDown}
+      >
+        {selectedWho ? (
+          <>
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <UserImgStyle
+                      src={
+                        billDataset.find(
+                          (bill) => bill.authorName === selectedWho,
+                        )?.userImage || ''
+                      }
+                      alt={selectedWho}
+                    />
+                  </td>
+                  <td style={{ verticalAlign: 'middle' }}>
+                    <UserNameStyle>{selectedWho}</UserNameStyle>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <Downimg src={Triangle} />
+        )}
       </SelectButton>
       {isDropDown && (
         <DropDown>
@@ -86,13 +119,21 @@ export default function Who({ onClickWho }) {
               value={bill.authorName}
               key={bill.id}
               onClick={onClickOption}
+              isSelected={bill.authorName === selectedWho}
             >
-              <img
-                src={bill.userImage}
-                alt={bill.authorName}
-                style={{ width: '5%' }}
-              />
-              {bill.authorName}
+              <tr>
+                <td>
+                  <UserImgStyle src={bill.userImage} alt={bill.authorName} />
+                </td>
+                <td
+                  style={{
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  <UserNameStyle>{bill.authorName}</UserNameStyle>
+                </td>
+              </tr>
+              {bill.authorName === selectedWho && <UserCheaked src={ImgV} />}
             </Option>
           ))}
         </DropDown>
@@ -102,10 +143,18 @@ export default function Who({ onClickWho }) {
 }
 
 const Component = styled.div`
-  width: 87%;
+  /* display: flex;
+  width: 340px;
+  padding: 10px 237px 5px 13px;
+  align-items: center;
+  margin: 0 auto; */
+
+  align-items: center;
+
+  /* width: 87%;
   align-items: center;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: 30px; */
 `;
 
 const Demand = styled.p`
@@ -120,7 +169,7 @@ const Demand = styled.p`
 
 const SelectButton = styled.button`
   width: 100%;
-  padding: 15px;
+  height: 50px;
   background-color: #f3f3f3;
   border-radius: 5px;
   cursor: pointer;
@@ -134,20 +183,23 @@ const SelectButton = styled.button`
 `;
 
 const DropDown = styled.div`
+  /* margin-top: 4px;
   width: 87%;
-  position: absolute;
+  position: absolute; */
+
   background-color: #ffffff;
   border-radius: 5px;
-  overflow-y: auto;
   box-shadow: 0px 0px 4px 0px #0000004d;
 `;
 
 const Option = styled.button`
-  width: 100%;
+  width: 340px;
+  height: 50px;
   color: #525252;
   background-color: #ffffff;
   border-radius: 5px;
-  text-align: left;
+  /* text-align: left; */
+  border-bottom: 0.3px solid #adb6bd;
 
   font-family: Pretendard;
   font-size: 14px;
@@ -155,10 +207,43 @@ const Option = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
 
-  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   &:hover {
     background-color: #f3f3f3;
     cursor: pointer;
   }
+
+  ${(props) =>
+    props.isSelected &&
+    `
+    color: #05b70c;
+  `}
+`;
+
+const Downimg = styled.img`
+  width: 10px;
+`;
+
+const UserImgStyle = styled.img`
+  width: 24px;
+  height: 24px;
+
+  margin-left: 20px;
+  margin-right: 10px;
+`;
+
+const UserNameStyle = styled.span`
+  vertical-align: middle;
+  text-align: left;
+  padding-left: 5px;
+`;
+
+const UserCheaked = styled.img`
+  width: 13.96px;
+  height: 10.48px;
+
+  vertical-align: middle;
 `;

@@ -6,6 +6,8 @@ import NewBillPage from './pages/NewBillPage';
 import AccountManage from './components/MyPage/AccountManage';
 import BillUpdatePage from './pages/BillUpdatePage';
 import BillListPage from './pages/BIllListPage';
+import EditCategoryPage from './pages/EditCategoryPage';
+import NewCategoryPage from './pages/NewCategoryPage';
 import TravelAccountBookPage from './pages/TravelAccountBookPage';
 import ModalExtend from './components/TravelAccount/ModalExtend';
 import AddSchedulePage from './pages/AddSchedulePage';
@@ -37,15 +39,17 @@ export default function Router() {
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
+          <Route path="/newcate" element={<NewCategoryPage />} />
+          <Route path="/editcate" element={<EditCategoryPage />} />
           <Route
             path="/travelaccountbook"
             element={<TravelAccountBookPage />}
           />
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
-          <Route path='/currencymodal' element={<BottomModal />} />
+          <Route path="/currencymodal" element={<BottomModal />} />
         </Routes>
-      </BrowserRouter >
+      </BrowserRouter>
     </>
   );
 }

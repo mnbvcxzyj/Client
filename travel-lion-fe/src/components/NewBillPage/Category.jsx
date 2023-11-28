@@ -4,9 +4,11 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/white.png';
+import CategoryImgSelf from '../../images/Newbill/tm.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
+import Alert from '../../images/Newbill/alert.png';
+import { useNavigate } from 'react-router-dom';
 
 const categoryDataset = [
   {
@@ -36,7 +38,7 @@ const categoryDataset = [
   },
 ];
 
-export default function Category({ onClickCategory }) {
+export default function Category({ onClickCategory, showAlert, setShowAlert }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
@@ -53,6 +55,7 @@ export default function Category({ onClickCategory }) {
       setSelectedCategory(selectedCategoryName);
       setSelectedCategoryImg(selectedCategoryInfo.img);
       setIsDropDown(false);
+      setShowAlert(false);
     }
   };
 
@@ -60,12 +63,20 @@ export default function Category({ onClickCategory }) {
     setIsDropDown(!isDropDown);
   };
 
+  const navigate = useNavigate();
+
   return (
     <Component>
       <Demand>
-        카테고리를 선택해주세요. <Rq>(필수)</Rq>
+        {' '}
+        &nbsp; 카테고리를 선택해주세요. <Rq>(필수)</Rq>
       </Demand>
-      <SelectButton type="button" onClick={onClickSelect}>
+      <SelectButton
+        type="button"
+        onClick={onClickSelect}
+        isDropDown={isDropDown}
+        $error={showAlert}
+      >
         {selectedCategory ? (
           <>
             <table>
@@ -87,6 +98,7 @@ export default function Category({ onClickCategory }) {
         ) : (
           <Downimg src={Triangle} />
         )}
+        {showAlert ? <Alertimg src={Alert} /> : null}
       </SelectButton>
       {isDropDown && (
         <DropDown>
@@ -94,7 +106,13 @@ export default function Category({ onClickCategory }) {
             <Option
               value={category.name}
               key={category.id}
-              onClick={onClickOption}
+              onClick={() => {
+                if (category.name === '직접 입력하기') {
+                  navigate('/newcate');
+                } else {
+                  onClickOption(category.name);
+                }
+              }}
               isSelected={category.name === selectedCategory}
             >
               <tr>
@@ -177,6 +195,13 @@ const SelectButton = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
+
+  border: ${(props) =>
+    props.isDropDown
+      ? '2px solid #05B70C'
+      : props.$error
+      ? '1px solid red'
+      : '1px solid transparent'};
 `;
 
 const DropDown = styled.div`
@@ -244,4 +269,11 @@ const CategoryCheaked = styled.img`
   height: 10.48px;
 
   vertical-align: middle;
+`;
+
+const Alertimg = styled.img`
+  position: absolute;
+  right: 11px;
+  width: 19px;
+  height: 19px;
 `;

@@ -1,244 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import Emoji from '../NewBillPage/Emoji';
-import Who from './Who';
-import Category from './Category';
-import Bill from './Bill';
-import Memo from './Memo';
-import { styled } from 'styled-components';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+// import React, { useState, useEffect } from 'react';
+// import Emoji from '../NewBillPage/Emoji';
+// import Who from './Who';
+// import Category from './Category';
+// import Bill from './bill';
+// import Memo from './Memo';
+// import { styled } from 'styled-components';
+// import { NavLink } from 'react-router-dom';
 
-export default function BillUpdateBtn() {
-  const navigate = useNavigate();
-  const [selectedEmoji, setSelectedEmoji] = useState('');
-  const [whoValue, setWhoValue] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [billValue, setBillValue] = useState('');
-  const [memoValue, setMemoValue] = useState('');
-  const [showBillAlert, setShowBillAlert] = useState(false);
+// export default function BillUpdateBtn() {
+//   const [selectedEmoji, setSelectedEmoji] = useState('');
+//   const [whoValue, setWhoValue] = useState('');
+//   const [selectedCategory, setSelectedCategory] = useState('');
+//   const [billValue, setBillValue] = useState('');
+//   const [memoValue, setMemoValue] = useState('');
 
-  const handleBillValueChange = (value) => {
-    setBillValue(value);
-  };
+//   // 수정한 내용을 저장하는 부분
+//   const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
 
-  const onClickCategory = (categoryName) => {
-    setSelectedCategory(categoryName);
-  };
+//   return (
+//     <>
+//       <Emoji onClickEmoji={setSelectedEmoji} />
+//       <Who onClickWho={setWhoValue} />
+//       <Category onClickCategory={onClickCategory} />
+//       <Bill setValue={handleBillValueChange} />
+//       <Memo setValue={setMemoValue} />
+//       <ButtonContainer>
+//         <NavListUpdate to="/billlist">
+//           <UpdateBtn onClick={handleSaveToStorage}>수정</UpdateBtn>
+//         </NavListUpdate>
+//         <NavListDel to="/billlist">
+//           <DelBtn onClick={handleSaveToStorage}>삭제</DelBtn>
+//         </NavListDel>
+//       </ButtonContainer>
+//     </>
+//   );
+// }
 
-  const { index } = useParams();
+// const NavListUpdate = styled(NavLink)`
+//   // 형태
+//   width: 40%;
+//   height: 60px;
+//   border-radius: 10px;
+//   background-color: #3369ff;
+//   color: #ffffff;
+//   // 배치
+//   margin: 0 10px;
+//   text-align: center;
 
-  useEffect(() => {
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
-    const itemToUpdate = storedList[index];
-    console.log(itemToUpdate);
+//   cursor: pointer;
 
-    if (itemToUpdate) {
-      setSelectedEmoji(itemToUpdate.selectedEmoji);
-      setWhoValue(itemToUpdate.whoValue);
-      setSelectedCategory(itemToUpdate.selectedCategory);
-      setBillValue(itemToUpdate.billValue);
-      setMemoValue(itemToUpdate.memoValue);
-    }
-  }, [index]);
+//   // 글꼴
+//   font-family: SUIT;
+//   font-size: 16px;
+//   font-weight: 700;
+//   line-height: 20px;
+//   letter-spacing: 0em;
+// `;
 
-  //수정 기능 구현
-  const handleUpdateStorage = () => {
-    if (billValue === '') {
-      setShowBillAlert(true);
-      return;
-    }
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
+// const NavListDel = styled(NavLink)`
+//   // 형태
+//   width: 40%;
+//   height: 60px;
+//   border-radius: 10px;
+//   background-color: #ffffff;
+//   color: #3369ff;
+//   border: solid #3369ff 1px;
 
-    sessionStorage.setItem('billList', JSON.stringify(storedList));
+//   // 배치
+//   margin: 0 10px;
+//   text-align: center;
 
-    const itemToUpdate = storedList[index];
-    itemToUpdate.selectedEmoji = selectedEmoji;
-    itemToUpdate.whoValue = whoValue;
-    itemToUpdate.selectedCategory = selectedCategory;
-    itemToUpdate.billValue = billValue;
-    itemToUpdate.memoValue = memoValue;
+//   cursor: pointer;
 
-    storedList[index] = itemToUpdate;
+//   // 글꼴
+//   font-family: SUIT;
+//   font-size: 16px;
+//   font-weight: 700;
+//   line-height: 20px;
+//   letter-spacing: 0em;
+// `;
 
-    sessionStorage.setItem('billList', JSON.stringify(storedList));
+// const ButtonContainer = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   margin-top: 30px;
+// `;
 
-    console.log('이 인덱스의 배열의 값은:', storedList[index]);
-    console.log('Updated Bill List:', storedList);
-    navigate('/billlist');
-  };
+// const UpdateBtn = styled.button``;
 
-  //삭제기능 구현
-  const handleDeleteStorage = () => {
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
-
-    if (storedList && storedList[index]) {
-      storedList.splice(index, 1);
-      sessionStorage.setItem('billList', JSON.stringify(storedList));
-    }
-    console.log('Delete Bill List:', storedList);
-  };
-
-  return (
-    <>
-<<<<<<< HEAD
-      <Content>
-        <Emoji value={selectedEmoji} onClickEmoji={setSelectedEmoji} />
-        <Who value={whoValue} onClickWho={setWhoValue} />
-        <Category value={selectedCategory} onClickCategory={onClickCategory} />
-        <Bill
-          value={billValue}
-          setValue={handleBillValueChange}
-          showAlert={showBillAlert}
-          setShowAlert={setShowBillAlert}
-        />
-        <Memo value={memoValue} setValue={setMemoValue} />
-        <ButtonContainer>
-          <NavListUpdate>
-            <UpdateBtn onClick={handleUpdateStorage}>수정</UpdateBtn>
-          </NavListUpdate>
-          <NavListDel to="/billlist">
-            <DelBtn onClick={handleDeleteStorage}>삭제</DelBtn>
-          </NavListDel>
-        </ButtonContainer>
-      </Content>
-=======
-      <Emoji value={selectedEmoji} onClickEmoji={setSelectedEmoji} />
-      <Who value={whoValue} onClickWho={setWhoValue} />
-      <Category value={selectedCategory} onClickCategory={onClickCategory} />
-      <Bill
-        value={billValue}
-        setValue={handleBillValueChange}
-        showAlert={showBillAlert}
-        setShowAlert={setShowBillAlert}
-      />
-      <Memo value={memoValue} setValue={setMemoValue} />
-      <ButtonContainer>
-        <NavListUpdate>
-          <UpdateBtn onClick={handleUpdateStorage}>수정</UpdateBtn>
-        </NavListUpdate>
-        <NavListDel to="/billlist">
-          <DelBtn onClick={handleDeleteStorage}>삭제</DelBtn>
-        </NavListDel>
-      </ButtonContainer>
->>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
-    </>
-  );
-}
-
-<<<<<<< HEAD
-const Content = styled.section`
-  max-width: 390px;
-  margin: 0 auto;
-  padding: 0 20px;
-  margin-bottom: 32px;
-`;
-
-=======
->>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
-const NavListUpdate = styled.div`
-  // 형태
-  width: 42%;
-  height: 60px;
-  border-radius: 10px;
-  background-color: #05b70c;
-  color: #ffffff;
-  // 배치
-  margin: 0 10px;
-  text-align: center;
-
-  cursor: pointer;
-
-  // 글꼴
-  font-family: SUIT;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0em;
-`;
-
-const NavListDel = styled(NavLink)`
-  // 형태
-  width: 42%;
-  height: 60px;
-  border-radius: 10px;
-  background-color: #ffffff;
-  color: #3369ff;
-  border: solid #05b70c 1px;
-
-  // 배치
-  margin: 0 10px;
-  text-align: center;
-
-  cursor: pointer;
-
-  // 글꼴
-  font-family: SUIT;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0em;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-`;
-
-const UpdateBtn = styled.button`
-  //형태
-<<<<<<< HEAD
-=======
-  width: 87%;
->>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
-  height: 60px;
-  border-radius: 10px;
-  background-color: #05b70c;
-  color: #ffffff;
-
-  //배치
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-
-  cursor: pointer;
-
-  //글꼴
-  font-family: SUIT;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0em;
-  text-align: left;
-`;
-
-const DelBtn = styled.button`
-  //형태
-<<<<<<< HEAD
-  height: 58px;
-=======
-  width: 87%;
-  height: 60px;
->>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
-  border-radius: 10px;
-  color: #05b70c;
-  background-color: #ffffff;
-
-  //배치
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-
-  cursor: pointer;
-
-  //글꼴
-  font-family: SUIT;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0em;
-  text-align: left;
-`;
+// const DelBtn = styled.button``;

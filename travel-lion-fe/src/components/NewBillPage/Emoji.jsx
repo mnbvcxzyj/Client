@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const emojiDataset = [
@@ -204,13 +204,10 @@ const emojiDataset = [
   },
 ];
 
-export default function Emoji({ value, onClickEmoji }) {
+export default function Emoji({ onClickEmoji }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState('');
 
-  useEffect(() => {
-    setSelectedEmoji(value);
-  }, [value]);
   const onClickOption = (e) => {
     onClickEmoji(e.target.value);
     setSelectedEmoji(e.target.value);

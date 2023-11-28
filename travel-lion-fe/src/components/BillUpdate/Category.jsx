@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/tm.png';
+import CategoryImgSelf from '../../images/Newbill/white.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 
@@ -36,22 +36,13 @@ const categoryDataset = [
   },
 ];
 
-export default function Category({ value, onClickCategory }) {
+export default function Category({ onClickCategory }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
 
-  useEffect(() => {
-    if (value === '') return;
-    setSelectedCategory(value);
-    const selectedCategoryInfo = categoryDataset.find(
-      (category) => category.name === value,
-    );
-    setSelectedCategoryImg(selectedCategoryInfo.img);
-  }, [value]);
-
-  const onClickOption = (name) => {
-    const selectedCategoryName = name;
+  const onClickOption = (e) => {
+    const selectedCategoryName = e.target.innerText;
 
     const selectedCategoryInfo = categoryDataset.find(
       (category) => category.name === selectedCategoryName,
@@ -75,11 +66,7 @@ export default function Category({ value, onClickCategory }) {
         {' '}
         &nbsp; 카테고리를 선택해주세요. <Rq>(필수)</Rq>
       </Demand>
-      <SelectButton
-        type="button"
-        onClick={onClickSelect}
-        isDropDown={isDropDown}
-      >
+      <SelectButton type="button" onClick={onClickSelect}>
         {selectedCategory ? (
           <>
             <table>
@@ -108,9 +95,7 @@ export default function Category({ value, onClickCategory }) {
             <Option
               value={category.name}
               key={category.id}
-              onClick={() => {
-                onClickOption(category.name);
-              }}
+              onClick={onClickOption}
               isSelected={category.name === selectedCategory}
             >
               <tr>
@@ -135,57 +120,42 @@ export default function Category({ value, onClickCategory }) {
     </Component>
   );
 }
+
 const Component = styled.div`
-  /* width: 87%;
+  width: 87%;
   align-items: center;
   margin: 0 auto;
-  margin-bottom: 30px; */
-
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 30px;
 `;
 
 const Demand = styled.p`
-  /* font-family: Pretendard;
-  font-size: 14px;
-  font-weight: 500; */
-  /* text-align: left; */
-
-  color: #525252;
-  margin-top: 30px;
-
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
-  /* text-align: left; */
+  text-align: left;
+
+  color: #525252;
+  margin-top: 35px;
 `;
 
 const Rq = styled.span`
-  color: #888;
-
-  /* H5 */
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
 
   width: 29px;
   height: 14px;
 `;
 
 const SelectButton = styled.button`
-  /* width: 100%; */
-  /* padding: 13px;
+  width: 100%;
+  padding: 13px;
   background-color: #f3f3f3;
-  border-radius: 5px; */
-
-  position: relative;
-  width: 340px;
-  height: 50px;
-  cursor: pointer;
   border-radius: 5px;
-  background: #f3f3f3;
+  cursor: pointer;
 
   font-family: Pretendard;
   font-size: 14px;
@@ -193,40 +163,25 @@ const SelectButton = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
-
-<<<<<<< HEAD
-  border: ${(props) =>
-    props.isDropDown
-      ? '2px solid #05B70C'
-      : props.$error
-      ? '1px solid red'
-      : '1px solid transparent'};
 `;
 
 const DropDown = styled.div`
-  /* margin-top: 4px;
-=======
-  border: ${(props) => (props.isDropDown ? '2px solid #05B70C' : 'none')};
-`;
-
-const DropDown = styled.div`
->>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
+  margin-top: 4px;
   width: 87%;
-  position: absolute; */
+  position: absolute;
 
   background-color: #ffffff;
   border-radius: 5px;
+  overflow-y: auto;
   box-shadow: 0px 0px 4px 0px #0000004d;
-  z-index: 1;
 `;
 
 const Option = styled.button`
-  width: 340px;
-  height: 50px;
+  width: 100%;
   color: #525252;
   background-color: #ffffff;
   border-radius: 5px;
-  /* text-align: left; */
+  text-align: left;
   border-bottom: 0.3px solid #adb6bd;
 
   font-family: Pretendard;
@@ -238,6 +193,8 @@ const Option = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  padding: 15px;
 
   &:hover {
     background-color: #f3f3f3;

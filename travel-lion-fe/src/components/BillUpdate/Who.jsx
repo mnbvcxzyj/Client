@@ -168,7 +168,7 @@ const Demand = styled.p`
 `;
 
 const SelectButton = styled.button`
-  width: 340px;
+  width: 100%;
   height: 50px;
   background-color: #f3f3f3;
   border-radius: 5px;
@@ -180,12 +180,14 @@ const SelectButton = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
   text-align: left;
+  width: 340px;
 `;
 
 const DropDown = styled.div`
   /* margin-top: 4px;
   width: 87%;
   position: absolute; */
+
   width: 340px;
 
   background-color: #ffffff;
@@ -232,7 +234,7 @@ const UserImgStyle = styled.img`
   width: 24px;
   height: 24px;
 
-  margin-left: 20px;
+  margin-left: 10px;
   margin-right: 10px;
 `;
 
@@ -247,4 +249,5 @@ const UserCheaked = styled.img`
   height: 10.48px;
 
   vertical-align: middle;
+  margin-right: 10px;
 `;

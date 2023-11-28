@@ -53,7 +53,6 @@ export default function NewBillBtn() {
 
   return (
     <>
-<<<<<<< HEAD
       <Content>
         <Emoji onClickEmoji={setSelectedEmoji} />
         <Who setValue={setWhoValue} />
@@ -70,22 +69,6 @@ export default function NewBillBtn() {
         <Memo setValue={setMemoValue} />
         <NewBtn onClick={handleSaveToStorage}>확인</NewBtn>
       </Content>
-=======
-      <Emoji onClickEmoji={setSelectedEmoji} />
-      <Who setValue={setWhoValue} />
-      <Category
-        onClickCategory={onClickCategory}
-        showAlert={showCategoryAlert}
-        setShowAlert={setShowCategoryAlert}
-      />
-      <Bill
-        setValue={handleBillValueChange}
-        showAlert={showBillAlert}
-        setShowAlert={setShowBillAlert}
-      />
-      <Memo setValue={setMemoValue} />
-      <NewBtn onClick={handleSaveToStorage}>확인</NewBtn>
->>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
     </>
   );
 }

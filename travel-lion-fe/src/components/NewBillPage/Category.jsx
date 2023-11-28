@@ -199,7 +199,7 @@ const SelectButton = styled.button`
 
   border: ${(props) =>
     props.isDropDown
-      ? '2px solid #00bc78'
+      ? '2px solid #05B70C'
       : props.$error
       ? '1px solid red'
       : '1px solid transparent'};
@@ -242,7 +242,7 @@ const Option = styled.button`
   ${(props) =>
     props.isSelected &&
     `
-    color: #00bc78;
+    color: #00BC78;
   `}
 `;
 

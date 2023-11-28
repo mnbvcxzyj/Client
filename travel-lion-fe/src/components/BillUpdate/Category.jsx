@@ -203,7 +203,7 @@ const SelectButton = styled.button`
 
   border: ${(props) =>
     props.isDropDown
-      ? '2px solid #00bc78'
+      ? '2px solid #00BC78'
       : props.$error
       ? '1px solid red'
       : '1px solid transparent'};
@@ -215,7 +215,6 @@ const DropDown = styled.div`
   position: absolute; */
 
   width: 340px;
-
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 0px 4px 0px #0000004d;
@@ -248,7 +247,7 @@ const Option = styled.button`
   ${(props) =>
     props.isSelected &&
     `
-    color: #00bc78;
+    color: #00BC78;
   `}
 `;
 const Downimg = styled.img`
@@ -274,4 +273,5 @@ const CategoryCheaked = styled.img`
   height: 10.48px;
 
   vertical-align: middle;
+  margin-right: 10px;
 `;

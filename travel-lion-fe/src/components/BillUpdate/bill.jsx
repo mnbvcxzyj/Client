@@ -97,8 +97,6 @@ const InputBill = styled.input`
   line-height: 19px;
   letter-spacing: 0em;
   text-align: left;
-
-  padding: 0px 10px;
 `;
 
 const Alertimg = styled.img`

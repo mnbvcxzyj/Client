@@ -15,8 +15,6 @@ import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
 import BottomModal from './components/TravelAccount/BottomModal';
-import NewCategoryPage from './components/NewCategory/NewCategory';
-import EditCategoryPage from './components/EditCategory/EditCategory';
 
 export default function Router() {
   return (

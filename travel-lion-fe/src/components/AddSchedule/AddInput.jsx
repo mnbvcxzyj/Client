@@ -4,10 +4,25 @@ import 'react-calendar/dist/Calendar.css';
 import { countryData } from '../../data/CountryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import Calendar from 'react-calendar';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddInput = () => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+
+  const [title, setTitle] = useState('');
+  const [nation, setNation] = useState('');
+  const [location, setLocation] = useState('');
+  const [budget, setBudget] = useState(0);
+  const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}-${String(date.getDate()).padStart(2, '0')}`;
+  };
 
   const toggleDateModal = () => {
     setIsDateModalOpen(!isDateModalOpen);
@@ -19,15 +34,33 @@ const AddInput = () => {
   };
 
   const formatSelectedDateRange = (range) => {
-    const startDate = range[0];
-    const endDate = range[1];
-    const startDateString = `${startDate.getFullYear()}/${
-      startDate.getMonth() + 1
-    }/${startDate.getDate()}`;
-    const endDateString = `${endDate.getFullYear()}/${
-      endDate.getMonth() + 1
-    }/${endDate.getDate()}`;
-    return `${startDateString} - ${endDateString}`;
+    const startDateString = formatDate(range[0]);
+    const endDateString = formatDate(range[1]);
+    return `${startDateString} ~ ${endDateString}`;
+  };
+
+  const handleSubmit = async () => {
+    const formData = {
+      title,
+      nation,
+      location,
+      startDate: formatDate(dateRange[0]),
+      endDate: formatDate(dateRange[1]),
+      budget,
+    };
+
+    try {
+      const response = await axios.post('http://3.36.156.17/group', formData, {
+        headers: {
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTU0OTcxLCJpYXQiOjE3MDExNTMxNzEsImp0aSI6IjRlYzgwZDk5ZTAxNjQ1Nzk4Y2E3ZTI0OTU2OWQ1MzI3IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.QTk07egRmvV-9-g-yaYShjsR8szOXw1yO5oFPfk7ARcBearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTU0OTcxLCJpYXQiOjE3MDExNTMxNzEsImp0aSI6IjRlYzgwZDk5ZTAxNjQ1Nzk4Y2E3ZTI0OTU2OWQ1MzI3IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.QTk07egRmvV-9-g-yaYShjsR8szOXw1yO5oFPfk7ARc `,
+        },
+      });
+      console.log(response.data);
+      navigate('/travelaccountbook');
+    } catch (error) {
+      console.error('에러가 발생했습니다 ⚠', error);
+      alert('에러가 발생했습니다! ⚠');
+    }
   };
 
   return (
@@ -35,18 +68,25 @@ const AddInput = () => {
       <Wrapper>
         <Text>플랜명을 입력해주세요.</Text>
         <InputWrapper>
-          <Input type="text" placeholder="ex) 자유여행" />
+          <Input
+            type="text"
+            placeholder="ex) 자유여행"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </InputWrapper>
       </Wrapper>
 
       <Wrapper>
         <Text>방문 국가를 선택해주세요.</Text>
         <InputWrapper>
-          <CountryDropdown>
+          <CountryDropdown
+            value={nation}
+            onChange={(e) => setNation(e.target.value)}
+          >
             {countryData.countries.map((country) => (
-              <CountryOption key={country.code}>
-                {country.flag}&nbsp;
-                {country.name}
+              <CountryOption key={country.code} value={country.name}>
+                {country.flag}&nbsp;{country.name}
               </CountryOption>
             ))}
           </CountryDropdown>
@@ -56,7 +96,12 @@ const AddInput = () => {
       <Wrapper>
         <Text>방문 지역을 입력해주세요.</Text>
         <InputWrapper>
-          <Input type="text" placeholder="ex) 시드니" />
+          <Input
+            type="text"
+            placeholder="ex) 시드니"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
         </InputWrapper>
       </Wrapper>
 
@@ -118,9 +163,17 @@ const AddInput = () => {
       <Wrapper>
         <Text>예상 경비를 작성해주세요.</Text>
         <InputWrapper>
-          <Input type="number" placeholder="숫자만 입력 가능합니다" />
+          <Input
+            type="number"
+            placeholder="숫자만 입력 가능합니다"
+            value={budget}
+            onChange={(e) => setBudget(e.target.value)}
+          />
         </InputWrapper>
       </Wrapper>
+      <AddButton to="/addSchedule" onClick={handleSubmit}>
+        확인
+      </AddButton>
     </Container>
   );
 };
@@ -324,15 +377,36 @@ const DateModal = styled.div`
   .react-calendar__tile--rangeStart,
   .react-calendar__tile--rangeEnd {
     background-color: #00bc78;
-    border-radius: 30px;
+    /* border-radius: 30px; */
     color: white;
   }
 
   // 기간 선택하면 그 사이 배경
   .react-calendar--selectRange .react-calendar__tile--hover {
     background-color: #dff3dd;
-    border-radius: 30px;
+    /* border-radius: 30px; */
   }
+`;
+
+const AddButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 120px;
+  width: 340px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #00bc78;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+  cursor: pointer;
 `;
 
 export default AddInput;

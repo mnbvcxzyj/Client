@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
 import { countryData } from '../../data/CountryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import Calendar from 'react-calendar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import * as F from './AddInputStyle';
 
 const AddInput = () => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
@@ -16,6 +16,18 @@ const AddInput = () => {
   const [location, setLocation] = useState('');
   const [budget, setBudget] = useState(0);
   const navigate = useNavigate();
+
+  const numberCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  const handleBudgetChange = (e) => {
+    const value = e.target.value.replace(/,/g, '');
+
+    if (!isNaN(value)) {
+      setBudget(numberCommas(value));
+    }
+  };
 
   const formatDate = (date) => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
@@ -46,7 +58,7 @@ const AddInput = () => {
       location,
       startDate: formatDate(dateRange[0]),
       endDate: formatDate(dateRange[1]),
-      budget,
+      budget: parseInt(budget.replace(/,/g, '')),
     };
 
     try {
@@ -64,60 +76,61 @@ const AddInput = () => {
   };
 
   return (
-    <Container>
-      <Wrapper>
-        <Text>플랜명을 입력해주세요.</Text>
-        <InputWrapper>
-          <Input
+    <F.Container>
+      <F.Wrapper>
+        <F.Text>플랜명을 입력해주세요.</F.Text>
+        <F.InputWrapper>
+          <F.Input
             type="text"
             placeholder="ex) 자유여행"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-        </InputWrapper>
-      </Wrapper>
+        </F.InputWrapper>
+      </F.Wrapper>
 
-      <Wrapper>
-        <Text>방문 국가를 선택해주세요.</Text>
-        <InputWrapper>
-          <CountryDropdown
+      <F.Wrapper>
+        <F.Text>방문 국가를 선택해주세요.</F.Text>
+        <F.InputWrapper>
+          <F.CountryDropdown
             value={nation}
             onChange={(e) => setNation(e.target.value)}
           >
             {countryData.countries.map((country) => (
-              <CountryOption key={country.code} value={country.name}>
+              <F.CountryOption key={country.code} value={country.name}>
                 {country.flag}&nbsp;{country.name}
-              </CountryOption>
+              </F.CountryOption>
             ))}
-          </CountryDropdown>
-        </InputWrapper>
-      </Wrapper>
+          </F.CountryDropdown>
+        </F.InputWrapper>
+      </F.Wrapper>
 
-      <Wrapper>
-        <Text>방문 지역을 입력해주세요.</Text>
-        <InputWrapper>
-          <Input
+      <F.Wrapper>
+        <F.Text>방문 지역을 입력해주세요.</F.Text>
+        <F.InputWrapper>
+          <F.Input
             type="text"
             placeholder="ex) 시드니"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
-        </InputWrapper>
-      </Wrapper>
+        </F.InputWrapper>
+        <F.erText>20자 이내로 입력해주세요.</F.erText>
+      </F.Wrapper>
 
-      <Wrapper>
-        <Text>여행 기간을 선택해주세요.</Text>
-        <InputWrapper>
-          <Input
+      <F.Wrapper>
+        <F.Text>여행 기간을 선택해주세요.</F.Text>
+        <F.InputWrapper>
+          <F.Input
             type="text"
             value={formatSelectedDateRange(dateRange)}
             placeholder="날짜 선택"
             readOnly
           />
           <img src={arrow} alt="⬇️" onClick={toggleDateModal} />
-        </InputWrapper>
+        </F.InputWrapper>
         {isDateModalOpen && (
-          <DateModal>
+          <F.DateModal>
             <Calendar
               onChange={handleDateChange}
               value={dateRange}
@@ -156,257 +169,26 @@ const AddInput = () => {
               showNeighboringMonth={false}
               calendarType="US"
             />
-          </DateModal>
+          </F.DateModal>
         )}
-      </Wrapper>
+      </F.Wrapper>
 
-      <Wrapper>
-        <Text>예상 경비를 작성해주세요.</Text>
-        <InputWrapper>
-          <Input
-            type="number"
+      <F.Wrapper>
+        <F.Text>예상 경비를 작성해주세요.</F.Text>
+        <F.InputWrapper>
+          <F.Input
+            type="text"
             placeholder="숫자만 입력 가능합니다"
             value={budget}
-            onChange={(e) => setBudget(e.target.value)}
+            onChange={handleBudgetChange}
           />
-        </InputWrapper>
-      </Wrapper>
-      <AddButton to="/addSchedule" onClick={handleSubmit}>
+        </F.InputWrapper>
+      </F.Wrapper>
+      <F.AddButton to="/addSchedule" onClick={handleSubmit}>
         확인
-      </AddButton>
-    </Container>
+      </F.AddButton>
+    </F.Container>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 390px;
-  margin: 0 auto;
-  margin-top: 46px;
-  gap: 26px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  margin: 0 auto;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  width: 339px;
-  height: 55px;
-  flex-shrink: 0;
-
-  border-radius: 6px;
-  border: 0.8px solid var(--Gray, #adb6bd);
-
-  img {
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-  }
-`;
-
-const Text = styled.div`
-  color: var(--Darkgray, #353a40);
-  font-family: Pretendard;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-`;
-
-const Input = styled.input`
-  width: 339px;
-  height: 55px;
-  flex-shrink: 1;
-  border: none;
-  outline: none;
-  color: #000;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  padding-left: 16px;
-  border-radius: 6px;
-  border: 0.8px solid var(--Gray, #adb6bd);
-`;
-
-const CountryDropdown = styled.select`
-  width: 339px;
-  height: 55px;
-
-  flex-shrink: 0;
-  color: #000;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  padding-left: 10px;
-  outline: none;
-  border: none;
-  -webkit-appearance: none;
-  appearance: none;
-
-  background: url(${arrow}) no-repeat 98% 50%/18px auto;
-`;
-
-const CountryOption = styled.option`
-  background-color: #fff;
-  color: #000;
-  outline: none;
-  border: none;
-  -webkit-appearance: none;
-  appearance: none;
-`;
-
-const DateModal = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-
-  // 달력 커스텀
-  .react-calendar {
-    // 흰 창
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    width: 350px;
-    height: 350px;
-    max-width: 100%;
-    background-color: #fff;
-    border-radius: 8px;
-    font-family: Pretendard;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  }
-  .react-calendar__navigation__label {
-    margin-top: 23px;
-  }
-
-  .react-calendar__navigation__arrow,
-  .react-calendar__navigation__next-button {
-    margin-top: 23px;
-  }
-
-  .react-calendar__tile--now {
-    // 오늘 날짜
-    background: none;
-  }
-
-  .react-calendar__tile--now:enabled:hover,
-  .react-calendar__tile--now:enabled:focus {
-    background-color: #00bc78;
-    /* border-radius: 30px; */
-  }
-
-  .react-calendar__tile--active:enabled:hover,
-  .react-calendar__tile--active:enabled:focus {
-    background: #00bc78;
-    /* border-radius: 30px; */
-
-    color: white;
-  }
-
-  // 년,월 글자
-  .react-calendar__navigation__label > span {
-    color: var(--Darkgray, #353a40);
-    text-align: center;
-    margin: 0 75px 0 75px;
-    font-family: Pretendard;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-  }
-
-  // 요일
-  .react-calendar__month-view__weekdays {
-    margin-top: 19px;
-    abbr {
-      font-family: Pretendard;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 12px;
-      letter-spacing: 0.36px;
-      text-transform: uppercase;
-      text-decoration: none;
-    }
-  }
-
-  // 한 칸
-  .react-calendar__tile {
-    display: flex;
-    height: 42px;
-    padding: 10px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
-    font-family: Pretendard;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 22px; /* 157.143% */
-  }
-
-  // 기간 설정하면 배경
-  .react-calendar__tile--active {
-    background: #dff3dd;
-    color: black;
-  }
-
-  // 시작 날짜, 끝 날짜
-  .react-calendar__tile--rangeStart,
-  .react-calendar__tile--rangeEnd {
-    background-color: #00bc78;
-    /* border-radius: 30px; */
-    color: white;
-  }
-
-  // 기간 선택하면 그 사이 배경
-  .react-calendar--selectRange .react-calendar__tile--hover {
-    background-color: #dff3dd;
-    /* border-radius: 30px; */
-  }
-`;
-
-const AddButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  margin-top: 120px;
-  width: 340px;
-  height: 60px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  background: #00bc78;
-  color: #fff;
-  font-family: Pretendard;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-
-  cursor: pointer;
-`;
 
 export default AddInput;

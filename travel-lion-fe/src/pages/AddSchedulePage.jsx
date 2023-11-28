@@ -8,7 +8,6 @@ const AddSchedulePage = () => {
     <>
       <AddHeader />
       <AddInput />
-      <AddBtn />
     </>
   );
 };

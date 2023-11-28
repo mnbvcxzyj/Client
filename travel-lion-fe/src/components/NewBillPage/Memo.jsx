@@ -94,7 +94,11 @@ const TextareaMemo = styled.textarea`
 
   background-color: #f3f3f3;
   border-radius: 5px;
+<<<<<<< HEAD
+  border: 1px solid ${(props) => (props.error ? 'red' : '#00BC78;')};
+=======
   border: none;
+>>>>>>> 55397adb57c02618bae49ec54e5a4e0ac4e4d533
   cursor: pointer;
 
   font-family: Pretendard;

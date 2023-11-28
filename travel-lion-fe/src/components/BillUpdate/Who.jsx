@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import userImg from '../../images/BillList/userImg.png';
-import ImgV from '../../images/Newbill/v.png';
-import Triangle from '../../images/Newbill/triangle.png';
 
 const billDataset = [
   {
@@ -61,13 +59,10 @@ const billDataset = [
 
 const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
 
-export default function Who({ value, onClickWho }) {
+export default function Who({ onClickWho }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedWho, setSelectedWho] = useState('');
 
-  useEffect(() => {
-    setSelectedWho(value);
-  }, [value]);
   const onClickOption = (e) => {
     onClickWho(e.target.value);
     setSelectedWho(e.target.innerText);
@@ -80,37 +75,9 @@ export default function Who({ value, onClickWho }) {
 
   return (
     <Component>
-      <Demand> &nbsp; 작성자를 선택해주세요.</Demand>
-      <SelectButton
-        type="button"
-        onClick={onClickSelect}
-        isDropDown={isDropDown}
-      >
-        {selectedWho ? (
-          <>
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <UserImgStyle
-                      src={
-                        billDataset.find(
-                          (bill) => bill.authorName === selectedWho,
-                        )?.userImage || ''
-                      }
-                      alt={selectedWho}
-                    />
-                  </td>
-                  <td style={{ verticalAlign: 'middle' }}>
-                    <UserNameStyle>{selectedWho}</UserNameStyle>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </>
-        ) : (
-          <Downimg src={Triangle} />
-        )}
+      <Demand>작성자를 선택해주세요.</Demand>
+      <SelectButton type="button" onClick={onClickSelect}>
+        {selectedWho || '선택하세요'}
       </SelectButton>
       {isDropDown && (
         <DropDown>
@@ -119,21 +86,13 @@ export default function Who({ value, onClickWho }) {
               value={bill.authorName}
               key={bill.id}
               onClick={onClickOption}
-              isSelected={bill.authorName === selectedWho}
             >
-              <tr>
-                <td>
-                  <UserImgStyle src={bill.userImage} alt={bill.authorName} />
-                </td>
-                <td
-                  style={{
-                    verticalAlign: 'middle',
-                  }}
-                >
-                  <UserNameStyle>{bill.authorName}</UserNameStyle>
-                </td>
-              </tr>
-              {bill.authorName === selectedWho && <UserCheaked src={ImgV} />}
+              <img
+                src={bill.userImage}
+                alt={bill.authorName}
+                style={{ width: '5%' }}
+              />
+              {bill.authorName}
             </Option>
           ))}
         </DropDown>
@@ -143,18 +102,10 @@ export default function Who({ value, onClickWho }) {
 }
 
 const Component = styled.div`
-  /* display: flex;
-  width: 340px;
-  padding: 10px 237px 5px 13px;
-  align-items: center;
-  margin: 0 auto; */
-
-  align-items: center;
-
-  /* width: 87%;
+  width: 87%;
   align-items: center;
   margin: 0 auto;
-  margin-bottom: 30px; */
+  margin-bottom: 30px;
 `;
 
 const Demand = styled.p`
@@ -169,7 +120,7 @@ const Demand = styled.p`
 
 const SelectButton = styled.button`
   width: 100%;
-  height: 50px;
+  padding: 15px;
   background-color: #f3f3f3;
   border-radius: 5px;
   cursor: pointer;
@@ -184,7 +135,6 @@ const SelectButton = styled.button`
 `;
 
 const DropDown = styled.div`
-  /* margin-top: 4px;
   width: 87%;
   position: absolute; */
 
@@ -192,17 +142,16 @@ const DropDown = styled.div`
 
   background-color: #ffffff;
   border-radius: 5px;
+  overflow-y: auto;
   box-shadow: 0px 0px 4px 0px #0000004d;
 `;
 
 const Option = styled.button`
-  width: 340px;
-  height: 50px;
+  width: 100%;
   color: #525252;
   background-color: #ffffff;
   border-radius: 5px;
-  /* text-align: left; */
-  border-bottom: 0.3px solid #adb6bd;
+  text-align: left;
 
   font-family: Pretendard;
   font-size: 14px;
@@ -210,9 +159,7 @@ const Option = styled.button`
   line-height: 17px;
   letter-spacing: 0em;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 15px;
 
   &:hover {
     background-color: #f3f3f3;

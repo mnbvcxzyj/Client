@@ -242,7 +242,7 @@ const Option = styled.button`
   ${(props) =>
     props.isSelected &&
     `
-    color: #00BC78;
+    color: #05b70c;
   `}
 `;
 

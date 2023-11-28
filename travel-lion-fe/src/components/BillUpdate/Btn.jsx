@@ -115,7 +115,7 @@ const NavListUpdate = styled.div`
   width: 42%;
   height: 60px;
   border-radius: 10px;
-  background-color: #05b70c;
+  background-color: #00bc78;
   color: #ffffff;
   // 배치
   margin: 0 10px;
@@ -137,8 +137,8 @@ const NavListDel = styled(NavLink)`
   height: 60px;
   border-radius: 10px;
   background-color: #ffffff;
-  color: #3369ff;
-  border: solid #05b70c 1px;
+  color: #00bc78;
+  border: solid #00bc78 1px;
 
   // 배치
   margin: 0 10px;
@@ -164,7 +164,7 @@ const UpdateBtn = styled.button`
   //형태
   height: 60px;
   border-radius: 10px;
-  background-color: #05b70c;
+  background-color: #00bc78;
   color: #ffffff;
 
   //배치
@@ -189,7 +189,7 @@ const DelBtn = styled.button`
   //형태
   height: 58px;
   border-radius: 10px;
-  color: #05b70c;
+  color: #00bc78;
   background-color: #ffffff;
 
   //배치

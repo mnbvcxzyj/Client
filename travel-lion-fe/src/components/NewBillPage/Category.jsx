@@ -43,8 +43,8 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
 
-  const onClickOption = (e) => {
-    const selectedCategoryName = e.target.innerText;
+  const onClickOption = (name) => {
+    const selectedCategoryName = name;
 
     const selectedCategoryInfo = categoryDataset.find(
       (category) => category.name === selectedCategoryName,
@@ -183,6 +183,7 @@ const SelectButton = styled.button`
   background-color: #f3f3f3;
   border-radius: 5px; */
 
+  position: relative;
   width: 340px;
   height: 50px;
   cursor: pointer;
@@ -198,7 +199,7 @@ const SelectButton = styled.button`
 
   border: ${(props) =>
     props.isDropDown
-      ? '2px solid #05B70C'
+      ? '2px solid #00bc78'
       : props.$error
       ? '1px solid red'
       : '1px solid transparent'};
@@ -211,7 +212,6 @@ const DropDown = styled.div`
 
   background-color: #ffffff;
   border-radius: 5px;
-  overflow-y: auto;
   box-shadow: 0px 0px 4px 0px #0000004d;
 `;
 
@@ -242,7 +242,7 @@ const Option = styled.button`
   ${(props) =>
     props.isSelected &&
     `
-    color: #00BC78;
+    color: #00bc78;
   `}
 `;
 

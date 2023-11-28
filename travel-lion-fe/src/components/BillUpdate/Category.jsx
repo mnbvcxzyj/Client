@@ -7,6 +7,7 @@ import CategoryImgEtc from '../../images/Newbill/etc.png';
 import CategoryImgSelf from '../../images/Newbill/tm.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
+import { useNavigate } from 'react-router-dom';
 
 const categoryDataset = [
   {
@@ -69,6 +70,8 @@ export default function Category({ value, onClickCategory }) {
     setIsDropDown(!isDropDown);
   };
 
+  const navigate = useNavigate();
+
   return (
     <Component>
       <Demand>
@@ -109,7 +112,11 @@ export default function Category({ value, onClickCategory }) {
               value={category.name}
               key={category.id}
               onClick={() => {
-                onClickOption(category.name);
+                if (category.name === '직접 입력하기') {
+                  navigate('/newcate');
+                } else {
+                  onClickOption(category.name);
+                }
               }}
               isSelected={category.name === selectedCategory}
             >
@@ -196,7 +203,7 @@ const SelectButton = styled.button`
 
   border: ${(props) =>
     props.isDropDown
-      ? '2px solid #05B70C'
+      ? '2px solid #00bc78'
       : props.$error
       ? '1px solid red'
       : '1px solid transparent'};
@@ -206,6 +213,8 @@ const DropDown = styled.div`
   /* margin-top: 4px;
   width: 87%;
   position: absolute; */
+
+  width: 340px;
 
   background-color: #ffffff;
   border-radius: 5px;
@@ -239,7 +248,7 @@ const Option = styled.button`
   ${(props) =>
     props.isSelected &&
     `
-    color: #05b70c;
+    color: #00bc78;
   `}
 `;
 const Downimg = styled.img`
@@ -250,7 +259,7 @@ const CategoryImgStyle = styled.img`
   width: 24px;
   height: 24px;
 
-  margin-left: 20px;
+  margin-left: 10px;
   margin-right: 10px;
 `;
 

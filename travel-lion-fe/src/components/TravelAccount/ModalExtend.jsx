@@ -61,7 +61,7 @@ function ModalExtend({ onCurrencySelect }) {
             onClick={() => onCurrencySelect(country.curUnit)}
           >
             {country.countryName} - {country.curUnit}(
-            {country.curNm.split('-')[1].trim()})
+            {country.curNm.split('-')[1].trim()})<SelectBtn>선택</SelectBtn>
           </CurrencyItem>
         ))}
       </CurrencyList>
@@ -69,7 +69,14 @@ function ModalExtend({ onCurrencySelect }) {
   );
 }
 
-const ModalWrapper = styled.div``;
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+`;
 
 const SearchWrapper = styled.div`
   display: flex;
@@ -109,7 +116,7 @@ const SelectBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 1;
   margin-right: 30px;
 
   width: 46px;

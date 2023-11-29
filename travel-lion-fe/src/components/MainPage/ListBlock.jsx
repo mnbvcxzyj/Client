@@ -2,45 +2,122 @@ import React, { useState, useEffect } from 'react';
 import shareLogoWhite from '../../images/MainPage/share_white.svg';
 import shareLogoGreen from '../../images/MainPage/share_green.svg';
 import * as M from './MainPageStyle';
-import { travelData } from '../../data/TravelData';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function ListBlock() {
+  const [travelDatas, setTravelDatas] = useState([]);
+
+  useEffect(() => {
+    const userId = '8a028aab-e74c-46c6-a7d2-5807f5cd3aaf'; // 여기에 실제 사용자의 userId를 설정해야 합니다.
+    const token =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTg2OTcxLCJpYXQiOjE3MDExODUxNzEsImp0aSI6IjA3OTZkMTFiNjRiNzRhY2FiNjk5Y2MyZDMwOTVkOGQ0IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.qxDeQSh16kRVV0P1roKbgUYeiNof5VldUATenE3Ov3w';
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json', // 필요한 경우 다른 헤더도 추가할 수 있습니다.
+    };
+
+    axios
+      .get(`http://3.36.156.17/${userId}/grouplist`, { headers }) // Bearer 토큰을 헤더에 추가
+      .then((response) => {
+        setTravelDatas(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          '백엔드에서 데이터를 가져오는 중 오류가 발생했습니다.',
+          error,
+        );
+      });
+  }, []);
+
   // 국기 이모지
   const getFlagEmoji = (c) =>
     String.fromCodePoint(
       ...[...c.toUpperCase()].map((x) => 0x1f1a5 + x.charCodeAt()),
     );
 
-  const [travelDatas, setTravelDatas] = useState(travelData);
-
-  const calculateDday = (date) => {
+  const calculateDday = (startDate, endDate) => {
     const today = new Date();
-    const timeDiff = date - today;
-    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    return daysDiff;
-  };
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-  const getDdayText = (daysDiff) => {
-    if (daysDiff < 0) {
-      return `D + ${Math.abs(daysDiff)}`;
+    if (today >= start && today <= end) {
+      // 여행이 진행 중
+      return Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+    } else if (today < start) {
+      // 여행 시작 전
+      return Math.ceil((start - today) / (1000 * 60 * 60 * 24));
     } else {
-      return `D - ${daysDiff}`;
+      // 여행 종료
+      return -1;
     }
   };
 
+  // const getDdayText = (daysDiff, endDate) => {
+  //   if (daysDiff > 0) {
+  //     // 여행이 시작되지 않았을 때
+  //     return `D-${daysDiff}`;
+  //   } else if (daysDiff < 0) {
+  //     // 여행이 종료된 후
+  //     const end = new Date(endDate);
+  //     const today = new Date();
+  //     const passedDays = Math.ceil((today - end) / (1000 * 60 * 60 * 24));
+
+  //     return `D+${daysDiff}`;
+  //   }
+  // };
+
+  const getDdayText = (daysDiff, endDate) => {
+    if (daysDiff > 0) {
+      return `D-${daysDiff}`;
+    } else if (daysDiff === 0) {
+      return 'D-Day';
+    } else {
+      const end = new Date(endDate);
+      const today = new Date();
+      const passedDays = Math.ceil((today - end) / (1000 * 60 * 60 * 24));
+      return `D+${passedDays}`;
+    }
+  };
+
+  // useEffect(() => {
+  //   const sortedDdays = travelDatas
+  //     .slice()
+  //     .sort((a, b) => calculateDday(a.startDate) - calculateDday(b.startDate));
+  //   setTravelDatas(sortedDdays);
+  // }, []);
+
   useEffect(() => {
-    const sortedDdays = travelDatas
-      .slice()
-      .sort((a, b) => calculateDday(a.firstDate) - calculateDday(b.firstDate));
-    setTravelDatas(sortedDdays);
+    const sortedTravelDatas = travelDatas.slice().sort((a, b) => {
+      const remainingTimeA = calculateDday(a.startDate, a.endDate);
+      const remainingTimeB = calculateDday(b.startDate, b.endDate);
+
+      // 먼저 진행 중인 여행을 상단에 배치
+      if (remainingTimeA <= 0 && remainingTimeB > 0) return -1;
+      if (remainingTimeB <= 0 && remainingTimeA > 0) return 1;
+
+      // 나머지는 여행 시작일 기준으로 오름차순 정렬
+      return new Date(a.startDate) - new Date(b.startDate);
+    });
+    setTravelDatas(sortedTravelDatas);
   }, []);
 
   const sortedTravelDatas = travelDatas
     .slice()
-    .sort((a, b) => calculateDday(a.firstDate) - calculateDday(b.firstDate));
+    .sort(
+      (a, b) =>
+        calculateDday(a.startDate, a.endDate) -
+        calculateDday(b.startDate, b.endDate),
+    );
 
-  const minRemainingTime = calculateDday(sortedTravelDatas[0].firstDate);
+  const minRemainingTime =
+    sortedTravelDatas.length > 0
+      ? calculateDday(
+          sortedTravelDatas[0].startDate,
+          sortedTravelDatas[0].endDate,
+        )
+      : 0;
 
   return (
     <>
@@ -48,17 +125,28 @@ export default function ListBlock() {
         <M.Content>
           <M.ListText>리스트</M.ListText>
           {travelDatas.map((travelData) => {
-            const remainingTime = calculateDday(travelData.firstDate);
-            const isExpired = remainingTime <= 0;
-            const isMinRemainingTime = remainingTime === minRemainingTime;
+            // const isMinRemainingTime =
+            //   remainingTime === minRemainingTime && !isExpired;
+
+            const startDate = new Date(travelData.startDate);
+            const endDate = new Date(travelData.endDate);
+
+            const remainingTime = calculateDday(startDate, endDate);
+            const isExpired = remainingTime === -1;
+            const isMinRemainingTime = remainingTime <= 0;
 
             return (
               !isExpired && (
                 <Link to="/travelaccountbook">
                   <M.TravelItem
+                    // key={travelData.title}
+                    // isExpired={isExpired}
+                    // isMinRemainingTime={isMinRemainingTime}
+                    // remainingTime={remainingTime}
                     key={travelData.title}
                     isExpired={isExpired}
-                    isMinRemainingTime={isMinRemainingTime}
+                    isMinRemainingTime={remainingTime === 0}
+                    remainingTime={remainingTime}
                   >
                     <M.TopDiv>
                       <M.DdayText>{getDdayText(remainingTime)}</M.DdayText>
@@ -71,24 +159,24 @@ export default function ListBlock() {
                     </M.TopDiv>
 
                     <M.TravelContainer>
-                      <M.FlagEmoji>
+                      {/* <M.FlagEmoji>
                         {getFlagEmoji(travelData.countryCode)}
-                      </M.FlagEmoji>
+                      </M.FlagEmoji> */}
 
                       <M.TravelInfo>
                         <M.TravelTitle>{travelData.title}</M.TravelTitle>
                         <M.TravelInfo2>
                           <div>
-                            {travelData.country} - {travelData.city}
+                            {travelData.nation} - {travelData.location}
                           </div>
                           |
                           <div>
-                            {travelData.firstDate.toLocaleDateString('en-US', {
+                            {startDate.toLocaleDateString('en-US', {
                               month: '2-digit',
                               day: '2-digit',
                             })}
                             &nbsp;-&nbsp;
-                            {travelData.lastDate.toLocaleDateString('en-US', {
+                            {endDate.toLocaleDateString('en-US', {
                               month: '2-digit',
                               day: '2-digit',
                             })}
@@ -100,7 +188,7 @@ export default function ListBlock() {
                     <M.TravelDetail>
                       <M.Participants>사진사진사진</M.Participants>
                       <M.AmountText>
-                        {travelData.amount.toLocaleString()}원
+                        {travelData.budget.toLocaleString()}원
                       </M.AmountText>
                     </M.TravelDetail>
                   </M.TravelItem>

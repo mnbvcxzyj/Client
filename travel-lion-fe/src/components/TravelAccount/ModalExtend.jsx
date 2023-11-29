@@ -1,26 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { currencyunitdata } from '../../data/CurrencyUnitData';
 import search from '../../images/TravelAccount/search.svg';
 import backarrow from '../../images/TravelAccount/backarrow.svg';
-import { CurrencyContext } from './CurrencyProvider';
+import axios from 'axios';
 
-function ModalExtend() {
-  // 사용자 입력값
+function ModalExtend({ onCurrencySelect }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [currencyData, setCurrencyData] = useState([]);
 
-  const { handleCurrencyChange } = useContext(CurrencyContext);
+  useEffect(() => {
+    axios
+      .get('http://3.36.156.17/exchanges')
+      .then((response) => {
+        setCurrencyData(response.data);
+      })
+      .catch((error) => {
+        console.error('환율 데이터 가져오기 오류', error);
+      });
+  }, []);
 
-  const handleCurrencyClick = (country) => {
-    handleCurrencyChange(country);
-  };
-
-  const searchData = currencyunitdata.filter((country) => {
-    const searchString =
-      `${country.country} ${country.code} ${country.unit}`.toLowerCase();
-    return searchString.includes(searchTerm.toLowerCase());
-  });
+  // 검색 로직
+  const filteredData = searchTerm
+    ? currencyData.filter(
+        (country) =>
+          country.countryName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          country.curUnit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          country.curNm
+            .split('-')[1]
+            .trim()
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
+      )
+    : currencyData;
 
   return (
     <ModalWrapper>
@@ -41,13 +55,13 @@ function ModalExtend() {
         </ImgDiv>
       </SearchWrapper>
       <CurrencyList>
-        {searchData.map((country) => (
+        {filteredData.map((country) => (
           <CurrencyItem
-            key={country.code}
-            onClick={() => handleCurrencyClick(country.code)}
+            key={country.curUnit}
+            onClick={() => onCurrencySelect(country.curUnit)}
           >
-            {country.country}
-            {country.code} ({country.unit})<SelectBtn>선택</SelectBtn>
+            {country.countryName} - {country.curUnit}(
+            {country.curNm.split('-')[1].trim()})
           </CurrencyItem>
         ))}
       </CurrencyList>

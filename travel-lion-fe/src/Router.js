@@ -13,6 +13,7 @@ import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
 import BottomModal from './components/TravelAccount/BottomModal';
+import Login from './components/Login/Login';
 
 export default function Router() {
   return (
@@ -20,6 +21,7 @@ export default function Router() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
           <Route
@@ -43,9 +45,9 @@ export default function Router() {
           />
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
-          <Route path='/currencymodal' element={<BottomModal />} />
+          <Route path="/currencymodal" element={<BottomModal />} />
         </Routes>
-      </BrowserRouter >
+      </BrowserRouter>
     </>
   );
 }

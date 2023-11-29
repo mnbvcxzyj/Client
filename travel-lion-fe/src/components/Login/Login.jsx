@@ -1,20 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
-import Cookies from 'js-cookie';
+import { Cookies } from 'react-cookie';
 
 //아이디 저장에 react-cookie 이용
 //npm install react-cookie 에러나서 아래의 명령문 사용
 //npm install js-cookie
 function Login() {
+  const cookies = new Cookies();
+
   const [saveBtnClicked, setSaveBtnClicked] = useState(
-    Cookies.get('savedId') === 'true',
+    cookies.get('savedId') === 'true',
   );
 
   const handleSaveBtnClick = () => {
     const newValue = !saveBtnClicked;
     setSaveBtnClicked(newValue);
-    Cookies.set('savedId', newValue, { expires: 365 }); // 쿠키 설정 및 유효기간 설정
+    // cookies.set('savedId', newValue, { expires: 365 }); // 쿠키 설정
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 365); // 현재로부터 365일 후
+    cookies.set('savedId', newValue, { expires: expires });
     console.log('cookie');
   };
 
@@ -200,6 +205,7 @@ const SaveIdText = styled.span`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const SaveDiv = styled.div`
@@ -217,7 +223,7 @@ const Check = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #05b70c;
+  background: #00bc6d;
   display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
   align-items: center; /* 수직 가운데 정렬 */
   justify-content: center;

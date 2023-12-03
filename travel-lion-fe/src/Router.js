@@ -45,9 +45,9 @@ export default function Router() {
             path="/travelaccountbook"
             element={<TravelAccountBookPage />}
           />
-          <Route path="/selectunit" element={<ModalExtend />} />
+
           <Route path="/addSchedule" element={<AddSchedulePage />} />
-          <Route path="/currencymodal" element={<BottomModal />} />
+
         </Routes>
       </BrowserRouter>
     </>

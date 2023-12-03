@@ -9,17 +9,17 @@ export default function ListBlock() {
   const [travelDatas, setTravelDatas] = useState([]);
 
   useEffect(() => {
-    const userId = '8a028aab-e74c-46c6-a7d2-5807f5cd3aaf'; // 여기에 실제 사용자의 userId를 설정해야 합니다.
+    const userId = '8a028aab-e74c-46c6-a7d2-5807f5cd3aaf';
     const token =
       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTg2OTcxLCJpYXQiOjE3MDExODUxNzEsImp0aSI6IjA3OTZkMTFiNjRiNzRhY2FiNjk5Y2MyZDMwOTVkOGQ0IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.qxDeQSh16kRVV0P1roKbgUYeiNof5VldUATenE3Ov3w';
 
     const headers = {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json', // 필요한 경우 다른 헤더도 추가할 수 있습니다.
+      'Content-Type': 'application/json',
     };
 
     axios
-      .get(`http://3.36.156.17/${userId}/grouplist`, { headers }) // Bearer 토큰을 헤더에 추가
+      .get(`http://3.36.156.17/${userId}/grouplist`, { headers })
       .then((response) => {
         setTravelDatas(response.data);
       })

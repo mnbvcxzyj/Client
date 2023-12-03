@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import search from '../../images/TravelAccount/search.svg';
 import backarrow from '../../images/TravelAccount/backarrow.svg';
 import axios from 'axios';
 
-function ModalExtend({ onCurrencySelect }) {
+function ModalExtend({ onCurrencySelect, onCloseModalExtend }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currencyData, setCurrencyData] = useState([]);
 
@@ -20,7 +19,6 @@ function ModalExtend({ onCurrencySelect }) {
       });
   }, []);
 
-  // 검색 로직
   const filteredData = searchTerm
     ? currencyData.filter(
         (country) =>
@@ -39,11 +37,10 @@ function ModalExtend({ onCurrencySelect }) {
   return (
     <ModalWrapper>
       <SearchWrapper>
-        <Link to="/travelaccountbook">
-          <ImgDiv>
-            <img src={backarrow} alt="<" />
-          </ImgDiv>
-        </Link>
+        <ImgDiv onClick={onCloseModalExtend}>
+          <img src={backarrow} alt="<" />
+        </ImgDiv>
+
         <SearchInput
           type="text"
           placeholder="국가명 또는 통화 검색"

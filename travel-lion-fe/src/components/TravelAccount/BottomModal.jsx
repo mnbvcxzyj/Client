@@ -27,15 +27,18 @@ function BottomModal({ selectedCurrency, onCurrencyChange }) {
   }, []);
 
   const handleCurrencyClick = (currencyCode) => {
-    onCurrencyChange(currencyCode); // 상위 컴포넌트의 상태 업데이트
+    onCurrencyChange(currencyCode);
     setIsOpen(false);
   };
 
   const openModalExtend = () => {
     setIsModalExtendOpen(true);
-    setIsOpen(false); // BottomModal을 닫고 ModalExtend를 엽니다
+    setIsOpen(false);
   };
 
+  const closeModalExtend = () => {
+    setIsModalExtendOpen(false);
+  };
   const previewcountries = [
     { name: '대한민국', code: 'KRW', unit: '원' },
     { name: '일본', code: 'JPY', unit: '엔' },
@@ -68,7 +71,12 @@ function BottomModal({ selectedCurrency, onCurrencyChange }) {
           </BottomSheetContent>
         </BottomSheetWrapper>
       )}
-      {isModalExtendOpen && <ModalExtend onCurrencySelect={onCurrencyChange} />}
+      {isModalExtendOpen && (
+        <ModalExtend
+          onCurrencySelect={onCurrencyChange}
+          onCloseModalExtend={closeModalExtend}
+        />
+      )}
     </>
   );
 }

@@ -69,10 +69,14 @@ function ModalExtend({ onCurrencySelect, onCloseModalExtend }) {
 const ModalWrapper = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 390px;
   height: 100%;
   background-color: white;
+  overflow-y: auto;
+  z-index: 10;
 `;
 
 const SearchWrapper = styled.div`

@@ -71,9 +71,9 @@ const Container = styled.div`
   flex-direction: column;
 
   font-family: Pretendard;
-
-  /* max-width: 390px; */
   width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
 `;
 
 const TopWrapper = styled.div`

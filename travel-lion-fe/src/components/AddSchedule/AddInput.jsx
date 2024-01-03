@@ -64,7 +64,7 @@ const AddInput = () => {
     try {
       const response = await axios.post('http://3.36.156.17/group', formData, {
         headers: {
-          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAxMTg2OTcxLCJpYXQiOjE3MDExODUxNzEsImp0aSI6IjA3OTZkMTFiNjRiNzRhY2FiNjk5Y2MyZDMwOTVkOGQ0IiwidXNlcklkIjoiOGEwMjhhYWItZTc0Yy00NmM2LWE3ZDItNTgwN2Y1Y2QzYWFmIn0.qxDeQSh16kRVV0P1roKbgUYeiNof5VldUATenE3Ov3w`,
+          Authorization: ``,
         },
       });
       console.log(response.data);

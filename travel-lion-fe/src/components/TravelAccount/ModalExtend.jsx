@@ -10,7 +10,7 @@ function ModalExtend({ onCurrencySelect, onCloseModalExtend }) {
 
   useEffect(() => {
     axios
-      .get('http://3.36.156.17/exchanges')
+      .get('http://13.125.174.198/exchanges')
       .then((response) => {
         setCurrencyData(response.data);
       })

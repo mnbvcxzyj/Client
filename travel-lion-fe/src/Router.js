@@ -15,13 +15,24 @@ import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
 import BottomModal from './components/TravelAccount/BottomModal';
+import InviteCodePage from './pages/InviteCodePage';
 
 export default function Router() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          {/* 메인페이지 */}
           <Route path="/" element={<MainPage />} />
+
+          {/* 일정 추가 페이지 */}
+          <Route path="/addSchedule" element={<AddSchedulePage />} />
+
+          {/* 초대 코드 입력 페이지  */}
+          <Route path='/invitecode' element={<InviteCodePage />} />
+
+
+          {/* 마이페이지 */}
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
           <Route
@@ -36,6 +47,8 @@ export default function Router() {
             path="/mypage/account/changename"
             element={<ChangeName />}
           ></Route>
+
+
           <Route path="/newbill" element={<NewBillPage />} />
           <Route path="/billupdate/:index" element={<BillUpdatePage />} />
           <Route path="/billlist" element={<BillListPage />} />
@@ -45,9 +58,6 @@ export default function Router() {
             path="/travelaccountbook"
             element={<TravelAccountBookPage />}
           />
-
-          <Route path="/addSchedule" element={<AddSchedulePage />} />
-
         </Routes>
       </BrowserRouter>
     </>

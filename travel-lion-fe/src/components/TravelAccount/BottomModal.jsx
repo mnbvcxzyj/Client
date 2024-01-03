@@ -1,16 +1,13 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import modalplus from '../../images/TravelAccount/modalplus.svg';
 import check from '../../images/TravelAccount/check.svg';
-import { CurrencyContext } from './CurrencyProvider';
-import { Link } from 'react-router-dom';
-
-function BottomModal() {
+import ModalExtend from './ModalExtend';
+function BottomModal({ selectedCurrency, onCurrencyChange }) {
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const bottomSheetRef = useRef(null);
+  const [isModalExtendOpen, setIsModalExtendOpen] = useState(false);
 
-  const { handleCurrencyChange } = useContext(CurrencyContext);
+  const bottomSheetRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -29,11 +26,19 @@ function BottomModal() {
     };
   }, []);
 
-  const handleCurrencyClick = (country) => {
-    setSelectedCountry(country);
-    handleCurrencyChange(country);
+  const handleCurrencyClick = (currencyCode) => {
+    onCurrencyChange(currencyCode);
+    setIsOpen(false);
   };
 
+  const openModalExtend = () => {
+    setIsModalExtendOpen(true);
+    setIsOpen(false);
+  };
+
+  const closeModalExtend = () => {
+    setIsModalExtendOpen(false);
+  };
   const previewcountries = [
     { name: '대한민국', code: 'KRW', unit: '원' },
     { name: '일본', code: 'JPY', unit: '엔' },
@@ -48,17 +53,15 @@ function BottomModal() {
           <BottomSheetContent>
             <TextDiv>
               통화 단위 선택
-              <Link to="/selectunit" rel="noopener noreferrer">
-                <ModalPlusBtn>
-                  <img src={modalplus} alt="+" />
-                </ModalPlusBtn>
-              </Link>
+              <ModalPlusBtn onClick={openModalExtend}>
+                <img src={modalplus} alt="+" />
+              </ModalPlusBtn>
             </TextDiv>
 
             {previewcountries.map((country) => (
               <UnitWrapper
                 key={country.code}
-                selected={selectedCountry === country.code}
+                selected={selectedCurrency === country.code}
                 onClick={() => handleCurrencyClick(country.code)}
               >
                 {country.name} - {country.code}({country.unit})
@@ -67,6 +70,12 @@ function BottomModal() {
             ))}
           </BottomSheetContent>
         </BottomSheetWrapper>
+      )}
+      {isModalExtendOpen && (
+        <ModalExtend
+          onCurrencySelect={onCurrencyChange}
+          onCloseModalExtend={closeModalExtend}
+        />
       )}
     </>
   );

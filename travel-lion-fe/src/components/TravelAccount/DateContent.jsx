@@ -4,14 +4,19 @@ import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
 import { Link } from 'react-router-dom';
-import { CurrencyContext } from './CurrencyProvider';
+import axios from 'axios';
 
 const DateContent = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const { selectedCurrency } = useContext(CurrencyContext);
+  const [selectedCurrency, setSelectedCurrency] = useState('KRW');
 
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
+  };
+
+  const handleCurrencyChange = (currencyCode) => {
+    setSelectedCurrency(currencyCode);
+    setIsBottomSheetOpen(false); // 통화 선택 후 BottomSheet 닫기
   };
 
   return (
@@ -49,7 +54,12 @@ const DateContent = () => {
           </Link>
         </DayWrapper>
       </Container>
-      {isBottomSheetOpen && <BottomModal />}
+      {isBottomSheetOpen && (
+        <BottomModal
+          selectedCurrency={selectedCurrency}
+          onCurrencyChange={handleCurrencyChange}
+        />
+      )}
     </>
   );
 };

@@ -122,7 +122,7 @@ export default function ListBlock() {
     <>
       <M.ListContainer>
         <M.Content>
-          <M.ListText>리스트</M.ListText>
+          <M.ListText>여행 리스트</M.ListText>
           {travelDatas.map((travelData) => {
             // const isMinRemainingTime =
             //   remainingTime === minRemainingTime && !isExpired;

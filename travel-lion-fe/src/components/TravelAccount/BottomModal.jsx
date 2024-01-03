@@ -108,7 +108,10 @@ const BottomSheetWrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
   height: ${({ isOpen }) => (isOpen ? '290px' : '0')};
+  max-width: 390px;
+  margin: 0 auto;
   background-color: white;
   border-radius: 10px 10px 0px 0px;
   background: #fff;

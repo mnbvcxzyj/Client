@@ -32,7 +32,6 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
   margin-bottom: 10px;
 `;
 

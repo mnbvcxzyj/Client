@@ -14,6 +14,7 @@ import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
 import InviteCodePage from './pages/InviteCodePage';
+import TravelList from './components/MyPage/TravelList';
 
 export default function Router() {
   return (
@@ -66,6 +67,9 @@ export default function Router() {
           <Route
             path="/mypage/account/changename"
             element={<ChangeName />}
+          />
+          <Route path="/mypage/travellist"
+            element={<TravelList />}
           />
         </Routes>
       </BrowserRouter>

@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { Cookies } from 'react-cookie';
 
 //아이디 저장에 react-cookie 이용
-//npm install react-cookie 에러나서 아래의 명령문 사용
-//npm install js-cookie
 function Login() {
   const cookies = new Cookies();
 

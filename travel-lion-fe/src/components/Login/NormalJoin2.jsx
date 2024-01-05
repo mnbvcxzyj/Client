@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const BigDiv = styled.div`
   width: 340px;
@@ -13,7 +14,6 @@ const Box = styled.div`
   height: 55px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1.5px solid ${(props) => (props.error ? 'red' : '#05B70C')};
   margin-top: 4px;
   margin-left: auto;
   margin-right: auto;
@@ -23,6 +23,8 @@ const Box = styled.div`
   &:first-child {
     margin-top: 146px;
   }
+
+  border: 1.5px solid ${(props) => (props.error ? 'red' : 'gray')}; // 에러가 있으면 빨간색, 없으면 연두색으로 설정
 `;
 
 const TextInput = styled.input`
@@ -43,7 +45,7 @@ const CompleteBtn = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: ${(props) => (props.error ? '#e2e2e2' : '#05B70C')};
+  background: ${(props) => (props.error ? '#00BC78' : '#00BC78')};
   margin-left: auto;
   margin-right: auto;
   margin-top: 418px;
@@ -84,6 +86,20 @@ const WarningDiv = styled.div`
 `;
 
 function NormalJoin2() {
+  const signUp = async (username, password, email, age) => {
+    try {
+      const response = await axios.post('http://3.36.156.17/signup/', {
+        username: username,
+        password: password,
+        email: email,
+        age: age,
+      });
+      console.log(response.data); // 회원가입이 성공했을 때의 처리
+    } catch (error) {
+      console.error('Signup error:', error.response);
+    }
+  };
+
   const [nickname, setNickname] = useState('');
   const [age, setAge] = useState('');
   const [nicknameError, setNicknameError] = useState(false);

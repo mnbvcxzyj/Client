@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Box = styled.div`
   position: relative;
@@ -15,6 +16,7 @@ const Box = styled.div`
   display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
   align-items: center; /* 수직 가운데 정렬 */
   justify-content: center;
+  cursor: pointer;
 `;
 
 const Text = styled.div`
@@ -25,6 +27,7 @@ const Text = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const Image = styled.img`
@@ -33,12 +36,19 @@ const Image = styled.img`
   height: 30px;
   border-radius: 30px;
   left: 10px;
+  cursor: pointer;
 `;
 
 function Join() {
+  const navigate = useNavigate();
+
+  const handleJoinClick = () => {
+    navigate('/join/normal');
+  };
+
   return (
     <div>
-      <Box>
+      <Box onClick={handleJoinClick}>
         <Text>회원가입</Text>
       </Box>
       <Box>

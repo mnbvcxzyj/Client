@@ -14,6 +14,9 @@ import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
 import BottomModal from './components/TravelAccount/BottomModal';
 import Login from './components/Login/Login';
+import Join from './components/Login/Join';
+import NormalJoin from './components/Login/NormalJoin';
+import NormalJoin2 from './components/Login/NormalJoin2';
 
 export default function Router() {
   return (
@@ -22,6 +25,9 @@ export default function Router() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/join/normal" element={<NormalJoin />} />
+          <Route path="/join/normal2" element={<NormalJoin2 />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
           <Route

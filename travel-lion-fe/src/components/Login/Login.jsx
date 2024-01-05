@@ -234,6 +234,7 @@ const CheckText = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const Join = styled.text`

@@ -91,10 +91,10 @@ export default function BillUpdateBtn() {
         />
         <Memo value={memoValue} setValue={setMemoValue} />
         <ButtonContainer>
-          <NavListUpdate>
+          <NavListUpdate onClick={handleUpdateStorage}>
             <UpdateBtn onClick={handleUpdateStorage}>수정</UpdateBtn>
           </NavListUpdate>
-          <NavListDel to="/billlist">
+          <NavListDel to="/billlist" onClick={handleDeleteStorage}>
             <DelBtn onClick={handleDeleteStorage}>삭제</DelBtn>
           </NavListDel>
         </ButtonContainer>

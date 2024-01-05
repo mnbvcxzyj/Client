@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import walletImg from '../../images/BillList/wIMg.png';
+import walletImg from '../../images/BillList/wImg.png';
 
 import { travelData } from '../../data/TravelData';
 
@@ -12,8 +12,8 @@ const CostPerPerson = () => {
         <ImgStyle>
           <WalletImg src={walletImg} alt="지갑이미지"></WalletImg>
         </ImgStyle>
-        <PersomCost>{firstTravel.amount}</PersomCost> /&nbsp;
-        <TotalCost>{firstTravel.amount}</TotalCost>
+        <PersomCost>{firstTravel.amount / 4}원</PersomCost> /&nbsp;
+        <TotalCost>{firstTravel.amount}원</TotalCost>
       </BackgroundDiv>
     </>
   );

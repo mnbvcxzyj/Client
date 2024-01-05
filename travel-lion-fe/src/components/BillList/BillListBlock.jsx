@@ -29,7 +29,9 @@ export default function BillListBlock() {
               <Date>08/14(월)</Date>
             </Day>
           </DateInfo>
-          <hr />
+          <HrDivStyle>
+            <hr />
+          </HrDivStyle>
           <BillList>
             {savedData.map((item, index) => (
               <BillItem key={index}>
@@ -93,7 +95,9 @@ export default function BillListBlock() {
               </BillItem>
             ))}
           </BillList>
-          <Btn></Btn>
+          <BtnStyleDiv>
+            <Btn></Btn>
+          </BtnStyleDiv>
         </Container>
       </BackgroundDiv>
     </div>
@@ -102,7 +106,7 @@ export default function BillListBlock() {
 
 const BackgroundDiv = styled.div`
   max-width: 390px;
-  min-height: 844px;
+  min-height: 700px;
   margin: 0 auto;
   padding-top: 24px;
   background-color: #f3f3f3;
@@ -112,16 +116,20 @@ const BackgroundDiv = styled.div`
 const Container = styled.div`
   /* width: 90%; */
   width: 350px;
-  min-height: 557px;
+  min-height: 657px;
   border-radius: 15px;
 
   margin: 0 auto;
   background: #ffffff;
-  padding-bottom: 20px;
 `;
 
 const DateInfo = styled.div`
   padding-top: 10px;
+`;
+
+const HrDivStyle = styled.div`
+  padding: 0px 10px 10px 10px;
+  color: #adb6bd;
 `;
 
 const Day = styled.span`
@@ -157,6 +165,10 @@ const Table = styled.table`
 
 const BillList = styled.div`
   width: 100%;
+`;
+
+const BtnStyleDiv = styled.div`
+  margin: 30px;
 `;
 
 const BillItem = styled.div`

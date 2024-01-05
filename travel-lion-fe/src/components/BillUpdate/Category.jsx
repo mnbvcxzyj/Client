@@ -4,7 +4,7 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/tm.png';
+import CategoryImgSelf from '../../images/Newbill/plusImg.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 import { useNavigate } from 'react-router-dom';

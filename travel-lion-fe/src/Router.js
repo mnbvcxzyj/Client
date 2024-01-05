@@ -23,6 +23,7 @@ import TravelList from './components/MyPage/TravelList';
 import ModalExtend from './components/TravelAccount/ModalExtend';
 import FindPasswd from './components/Find/FindPasswd';
 import SendEmailComplete from './components/Find/SendEmailComplete';
+import Invite from './components/Invite/Invite';
 
 export default function Router() {
   return (
@@ -81,6 +82,7 @@ export default function Router() {
           <Route path="/addSchedule" element={<AddSchedulePage />} />
           <Route path="/currencymodal" element={<BottomModal />} />
           <Route path="/mypage/travellist" element={<TravelList />} />
+          <Route path="/mypage/invite" element={<Invite />} />
         </Routes>
       </BrowserRouter>
     </>

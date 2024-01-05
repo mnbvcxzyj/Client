@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const emojiDataset = [
@@ -204,10 +204,13 @@ const emojiDataset = [
   },
 ];
 
-export default function Emoji({ onClickEmoji }) {
+export default function Emoji({ value, onClickEmoji }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState('');
 
+  useEffect(() => {
+    setSelectedEmoji(value);
+  }, [value]);
   const onClickOption = (e) => {
     onClickEmoji(e.target.value);
     setSelectedEmoji(e.target.value);
@@ -259,8 +262,11 @@ const SelectButton = styled.button`
 
 const DropDown = styled.div`
   position: absolute;
-  left: 20%;
-  right: 20%;
+  width: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   background-color: #ffffff;
   border-radius: 3%;
   border: 0.3px solid #f3f3f3;

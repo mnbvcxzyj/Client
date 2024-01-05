@@ -4,33 +4,30 @@ import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const NewCategory = () => {
+const RenameCategory = () => {
   const navigate = useNavigate();
 
   const handleAddCategory = () => {
-    navigate('/newBill');
+    navigate('/editcate');
   };
 
   return (
     <>
       <Container>
-        <GoBack to="/newbill">
+        <GoBack to="/editcate">
           <GoBackImg src={goBack} alt="뒤로가기 이미지" />
         </GoBack>
-        <Title>카테고리 추가 입력</Title>
+        <Title>카테고리 수정</Title>
         <NewCategoryInput />
         <PlusBtn onClick={handleAddCategory}>
-          <BtnText>추가</BtnText>
+          <BtnText>확인</BtnText>
         </PlusBtn>
-        <GoEdit to="/editcate">
-          <GoEditCategory>카테고리 편집 &gt; </GoEditCategory>
-        </GoEdit>
       </Container>
     </>
   );
 };
 
-export default NewCategory;
+export default RenameCategory;
 
 const Container = styled.div`
   width: 390px;

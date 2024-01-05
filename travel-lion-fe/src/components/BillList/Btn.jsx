@@ -1,7 +1,6 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import plus from '../../images/BillList/plus.png';
 
 export default function NewBillBtn() {
   return (
@@ -39,6 +38,7 @@ const Plus = styled.span`
   border-radius: 30px;
   stroke-width: 0.3px;
   stroke: var(--Skyblue, #95bfff);
+
   //글꼴
   font-family: SUIT;
   font-size: 35px;

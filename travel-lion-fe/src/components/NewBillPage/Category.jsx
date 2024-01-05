@@ -4,7 +4,7 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/tm.png';
+import CategoryImgSelf from '../../images/Newbill/plusImg.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
@@ -199,7 +199,7 @@ const SelectButton = styled.button`
 
   border: ${(props) =>
     props.isDropDown
-      ? '2px solid #05B70C'
+      ? '2px solid #00bc78'
       : props.$error
       ? '1px solid red'
       : '1px solid transparent'};
@@ -209,10 +209,14 @@ const DropDown = styled.div`
   /* margin-top: 4px;
   width: 87%;
   position: absolute; */
+  position: absolute;
+  top: 396px;
 
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 0px 4px 0px #0000004d;
+  width: 340px;
+  z-index: 1;
 `;
 
 const Option = styled.button`

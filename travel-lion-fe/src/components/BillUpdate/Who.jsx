@@ -188,11 +188,15 @@ const DropDown = styled.div`
   width: 87%;
   position: absolute; */
 
+  position: absolute;
+  top: 300px;
+
   width: 340px;
 
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0px 0px 4px 0px #0000004d;
+  z-index: 1;
 `;
 
 const Option = styled.button`

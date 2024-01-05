@@ -68,15 +68,12 @@ export default function Router() {
           {/* 여행별 가계부 페이지 - 카테고리 편집 */}
           <Route path="/editcate" element={<EditCategoryPage />} />
 
-<<<<<<< HEAD
           {/* 여행별 가계부 페이지 - 카테고리 수정 */}
           <Route path="/renamecate" element={<RenameCategoryPage />} />
 
           {/* 여행별 가계부 페이지 - 팔로우 요청 목록 */}
           <Route path="/followrequest" element={<FollowRequestListPage />} />
 
-=======
->>>>>>> ed021e9f1043506abcd7fe308ae33b4fbf93b6e9
           {/* 마이페이지 */}
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
@@ -89,14 +86,11 @@ export default function Router() {
             element={<ChangePasswd />}
           />
           <Route path="/mypage/account/changename" element={<ChangeName />} />
-<<<<<<< HEAD
-=======
           <Route path="/selectunit" element={<ModalExtend />} />
           <Route path="/addSchedule" element={<AddSchedulePage />} />
           <Route path="/currencymodal" element={<BottomModal />} />
           <Route path="/mypage/travellist" element={<TravelList />} />
           <Route path="/mypage/invite" element={<Invite />} />
->>>>>>> ed021e9f1043506abcd7fe308ae33b4fbf93b6e9
         </Routes>
       </BrowserRouter>
     </>

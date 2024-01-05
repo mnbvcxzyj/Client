@@ -21,6 +21,8 @@ import NormalJoin2 from './components/Login/NormalJoin2';
 import InviteCodePage from './pages/InviteCodePage';
 import TravelList from './components/MyPage/TravelList';
 import ModalExtend from './components/TravelAccount/ModalExtend';
+import FindPasswd from './components/Find/FindPasswd';
+import SendEmailComplete from './components/Find/SendEmailComplete';
 
 export default function Router() {
   return (
@@ -33,6 +35,8 @@ export default function Router() {
           <Route path="/join" element={<Join />} />
           <Route path="/join/normal" element={<NormalJoin />} />
           <Route path="/join/normal2" element={<NormalJoin2 />} />
+          <Route path="/login/find" element={<FindPasswd />} />
+          <Route path="/login/find/complete" element={<SendEmailComplete />} />
 
           {/* 일정 추가 페이지 */}
           <Route path="/addSchedule" element={<AddSchedulePage />} />

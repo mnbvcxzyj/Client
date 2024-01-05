@@ -1,35 +1,46 @@
-import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { currencyunitdata } from '../../data/CurrencyUnitData';
 import search from '../../images/TravelAccount/search.svg';
 import backarrow from '../../images/TravelAccount/backarrow.svg';
-import { CurrencyContext } from './CurrencyProvider';
+import axios from 'axios';
 
-function ModalExtend() {
-  // 사용자 입력값
+function ModalExtend({ onCurrencySelect, onCloseModalExtend }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [currencyData, setCurrencyData] = useState([]);
 
-  const { handleCurrencyChange } = useContext(CurrencyContext);
+  useEffect(() => {
+    axios
+      .get('http://13.125.174.198/exchanges')
+      .then((response) => {
+        setCurrencyData(response.data);
+      })
+      .catch((error) => {
+        console.error('환율 데이터 가져오기 오류', error);
+      });
+  }, []);
 
-  const handleCurrencyClick = (country) => {
-    handleCurrencyChange(country);
-  };
-
-  const searchData = currencyunitdata.filter((country) => {
-    const searchString =
-      `${country.country} ${country.code} ${country.unit}`.toLowerCase();
-    return searchString.includes(searchTerm.toLowerCase());
-  });
+  const filteredData = searchTerm
+    ? currencyData.filter(
+        (country) =>
+          country.countryName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          country.curUnit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          country.curNm
+            .split('-')[1]
+            .trim()
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
+      )
+    : currencyData;
 
   return (
     <ModalWrapper>
       <SearchWrapper>
-        <Link to="/travelaccountbook">
-          <ImgDiv>
-            <img src={backarrow} alt="<" />
-          </ImgDiv>
-        </Link>
+        <ImgDiv onClick={onCloseModalExtend}>
+          <img src={backarrow} alt="<" />
+        </ImgDiv>
+
         <SearchInput
           type="text"
           placeholder="국가명 또는 통화 검색"
@@ -41,13 +52,13 @@ function ModalExtend() {
         </ImgDiv>
       </SearchWrapper>
       <CurrencyList>
-        {searchData.map((country) => (
+        {filteredData.map((country) => (
           <CurrencyItem
-            key={country.code}
-            onClick={() => handleCurrencyClick(country.code)}
+            key={country.curUnit}
+            onClick={() => onCurrencySelect(country.curUnit)}
           >
-            {country.country}
-            {country.code} ({country.unit})<SelectBtn>선택</SelectBtn>
+            {country.countryName} - {country.curUnit}(
+            {country.curNm.split('-')[1].trim()})<SelectBtn>선택</SelectBtn>
           </CurrencyItem>
         ))}
       </CurrencyList>
@@ -55,7 +66,18 @@ function ModalExtend() {
   );
 }
 
-const ModalWrapper = styled.div``;
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 390px;
+  height: 100%;
+  background-color: white;
+  overflow-y: auto;
+  z-index: 10;
+`;
 
 const SearchWrapper = styled.div`
   display: flex;
@@ -95,7 +117,7 @@ const SelectBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 1;
   margin-right: 30px;
 
   width: 46px;

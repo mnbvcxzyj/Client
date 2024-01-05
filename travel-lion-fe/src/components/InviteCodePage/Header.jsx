@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import arrow from '../../images/TravelAccount/backarrow.svg';
 
-const AddHeader = () => {
+const Header = () => {
   return (
     <>
-      <BackDiv to="/travelaccountbook">
-        <img src={arrow} alt="뒤로" />
+      <BackDiv to="/">
+        <img src={arrow} alt="<" />
       </BackDiv>
     </>
   );
@@ -25,4 +25,4 @@ const BackDiv = styled(Link)`
   }
 `;
 
-export default AddHeader;
+export default Header;

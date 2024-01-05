@@ -10,6 +10,10 @@ const MyPageMain = () => {
     navigate('/mypage/account');
   };
 
+  const handleTravelNavigation = () => {
+    navigate('/mypage/travellist');
+  };
+
   return (
     <>
       <Container>
@@ -32,7 +36,7 @@ const MyPageMain = () => {
             </svg>
           </GoBtn>
         </GoInfo>
-        <GreenBtn>
+        <GreenBtn onClick={handleTravelNavigation}>
           <GreenText>여행리스트 관리</GreenText>
           <GreenGoBtn>
             <svg

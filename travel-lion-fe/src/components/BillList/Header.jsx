@@ -4,8 +4,11 @@ import { NavLink } from 'react-router-dom';
 import goBack from '../../images/goBack.png';
 import share from '../../images/share.png';
 import auImg from '../../images/AU.png';
+import { travelData } from '../../data/TravelData';
 
 export default function Header() {
+  const firstTravel = travelData[1];
+
   return (
     <>
       <HeaderContainer>
@@ -14,10 +17,20 @@ export default function Header() {
         </NavLeft>
         <TravelInfoDiv>
           <Image src={auImg} />
-          <TravelName>졸업여행</TravelName>
+          <TravelName>{firstTravel.title}</TravelName>
           <br />
-          <TravelLocation>호주-시드니 | </TravelLocation>
-          <TravelDate>07.09 ~ 08.01</TravelDate>
+          <TravelLocation>{`${firstTravel.country}-${firstTravel.city} | `}</TravelLocation>
+          <TravelDate>{`${(firstTravel.firstDate.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${firstTravel.firstDate
+            .getDate()
+            .toString()
+            .padStart(2, '0')} ~ ${(firstTravel.lastDate.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${firstTravel.lastDate
+            .getDate()
+            .toString()
+            .padStart(2, '0')}`}</TravelDate>
         </TravelInfoDiv>
         <Share to="">
           <ShareImg src={share} />

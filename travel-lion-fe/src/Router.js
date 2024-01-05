@@ -13,6 +13,11 @@ import AddSchedulePage from './pages/AddSchedulePage';
 import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
+import BottomModal from './components/TravelAccount/BottomModal';
+import Login from './components/Login/Login';
+import Join from './components/Login/Join';
+import NormalJoin from './components/Login/NormalJoin';
+import NormalJoin2 from './components/Login/NormalJoin2';
 import InviteCodePage from './pages/InviteCodePage';
 import TravelList from './components/MyPage/TravelList';
 
@@ -23,6 +28,10 @@ export default function Router() {
         <Routes>
           {/* 메인페이지 */}
           <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/join/normal" element={<NormalJoin />} />
+          <Route path="/join/normal2" element={<NormalJoin2 />} />
 
           {/* 일정 추가 페이지 */}
           <Route path="/addSchedule" element={<AddSchedulePage />} />
@@ -68,6 +77,9 @@ export default function Router() {
             path="/mypage/account/changename"
             element={<ChangeName />}
           />
+          <Route path="/selectunit" element={<ModalExtend />} />
+          <Route path="/addSchedule" element={<AddSchedulePage />} />
+          <Route path="/currencymodal" element={<BottomModal />} />
           <Route path="/mypage/travellist"
             element={<TravelList />}
           />

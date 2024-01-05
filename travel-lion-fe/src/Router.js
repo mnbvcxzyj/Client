@@ -15,7 +15,17 @@ import AddSchedulePage from './pages/AddSchedulePage';
 import OldPasswd from './components/MyPage/OldPasswd';
 import ChangePasswd from './components/MyPage/ChangePasswd';
 import ChangeName from './components/MyPage/ChangeName';
+import BottomModal from './components/TravelAccount/BottomModal';
+import Login from './components/Login/Login';
+import Join from './components/Login/Join';
+import NormalJoin from './components/Login/NormalJoin';
+import NormalJoin2 from './components/Login/NormalJoin2';
 import InviteCodePage from './pages/InviteCodePage';
+import TravelList from './components/MyPage/TravelList';
+import ModalExtend from './components/TravelAccount/ModalExtend';
+import FindPasswd from './components/Find/FindPasswd';
+import SendEmailComplete from './components/Find/SendEmailComplete';
+import Invite from './components/Invite/Invite';
 
 export default function Router() {
   return (
@@ -24,6 +34,12 @@ export default function Router() {
         <Routes>
           {/* 메인페이지 */}
           <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/join/normal" element={<NormalJoin />} />
+          <Route path="/join/normal2" element={<NormalJoin2 />} />
+          <Route path="/login/find" element={<FindPasswd />} />
+          <Route path="/login/find/complete" element={<SendEmailComplete />} />
 
           {/* 일정 추가 페이지 */}
           <Route path="/addSchedule" element={<AddSchedulePage />} />
@@ -52,12 +68,15 @@ export default function Router() {
           {/* 여행별 가계부 페이지 - 카테고리 편집 */}
           <Route path="/editcate" element={<EditCategoryPage />} />
 
+<<<<<<< HEAD
           {/* 여행별 가계부 페이지 - 카테고리 수정 */}
           <Route path="/renamecate" element={<RenameCategoryPage />} />
 
           {/* 여행별 가계부 페이지 - 팔로우 요청 목록 */}
           <Route path="/followrequest" element={<FollowRequestListPage />} />
 
+=======
+>>>>>>> ed021e9f1043506abcd7fe308ae33b4fbf93b6e9
           {/* 마이페이지 */}
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/account" element={<AccountManage />} />
@@ -70,6 +89,14 @@ export default function Router() {
             element={<ChangePasswd />}
           />
           <Route path="/mypage/account/changename" element={<ChangeName />} />
+<<<<<<< HEAD
+=======
+          <Route path="/selectunit" element={<ModalExtend />} />
+          <Route path="/addSchedule" element={<AddSchedulePage />} />
+          <Route path="/currencymodal" element={<BottomModal />} />
+          <Route path="/mypage/travellist" element={<TravelList />} />
+          <Route path="/mypage/invite" element={<Invite />} />
+>>>>>>> ed021e9f1043506abcd7fe308ae33b4fbf93b6e9
         </Routes>
       </BrowserRouter>
     </>

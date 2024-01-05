@@ -1,8 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //유효성 검사 코드
 function NormalJoin() {
+  // 회원가입 함수
+
+  const navigate = useNavigate();
+
+  const gotoNormalJoin2 = () => {
+    navigate('/join/normal2');
+  };
+
   //이메일
   const [email, setEmail] = useState('');
   const [emailMessage, setEmailMessage] = useState('');
@@ -88,7 +98,7 @@ function NormalJoin() {
       );
       setIsPassword(false);
     } else {
-      setPasswordMessage('초록색으로 바뀌게 하기');
+      setPasswordMessage('');
       setIsPassword(true);
     }
   }, []);
@@ -104,7 +114,7 @@ function NormalJoin() {
       setPasswordConfirm(passwordConfirmCurrent);
 
       if (password === passwordConfirmCurrent) {
-        setPasswordConfirmMessage('초록색으로 바뀌게 하기');
+        setPasswordConfirmMessage('');
         setIsPasswordConfirm(true);
       } else {
         setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.');
@@ -138,7 +148,7 @@ function NormalJoin() {
   return (
     <BigDiv>
       <Join>회원가입</Join>
-      <Box isEmail={isEmail}>
+      <Box isEmail={isEmail} isValid={isEmail}>
         <EmailInput
           type="text"
           value={email}
@@ -149,11 +159,11 @@ function NormalJoin() {
           <SentText>인증</SentText>
         </SendBtn>
       </Box>
-      <WarningMessage>{emailMessage}</WarningMessage>
+      <WarningMessage isSuccess={isEmail}>{emailMessage}</WarningMessage>
 
       {boxes}
 
-      <Box>
+      <Box isPassword={isPassword}>
         <PasswdInput
           type="password"
           value={password}
@@ -161,17 +171,19 @@ function NormalJoin() {
           placeholder="비밀번호"
         ></PasswdInput>
       </Box>
-      <div>{passwordMessage}</div>
+      <WarningMessage isSuccess={isPassword}>{passwordMessage}</WarningMessage>
 
-      <Box>
+      <Box isPasswordConfirm={isPasswordConfirm}>
         <CheckPasswdInput
           type="password"
           value={passwordConfirm}
           onChange={onChangePasswordConfirm}
           placeholder="비밀번호 확인"
-        ></CheckPasswdInput>
+        />
       </Box>
-      <div>{passwordConfirmMessage}</div>
+      <WarningMessage isSuccess={isPasswordConfirm}>
+        {passwordConfirmMessage}
+      </WarningMessage>
 
       <CheckDiv style={{ marginTop: '77px' }}>
         <CheckBtn onClick={handleCheckAge}>
@@ -209,7 +221,7 @@ function NormalJoin() {
                   />
                 </mask>
                 <g mask="url(#mask0_799_6547)">
-                  <path d="M0 0H20V20H0V0Z" fill="#05B70C" />
+                  <path d="M0 0H20V20H0V0Z" fill="#00bc78" />
                 </g>
               </g>
               <defs>
@@ -288,7 +300,7 @@ function NormalJoin() {
                   />
                 </mask>
                 <g mask="url(#mask0_799_6547)">
-                  <path d="M0 0H20V20H0V0Z" fill="#05B70C" />
+                  <path d="M0 0H20V20H0V0Z" fill="#00bc78" />
                 </g>
               </g>
               <defs>
@@ -367,7 +379,7 @@ function NormalJoin() {
                   />
                 </mask>
                 <g mask="url(#mask0_799_6547)">
-                  <path d="M0 0H20V20H0V0Z" fill="#05B70C" />
+                  <path d="M0 0H20V20H0V0Z" fill="#00bc78" />
                 </g>
               </g>
               <defs>
@@ -410,7 +422,7 @@ function NormalJoin() {
         <CheckText>개인정보 수집 및 이용에 동의합니다.</CheckText>
       </CheckDiv>
 
-      <Btn>
+      <Btn onClick={gotoNormalJoin2}>
         <BtnText>다음</BtnText>
       </Btn>
     </BigDiv>
@@ -447,8 +459,6 @@ const Box = styled.div`
   height: 55px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1.5px solid
-    ${(props) => (props.isEmail ? '#05B70C' : 'var(--Gray, #adb6bd)')};
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
@@ -458,6 +468,13 @@ const Box = styled.div`
   span {
     display: inline-block;
   }
+  border: 1.5px solid
+    ${(props) => (props.isEmail ? '#00bc78' : 'var(--Gray, #adb6bd)')};
+  /* 비밀번호 관련 스타일을 동적으로 추가합니다. */
+  border: ${(props) =>
+    props.isPassword || props.isPasswordConfirm
+      ? '1.5px solid #00bc78'
+      : '1.5px solid var(--Gray, #adb6bd)'};
 `;
 
 const WarningMessage = styled.span`
@@ -470,6 +487,7 @@ const WarningMessage = styled.span`
   font-weight: 400;
   line-height: normal;
   margin-left: 6px;
+  color: ${(props) => (props.isSuccess ? '#00bc78' : '#ff2e3b')};
 `;
 
 const SendBtn = styled.div`
@@ -478,7 +496,7 @@ const SendBtn = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 3px;
-  background: #05b70c;
+  background: #00bc78;
   cursor: pointer;
   position: absolute;
   margin-left: 291px;
@@ -600,4 +618,5 @@ const BtnText = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;

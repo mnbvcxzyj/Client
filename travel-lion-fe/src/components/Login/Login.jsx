@@ -1,38 +1,67 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
-import { Cookies } from 'react-cookie';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../api/auth/AuthContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { createAxiosInstance } from '../../api/auth/Axios';
 
-//아이디 저장에 react-cookie 이용
 function Login() {
-  const cookies = new Cookies();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [saveBtnClicked, setSaveBtnClicked] = useState(false);
 
-  const [saveBtnClicked, setSaveBtnClicked] = useState(
-    cookies.get('savedId') === 'true',
-  );
+  const navigate = useNavigate();
 
-  const handleSaveBtnClick = () => {
-    const newValue = !saveBtnClicked;
-    setSaveBtnClicked(newValue);
-    // cookies.set('savedId', newValue, { expires: 365 }); // 쿠키 설정
-    const expires = new Date();
-    expires.setDate(expires.getDate() + 365); // 현재로부터 365일 후
-    cookies.set('savedId', newValue, { expires: expires });
-    console.log('cookie');
+  const { login, refreshAccessToken } = useContext(AuthContext);
+  const axiosInstance = createAxiosInstance(refreshAccessToken);
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await axiosInstance.post('/login/', {
+        email: email,
+        password: password,
+      });
+
+      if (response.data) {
+        login(response.data);
+        console.log('로그인 성공!');
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('로그인 실패:', error);
+    }
   };
 
   return (
     <CenterDiv>
-      <IdBox>
-        <IdText placeholder="아이디"></IdText>
-      </IdBox>
+      <EmailBox>
+        <EmailText
+          value={email}
+          onChange={handleEmailChange}
+          placeholder="아이디"
+        ></EmailText>
+      </EmailBox>
       <PasswdBox>
-        <PasswdText type="password" placeholder="비밀번호"></PasswdText>
+        <PasswdText
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+          placeholder="비밀번호"
+        ></PasswdText>{' '}
       </PasswdBox>
-      <Check>
+      <Check onClick={handleLogin}>
         <CheckText>확인</CheckText>
       </Check>
-      <SaveDiv onClick={handleSaveBtnClick}>
+      <SaveDiv>
         <SaveIdBtn>
           {saveBtnClicked ? (
             <svg
@@ -130,7 +159,7 @@ const CenterDiv = styled.div`
   margin: auto;
 `;
 
-const IdBox = styled.div`
+const EmailBox = styled.div`
   position: relative;
   top: 230px;
   margin: auto;
@@ -143,7 +172,7 @@ const IdBox = styled.div`
   align-items: center; /* 수직 가운데 정렬 */
 `;
 
-const IdText = styled.input`
+const EmailText = styled.input`
   color: var(--Gray, #adb6bd);
   font-family: Pretendard;
   font-size: 15px;

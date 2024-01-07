@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { countryData } from '../../data/CountryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
@@ -6,7 +6,8 @@ import Calendar from 'react-calendar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import * as F from './AddInputStyle';
-
+import { AuthContext } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
 const AddInput = () => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
@@ -16,6 +17,9 @@ const AddInput = () => {
   const [location, setLocation] = useState('');
   const [budget, setBudget] = useState(0);
   const navigate = useNavigate();
+
+  const { user, refreshAccessToken } = useContext(AuthContext);
+  const axiosInstance = createAxiosInstance(refreshAccessToken);
 
   const numberCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -62,13 +66,13 @@ const AddInput = () => {
     };
 
     try {
-      const response = await axios.post('http://3.36.156.17/group', formData, {
+      const response = await axiosInstance.post('/group', formData, {
         headers: {
-          Authorization: ``,
+          Authorization: `Bearer ${user.accessToken}`, // 사용자의 액세스 토큰 포함
         },
       });
       console.log(response.data);
-      navigate('/travelaccountbook');
+      navigate('/travelaccountbook'); // 성공 후 페이지 이동
     } catch (error) {
       console.error('에러가 발생했습니다 ⚠', error);
       alert('에러가 발생했습니다! ⚠');

@@ -1,34 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import shareLogoWhite from '../../images/MainPage/share_white.svg';
 import shareLogoGreen from '../../images/MainPage/share_green.svg';
 import * as M from './MainPageStyle';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+import { useMemo } from 'react';
 
 export default function ListBlock() {
   const [travelDatas, setTravelDatas] = useState([]);
+  const { user } = useContext(AuthContext);
+  const { refreshAccessToken } = useAuth();
+
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
 
   useEffect(() => {
-    const userId = '';
-    const token = '';
+    if (user) {
+      const userId = user.userId;
+      const token = user.accessToken;
+      console.log(userId, token);
 
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    };
-
-    axios
-      .get(`http://3.36.156.17/${userId}/grouplist`, { headers })
-      .then((response) => {
-        setTravelDatas(response.data);
-      })
-      .catch((error) => {
-        console.error(
-          '백엔드에서 데이터를 가져오는 중 오류가 발생했습니다.',
-          error,
-        );
-      });
-  }, []);
+      axiosInstance
+        .get(`/${userId}/grouplist`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // 헤더에 액세스 토큰 설정
+          },
+        })
+        .then((response) => {
+          setTravelDatas(response.data);
+        })
+        .catch((error) => {
+          console.error(
+            '백엔드에서 데이터를 가져오는 중 오류가 발생했습니다.',
+            error,
+          );
+        });
+    }
+  }, [user, axiosInstance]);
 
   // 국기 이모지
   const getFlagEmoji = (c) =>

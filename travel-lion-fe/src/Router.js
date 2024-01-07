@@ -78,13 +78,13 @@ export default function Router() {
             <Route path="/followrequest" element={<FollowRequestListPage />} />
 
             {/* 마이페이지 */}
-            <Route
+            {/* <Route
               path="/mypage"
               element={
                 <PrivateRoute element={MyPage} />
               }
-            />
-            {/* <Route path="/mypage" element={<MyPage />} /> */}
+            /> */}
+            <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/account" element={<AccountManage />} />
             <Route
               path="/mypage/account/existingpasswd"

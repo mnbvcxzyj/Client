@@ -4,13 +4,18 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../../api/auth/AuthContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createAxiosInstance } from '../../api/auth/Axios';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [saveBtnClicked, setSaveBtnClicked] = useState(false);
-  const { login } = useContext(AuthContext);
+
   const navigate = useNavigate();
+
+  const { login, refreshAccessToken } = useContext(AuthContext);
+  const axiosInstance = createAxiosInstance(refreshAccessToken);
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -21,15 +26,13 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://13.125.174.198/login/', {
+      const response = await axiosInstance.post('/login/', {
         email: email,
         password: password,
       });
 
       if (response.data) {
-        const { token, userInfo } = response.data;
-
-        login({ token, ...userInfo });
+        login(response.data);
         console.log('로그인 성공!');
         navigate('/');
       }

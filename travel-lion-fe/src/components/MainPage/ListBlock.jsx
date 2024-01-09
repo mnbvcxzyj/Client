@@ -147,7 +147,7 @@ export default function ListBlock() {
 
             return (
               !isExpired && (
-                <Link to="/travelaccountbook">
+                <Link to={`/travelaccountbook/${travelData.groupId}`}>
                   <M.TravelItem
                     // key={travelData.title}
                     // isExpired={isExpired}

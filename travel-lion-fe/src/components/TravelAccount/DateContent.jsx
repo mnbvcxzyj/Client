@@ -1,14 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
 
-const DateContent = () => {
+const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('KRW');
+
+  const { user } = useContext(AuthContext);
+  const [travelDatas, setTravelDatas] = useState([]);
+  const { refreshAccessToken } = useAuth();
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/${user.userId}/grouplist/${groupId}`, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        })
+        .then((response) => {
+          setTravelDatas(response.data);
+        })
+        .catch((error) => {
+          console.error('API 요청 중 오류 발생:', error);
+        });
+    }
+  }, [axiosInstance, user, groupId]);
 
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(!isBottomSheetOpen);
@@ -25,12 +51,12 @@ const DateContent = () => {
         <TopWrapper>
           <AmountDiv>
             <Text>여행 경비 총합</Text>
-            <TravelExpense>1,800,000원 /</TravelExpense>
+            <TravelExpense>{travelDatas.spentMoney}원 /</TravelExpense>
           </AmountDiv>
           &nbsp;
           <AmountDiv>
             <Text>예산</Text>
-            <Budget>1,700,000원</Budget>
+            <Budget>{travelDatas.budget}원</Budget>
           </AmountDiv>
           <ExchangeRate onClick={toggleBottomSheet}>
             {selectedCurrency}
@@ -39,7 +65,10 @@ const DateContent = () => {
         </TopWrapper>
         <DayWrapper>
           <DayText>
-            <div>1일차</div>
+            <div>
+              1일차
+              {travelDatas.dday}
+            </div>
             <div>08/14(월)</div>
           </DayText>
 

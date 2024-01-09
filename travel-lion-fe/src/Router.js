@@ -51,10 +51,8 @@ export default function Router() {
             <Route path="/invitecode" element={<InviteCodePage />} />
 
             {/* 여행별 가계부 페이지 - (첫 화면 및 통화단위 모달)  */}
-            <Route
-              path="/travelaccountbook"
-              element={<TravelAccountBookPage />}
-            />
+            <Route path="/travelaccountbook/:groupId" element={<TravelAccountBookPage />} />
+
 
             {/* 여행별 가계부 페이지 - 일정별 가계부 상세  */}
             <Route path="/billlist" element={<BillListPage />} />

@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
 import * as D from './DateContentStyle';
 import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
@@ -6,6 +5,7 @@ import BottomModal from './BottomModal';
 import { Link, useParams } from 'react-router-dom';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 
 const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -48,6 +48,50 @@ const DateContent = ({ groupId }) => {
 
   console.log(travelDatas);
 
+  const [plans, setPlans] = useState([]);
+  const [categories, setCategories] = useState({});
+
+  // 여행
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/${user.userId}/grouplist/${groupId}/plan`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+            },
+          },
+        );
+        setPlans(response.data);
+        response.data.forEach((plan) => {
+          fetchCategoryDetails(plan.planId); // 카테고리
+        });
+      } catch (error) {
+        console.error('Plan 데이터 요청 중 오류 발생:', error);
+      }
+    };
+
+    fetchPlans();
+  }, [axiosInstance, user, groupId]);
+
+  // 카테고리 데이터 가져오기
+  const fetchCategoryDetails = async (planId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/${user.userId}/grouplist/${groupId}/plan/${planId}/category`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        },
+      );
+      setCategories((prev) => ({ ...prev, [planId]: response.data }));
+    } catch (error) {
+      console.error('Category 데이터 요청 중 오류 발생:', error);
+    }
+  };
+
   return (
     <>
       <D.Container>
@@ -68,22 +112,28 @@ const DateContent = ({ groupId }) => {
             <img src={arrow} alt=">" />
           </D.ExchangeRate>
         </D.TopWrapper>
-        <D.DayWrapper>
-          <D.DayText>
-            <div>1일차</div>
-            <div>08/14(월)</div>
-          </D.DayText>
 
-          <D.CategoryWrapper>
-            <D.CategoryIcon>{categoryData[0].icon}</D.CategoryIcon>
-            <D.CategoryText>식비</D.CategoryText>
-            <D.Amount>30,000원</D.Amount>
-          </D.CategoryWrapper>
-
-          <Link to="/newbill">
-            <D.InputBtn>사용 금액 입력</D.InputBtn>
-          </Link>
-        </D.DayWrapper>
+        {plans.map((plan) => (
+          <D.DayWrapper key={plan.planId}>
+            <D.DayText>
+              <div>{plan.nDay}일차</div>
+              <div>
+                {plan.date}({plan.dayOfWeek})
+              </div>
+            </D.DayText>
+            {categories[plan.planId] &&
+              categories[plan.planId].map((category) => (
+                <D.CategoryWrapper key={category.categoryId}>
+                  <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
+                  <D.CategoryText>{category.categoryTitle}</D.CategoryText>
+                  <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
+                </D.CategoryWrapper>
+              ))}
+            <Link to="/newbill">
+              <D.InputBtn>사용 금액 입력</D.InputBtn>
+            </Link>
+          </D.DayWrapper>
+        ))}
       </D.Container>
       {isBottomSheetOpen && (
         <BottomModal

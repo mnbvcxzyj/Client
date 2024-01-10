@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../api/auth/AuthContext';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createAxiosInstance } from '../../api/auth/Axios';
 
@@ -33,6 +32,10 @@ function Login() {
 
       if (response.data) {
         login(response.data);
+        console.log(response.data);
+        const uuid = response.data.userId; // UUID 추출
+        localStorage.setItem('userId', uuid); // 로컬 저장소에 저장
+        console.log('저장된 userId: ' + uuid);
         console.log('로그인 성공!');
         navigate('/');
       }

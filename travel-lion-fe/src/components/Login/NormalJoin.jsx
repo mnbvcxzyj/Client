@@ -3,14 +3,19 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+//사이트 자체 회원가입
 //유효성 검사 코드
 function NormalJoin() {
-  // 회원가입 함수
-
   const navigate = useNavigate();
 
   const gotoNormalJoin2 = () => {
-    navigate('/join/normal2');
+    // 통과
+    if (isEmail && isPassword && isPasswordConfirm) {
+      navigate('/join/normal2', { state: { email, password } });
+    } else {
+      // 유효성 검사에 실패한 경우의 처리
+      console.log('유효성 검사에 실패했습니다.');
+    }
   };
 
   //이메일

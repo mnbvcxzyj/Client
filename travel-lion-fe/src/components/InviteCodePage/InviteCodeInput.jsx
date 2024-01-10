@@ -1,38 +1,51 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import { AuthContext } from '../../api/auth/AuthContext';
-import axios from 'axios';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+
 const InviteCodeInput = () => {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
   const { user } = useContext(AuthContext);
+
+  const { refreshAccessToken } = useAuth();
+
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
 
   const handleCodeChange = (e) => {
     setCode(e.target.value);
   };
 
   const handleSubmit = async () => {
-    if (code) {
-      try {
-        const response = await axios.post(
-          `http://13.125.174.198/join/0000/`,
-          {
-            entered_invite_code: code,
-          },
+    if (!code.trim()) {
+      alert('코드를 입력해주세요.');
+      return;
+    }
 
-          {
-            headers: {
-              Authorization: `Bearer ${user.accessToken}`,
-            },
+    try {
+      const response = await axiosInstance.post(
+        '/join',
+        {
+          inviteCode: code,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
           },
-        );
+        },
+      );
 
-        setMessage('일정이 성공적으로 등록되었습니다!');
-      } catch (error) {
-        setMessage('등록되지 않은 코드입니다!');
+      setMessage(response.data.message);
+      /// 벼ㄴ경
+    } catch (error) {
+      if (error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage('오류가 발생했습니다. 다시 시도해주세요.');
       }
-    } else {
-      setMessage('코드를 입력해주세요!');
     }
   };
 
@@ -43,8 +56,8 @@ const InviteCodeInput = () => {
         placeholder="코드를 입력해주세요."
         value={code}
         onChange={handleCodeChange}
-      ></Input>
-      {message && <ErrorMessage>{message}</ErrorMessage>}{' '}
+      />
+      {message && <ErrorMessage>{message}</ErrorMessage>}
       <CheckBtn onClick={handleSubmit}>확인</CheckBtn>
     </Container>
   );
@@ -118,8 +131,7 @@ const CheckBtn = styled.button`
 `;
 
 const ErrorMessage = styled.div`
-  color: red; // 빨간색으로 에러 메시지 표시
-  // 필요한 스타일 추가
+  color: red;
 `;
 
 export default InviteCodeInput;

@@ -4,23 +4,10 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 function NormalJoin2() {
-  // const signUp = async (username, password, email, age) => {
-  //   try {
-  //     const response = await axios.post('http://3.36.156.17/signup/', {
-  //       username: username,
-  //       password: password,
-  //       email: email,
-  //       age: age,
-  //     });
-  //     console.log(response.data); // 회원가입이 성공했을 때의 처리
-  //   } catch (error) {
-  //     console.error('Signup error:', error.response);
-  //   }
-  // };
-
   const location = useLocation();
   const navigate = useNavigate();
-  // 이전 컴포넌트에서 전달받은 state를 사용합니다.
+
+  // 이전 컴포넌트에서 전달받은 state를 사용
   const { email, password } = location.state || {}; // location.state가 없는 경우를 대비하여 기본값 설정
 
   useEffect(() => {
@@ -41,8 +28,9 @@ function NormalJoin2() {
           repassword: password,
           age: age,
         });
+
         console.log('회원가입 성공:', response.data);
-        navigate('/login'); // 회원가입 성공 후 로그인 페이지로 이동
+        navigate('/join/complete'); //complete 페이지로 이동
       } catch (error) {
         console.error('Signup error:', error.response);
       }

@@ -1,7 +1,7 @@
-//경로: /mainpage
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const MyPageMain = () => {
   const navigate = useNavigate();
@@ -14,13 +14,59 @@ const MyPageMain = () => {
     navigate('/mypage/travellist');
   };
 
+  // 사용자 정보를 상태로 관리
+  const [userInfo, setUserInfo] = useState({
+    userId: '',
+    email: '',
+    nickname: '',
+    profile: '',
+  });
+
+  //백엔드에서 사용자 정보를 가져오는 함수
+  //기본 이미지 필요 함
+  //로그인 할때 UUID 가져와야 함 -> Login.jsx
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        // console.log('내가 불러 온 userId: ' + userId); //ok
+
+        if (!userId) {
+          console.error('No userId found');
+          return;
+        }
+        const response = await axios.get(
+          `http://13.125.174.198/profile/${userId}/`,
+        );
+
+        if (response.status === 200) {
+          setUserInfo({
+            userId: response.data.userId,
+            email: response.data.email,
+            nickname: response.data.nickname,
+            age: response.data.age,
+            profile: response.data.profile,
+          });
+        } else {
+          console.error('Failed to fetch user info:', response.status);
+        }
+      } catch (error) {
+        console.error('There was an error fetching the user info:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   return (
     <>
       <Container>
         <Header>마이페이지</Header>
         <GoInfo onClick={handlePageNavigation}>
-          <ProfileImg src="/images/google.png"></ProfileImg>
-          <Name>닉네임</Name>
+          <ProfileImg
+            src={userInfo.profile || 'images/basicProfile.jpg'}
+          ></ProfileImg>
+          <Name>{userInfo.nickname}</Name>
           <GoBtn>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +132,6 @@ const Header = styled.div`
 const GoInfo = styled.div`
   /* position: absolute; */
   /* top: 106px; */
-
   display: flex;
   align-items: center;
   width: 390px;
@@ -94,6 +139,7 @@ const GoInfo = styled.div`
   margin-top: 33px;
   flex-shrink: 0;
   padding: 0 20px;
+  cursor: pointer;
 `;
 
 const ProfileImg = styled.img`
@@ -101,7 +147,6 @@ const ProfileImg = styled.img`
   top: 28px;
   left: 38px;
   bottom: 21px; */
-
   display: flex;
   justify-content: center;
   align-content: center;
@@ -115,13 +160,13 @@ const Name = styled.div`
   /* position: absolute;
   top: 46px;
   left: 115px; */
-
   margin-left: 17px;
   color: var(--Darkgray, #353a40);
   font-family: Pretendard;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
+  cursor: pointer;
 `;
 
 const GoBtn = styled.div`
@@ -145,7 +190,6 @@ const GreenBtn = styled.div`
   border-radius: 15px;
   background: #00bc78;
   height: 109px; */
-
   display: flex;
   height: 93px;
   padding: 0px 18px 0px 35px;

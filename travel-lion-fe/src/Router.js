@@ -28,6 +28,7 @@ import SendEmailComplete from './components/Find/SendEmailComplete';
 import Invite from './components/Invite/Invite';
 import { AuthProvider } from './api/auth/AuthContext';
 import PrivateRoute from './PrivateRoute';
+import Complete from './components/Login/Complete';
 
 export default function Router() {
   return (
@@ -41,8 +42,12 @@ export default function Router() {
             <Route path="/join" element={<Join />} />
             <Route path="/join/normal" element={<NormalJoin />} />
             <Route path="/join/normal2" element={<NormalJoin2 />} />
+            <Route path="/join/complete" element={<Complete />} />
             <Route path="/login/find" element={<FindPasswd />} />
-            <Route path="/login/find/complete" element={<SendEmailComplete />} />
+            <Route
+              path="/login/find/complete"
+              element={<SendEmailComplete />}
+            />
 
             {/* 일정 추가 페이지 */}
             <Route path="/addSchedule" element={<AddSchedulePage />} />
@@ -51,8 +56,10 @@ export default function Router() {
             <Route path="/invitecode" element={<InviteCodePage />} />
 
             {/* 여행별 가계부 페이지 - (첫 화면 및 통화단위 모달)  */}
-            <Route path="/travelaccountbook/:groupId" element={<TravelAccountBookPage />} />
-
+            <Route
+              path="/travelaccountbook/:groupId"
+              element={<TravelAccountBookPage />}
+            />
 
             {/* 여행별 가계부 페이지 - 일정별 가계부 상세  */}
             <Route path="/billlist" element={<BillListPage />} />

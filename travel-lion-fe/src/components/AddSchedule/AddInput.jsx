@@ -72,7 +72,8 @@ const AddInput = () => {
         },
       });
       console.log(response.data);
-      navigate('/travelaccountbook'); // 성공 후 페이지 이동
+      const groupId = response.data.groupId;
+      navigate(`/travelaccountbook/${groupId}`);
     } catch (error) {
       console.error('에러가 발생했습니다 ⚠', error);
       alert('에러가 발생했습니다! ⚠');

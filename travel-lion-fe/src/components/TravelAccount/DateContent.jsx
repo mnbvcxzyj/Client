@@ -22,6 +22,7 @@ const DateContent = ({ groupId }) => {
   const { plan, handleChangePlan } = useContext(PlanContext);
   const { category, handleChangeCategory } = useContext(CategoryContext);
   const { group, handleChangeGroup } = useContext(GroupContext);
+  const [duration, setDuration] = useState(0);
 
   const axiosInstance = useMemo(
     () => createAxiosInstance(refreshAccessToken),
@@ -39,6 +40,7 @@ const DateContent = ({ groupId }) => {
         .then((response) => {
           setTravelDatas(response.data);
           handleChangeGroup(response.data); //컨텍스트에 저장
+          setDuration(response.data.duration);
         })
         .catch((error) => {
           console.error('API 요청 중 오류 발생:', error);
@@ -60,6 +62,7 @@ const DateContent = ({ groupId }) => {
   const [plans, setPlans] = useState([]);
   const [categories, setCategories] = useState({});
 
+  console.log(plans);
   // 여행
   useEffect(() => {
     const fetchPlans = async () => {
@@ -129,27 +132,33 @@ const DateContent = ({ groupId }) => {
           </D.ExchangeRate>
         </D.TopWrapper>
 
-        {plans.map((plan) => (
-          <D.DayWrapper key={plan.planId}>
-            <D.DayText>
-              <div>{plan.nDay}일차</div>
-              <div>
-                {plan.date}({plan.dayOfWeek})
-              </div>
-            </D.DayText>
-            {categories[plan.planId] &&
-              categories[plan.planId].map((category) => (
-                <D.CategoryWrapper key={category.categoryId}>
-                  <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
-                  <D.CategoryText>{category.categoryTitle}</D.CategoryText>
-                  <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
-                </D.CategoryWrapper>
-              ))}
-            <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
-              <D.InputBtn>사용 금액 입력</D.InputBtn>
-            </Link>
-          </D.DayWrapper>
-        ))}
+        {Array.from({ length: duration }, (_, i) => i + 1).map((day) => {
+          const plan = plans.find((plan) => plan.nDay === day);
+          return (
+            <D.DayWrapper key={day}>
+              <D.DayText>
+                <div>{day}일차</div>
+                {plan && (
+                  <div>
+                    {plan.date}({plan.dayOfWeek})
+                  </div>
+                )}
+              </D.DayText>
+              {plan &&
+                categories[plan.planId] &&
+                categories[plan.planId].map((category) => (
+                  <D.CategoryWrapper key={category.categoryId}>
+                    <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
+                    <D.CategoryText>{category.categoryTitle}</D.CategoryText>
+                    <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
+                  </D.CategoryWrapper>
+                ))}
+              <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
+                <D.InputBtn>사용 금액 입력</D.InputBtn>
+              </Link>
+            </D.DayWrapper>
+          );
+        })}
       </D.Container>
       {isBottomSheetOpen && (
         <BottomModal

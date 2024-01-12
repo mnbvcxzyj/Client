@@ -9,11 +9,9 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { PlanContext } from '../../contexts/PlanContext';
 import { CategoryContext } from '../../contexts/CategoryContext';
 import { GroupContext } from '../../contexts/GroupContext';
-
 const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('KRW');
-
   const { user } = useContext(AuthContext);
   const [travelDatas, setTravelDatas] = useState([]);
   const { refreshAccessToken } = useAuth();
@@ -23,11 +21,12 @@ const DateContent = ({ groupId }) => {
   const { category, handleChangeCategory } = useContext(CategoryContext);
   const { group, handleChangeGroup } = useContext(GroupContext);
 
+  const [duration, setDuration] = useState(0);
+
   const axiosInstance = useMemo(
     () => createAxiosInstance(refreshAccessToken),
     [refreshAccessToken],
   );
-
   useEffect(() => {
     if (user) {
       axiosInstance
@@ -38,7 +37,9 @@ const DateContent = ({ groupId }) => {
         })
         .then((response) => {
           setTravelDatas(response.data);
+
           handleChangeGroup(response.data); //컨텍스트에 저장
+          setDuration(response.data.duration);
         })
         .catch((error) => {
           console.error('API 요청 중 오류 발생:', error);
@@ -55,10 +56,9 @@ const DateContent = ({ groupId }) => {
     setIsBottomSheetOpen(false); // 통화 선택 후 BottomSheet 닫기
   };
 
-  console.log(travelDatas);
-
   const [plans, setPlans] = useState([]);
   const [categories, setCategories] = useState({});
+  console.log(plans);
 
   // 여행
   useEffect(() => {
@@ -82,11 +82,8 @@ const DateContent = ({ groupId }) => {
         console.error('Plan 데이터 요청 중 오류 발생:', error);
       }
     };
-
     fetchPlans();
   }, [axiosInstance, user, groupId]);
-
-  console.log(plans);
 
   // 카테고리 데이터 가져오기
   const fetchCategoryDetails = async (planId) => {
@@ -105,8 +102,6 @@ const DateContent = ({ groupId }) => {
       console.error('Category 데이터 요청 중 오류 발생:', error);
     }
   };
-
-  console.log(categories);
 
   return (
     <>
@@ -129,27 +124,31 @@ const DateContent = ({ groupId }) => {
           </D.ExchangeRate>
         </D.TopWrapper>
 
-        {plans.map((plan) => (
-          <D.DayWrapper key={plan.planId}>
-            <D.DayText>
-              <div>{plan.nDay}일차</div>
-              <div>
-                {plan.date}({plan.dayOfWeek})
-              </div>
-            </D.DayText>
-            {categories[plan.planId] &&
-              categories[plan.planId].map((category) => (
-                <D.CategoryWrapper key={category.categoryId}>
-                  <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
-                  <D.CategoryText>{category.categoryTitle}</D.CategoryText>
-                  <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
-                </D.CategoryWrapper>
-              ))}
-            <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
-              <D.InputBtn>사용 금액 입력</D.InputBtn>
-            </Link>
-          </D.DayWrapper>
-        ))}
+        {Array.from({ length: duration }, (_, i) => i + 1).map((day) => {
+          const plan = plans.find((plan) => plan.nDay === day);
+          console.log(plan);
+          return (
+            <D.DayWrapper key={day}>
+              <D.DayText>
+                <div>{day}일차</div>
+              </D.DayText>
+
+              {plan &&
+                categories[plan.planId] &&
+                categories[plan.planId].map((category) => (
+                  <D.CategoryWrapper key={category.categoryId}>
+                    <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
+                    <D.CategoryText>{category.categoryTitle}</D.CategoryText>
+                    <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
+                  </D.CategoryWrapper>
+                ))}
+
+              <Link to={`/newbill/${travelDatas.groupId}/${plans.id}`}>
+                <D.InputBtn>사용 금액 입력</D.InputBtn>
+              </Link>
+            </D.DayWrapper>
+          );
+        })}
       </D.Container>
       {isBottomSheetOpen && (
         <BottomModal
@@ -160,5 +159,4 @@ const DateContent = ({ groupId }) => {
     </>
   );
 };
-
 export default DateContent;

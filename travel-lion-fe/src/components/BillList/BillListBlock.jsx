@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { styled } from 'styled-components';
 import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
 import CategoryImgSelf from '../../images/Newbill/white.png';
-import Btn from './Btn';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { styled } from 'styled-components';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+import { UserContext } from '../../contexts/UserContext';
+import { GroupContext } from '../../contexts/GroupContext';
+import { PlanContext } from '../../contexts/PlanContext';
+import { CategoryContext } from '../../contexts/CategoryContext';
 
 export default function BillListBlock() {
   const categoryImages = {
@@ -17,25 +22,40 @@ export default function BillListBlock() {
     직접입력하기: CategoryImgSelf,
   };
 
-  const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
+  //const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
 
+  const [travelDatas, setTravelDatas] = useState([]);
+  const { refreshAccessToken } = useAuth();
+
+  const { user } = useContext(UserContext);
+  const { group } = useContext(GroupContext);
+  const { plan } = useContext(PlanContext);
+  const { category } = useContext(CategoryContext);
+
+  console.log('그룹정보', group);
+  console.log('플랜정보', plan);
+  console.log('카테고리 정보', category);
   return (
     <div>
       <BackgroundDiv>
         <Container>
           <DateInfo>
             <Day>
-              2일차
-              <Date>08/14(월)</Date>
+              {plan.nDay}일차
+              <Date>
+                {plan.date}({plan.dayOfWeek})
+              </Date>
             </Day>
           </DateInfo>
           <HrDivStyle>
             <hr />
           </HrDivStyle>
           <BillList>
-            {savedData.map((item, index) => (
+            {category.map((item, index) => (
               <BillItem key={index}>
-                <Link to={`/billupdate/${index}`}>
+                <Link
+                  to={`/billupdate/${group.groupId}/${plan.planId}/${category.categoryId}`}
+                >
                   <BillInfo>
                     <Table>
                       <tbody>
@@ -50,8 +70,8 @@ export default function BillListBlock() {
                           >
                             <CategoryImgStyle>
                               <BillImage
-                                src={categoryImages[item.selectedCategory]}
-                                alt={item.selectedCategor}
+                                src={categoryImages[plan.selectedCategory]}
+                                alt={plan.selectedCategor}
                               />
                             </CategoryImgStyle>
                           </td>
@@ -61,7 +81,7 @@ export default function BillListBlock() {
                               borderBottom: '0.4px solid #ADB6BD',
                             }}
                           >
-                            <BillCategory>{item.selectedCategory}</BillCategory>
+                            <BillCategory>{plan.selectedCategory}</BillCategory>
                           </td>
                           <td
                             style={{
@@ -70,22 +90,22 @@ export default function BillListBlock() {
                             }}
                           >
                             <BillAmount>{`${
-                              item.billValue >= 10000000
+                              plan.billValue >= 10000000
                                 ? '9999999+'
-                                : item.billValue + '원'
+                                : plan.billValue + '원'
                             }`}</BillAmount>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <BillMemo>
-                              {item.memoValue.length > 11
-                                ? `${item.memoValue.slice(0, 10)}...`
-                                : item.memoValue}
+                              {plan.memoValue.length > 11
+                                ? `${plan.memoValue.slice(0, 10)}...`
+                                : plan.memoValue}
                             </BillMemo>
                           </td>
                           <td>
-                            <BillAuthor>{item.whoValue}</BillAuthor>
+                            <BillAuthor>{plan.whoValue}</BillAuthor>
                           </td>
                         </tr>
                       </tbody>
@@ -96,7 +116,11 @@ export default function BillListBlock() {
             ))}
           </BillList>
           <BtnStyleDiv>
-            <Btn></Btn>
+            <NewBtn>
+              <NavList to={`/newbill/${group.groupId}/${plan.planId}`}>
+                <Plus>+</Plus>
+              </NavList>
+            </NewBtn>
           </BtnStyleDiv>
         </Container>
       </BackgroundDiv>
@@ -250,4 +274,35 @@ const BillMemo = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const NavList = styled(NavLink)``;
+
+const NewBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 41px;
+  height: 41px;
+  flex-shrink: 0;
+  background-color: #00bc78;
+  color: white;
+  border-radius: 30px;
+  stroke-width: 0.3px;
+  stroke: var(--Skyblue, #95bfff);
+`;
+
+const Plus = styled.span`
+  vertical-align: middle;
+
+  color: white;
+  border-radius: 30px;
+  stroke-width: 0.3px;
+  stroke: var(--Skyblue, #95bfff);
+
+  //글꼴
+  font-family: SUIT;
+  font-size: 35px;
+  font-weight: 350;
 `;

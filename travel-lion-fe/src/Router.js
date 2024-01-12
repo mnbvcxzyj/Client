@@ -29,6 +29,7 @@ import Invite from './components/Invite/Invite';
 import { AuthProvider } from './api/auth/AuthContext';
 import PrivateRoute from './PrivateRoute';
 import Complete from './components/Login/Complete';
+import NoAccount from './components/MyPage/NoAccount';
 
 export default function Router() {
   return (
@@ -100,6 +101,7 @@ export default function Router() {
               element={<ChangePasswd />}
             />
             <Route path="/mypage/account/changename" element={<ChangeName />} />
+            <Route path="/mypage/account/noaccount" element={<NoAccount />} />
             <Route path="/selectunit" element={<ModalExtend />} />
             <Route path="/addSchedule" element={<AddSchedulePage />} />
             <Route path="/currencymodal" element={<BottomModal />} />

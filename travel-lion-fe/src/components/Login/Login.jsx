@@ -44,6 +44,10 @@ function Login() {
     }
   };
 
+  const goToJoin = () => {
+    navigate('/join/normal');
+  };
+
   return (
     <CenterDiv>
       <EmailBox>
@@ -59,7 +63,7 @@ function Login() {
           value={password}
           onChange={handlePasswordChange}
           placeholder="비밀번호"
-        ></PasswdText>{' '}
+        ></PasswdText>
       </PasswdBox>
       <Check onClick={handleLogin}>
         <CheckText>확인</CheckText>
@@ -142,7 +146,7 @@ function Login() {
         </SaveIdBtn>
         <SaveIdText>아이디 저장</SaveIdText>
       </SaveDiv>
-      <Join>회원가입</Join>
+      <Join onClick={goToJoin}>회원가입</Join>
       <Find>ID/PW 찾기</Find>
       <SimpleLogin>
         간편 로그인<br></br>
@@ -269,7 +273,7 @@ const CheckText = styled.div`
   cursor: pointer;
 `;
 
-const Join = styled.text`
+const Join = styled.span`
   position: absolute;
   top: 463px;
   width: 130px;
@@ -280,6 +284,7 @@ const Join = styled.text`
   font-weight: 600;
   line-height: normal;
   margin-left: 15px;
+  cursor: pointer;
 `;
 
 const Find = styled.text`

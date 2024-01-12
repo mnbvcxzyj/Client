@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 import styles from './ModalBasic.module.css';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../api/auth/AuthContext';
 
 function ModalBasic({ setWithdrawalModalOpen }) {
   // 모달 끄기 (X버튼 onClick 이벤트 핸들러)
@@ -33,12 +36,32 @@ function ModalBasic({ setWithdrawalModalOpen }) {
     };
   }, []);
 
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  // 탈퇴 API 호출 함수
+  const handleWithdrawalConfirm = async () => {
+    try {
+      const response = await axios.delete('http://13.125.174.198/withdrawal/', {
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('탈퇴 처리 성공');
+        navigate('/mypage/account/noaccount');
+      }
+    } catch (error) {
+      console.error('탈퇴 처리 중 오류 발생:', error);
+    }
+  };
+
   return (
-    // 모달창을 useRef로 잡아준다.
     <div className={styles.mcontainer}>
       <WhiteDiv ref={modalRef}>
         <Text>계정을 탈퇴하시겠습니까?</Text>
-        <CheckBtn>
+        <CheckBtn onClick={handleWithdrawalConfirm}>
           <CheckText>확인</CheckText>
         </CheckBtn>
         <CancelBtn>

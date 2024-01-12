@@ -198,6 +198,7 @@ const GreenBtn = styled.div`
   flex-shrink: 0;
   border-radius: 15px;
   background: #00bc78;
+  cursor: pointer;
 `;
 
 const GreenText = styled.div`
@@ -210,9 +211,11 @@ const GreenText = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  cursor: pointer;
 `;
 
 const GreenGoBtn = styled.div`
   width: 24px;
   height: 24px;
+  cursor: pointer;
 `;

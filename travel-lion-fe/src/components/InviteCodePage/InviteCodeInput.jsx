@@ -1,4 +1,5 @@
 import React, { useState, useContext, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
@@ -7,6 +8,8 @@ const InviteCodeInput = () => {
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
   const { user } = useContext(AuthContext);
+  const [isValid, setIsValid] = useState(true);
+  const navigate = useNavigate();
 
   const { refreshAccessToken } = useAuth();
 
@@ -22,14 +25,15 @@ const InviteCodeInput = () => {
   const handleSubmit = async () => {
     if (!code.trim()) {
       alert('코드를 입력해주세요.');
+      setIsValid(false);
       return;
     }
 
     try {
-      const response = await axiosInstance.post(
-        '/join',
+      await axiosInstance.post(
+        '/join/',
         {
-          inviteCode: code,
+          entered_invite_code: code,
         },
         {
           headers: {
@@ -37,18 +41,18 @@ const InviteCodeInput = () => {
           },
         },
       );
-
-      setMessage(response.data.message);
-      /// 벼ㄴ경
+      setIsValid(true);
+      navigate('/');
     } catch (error) {
       if (error.response) {
-        setMessage(error.response.data.message);
+        setMessage('등록되지 않은 코드입니다.');
+        setIsValid(false);
       } else {
         setMessage('오류가 발생했습니다. 다시 시도해주세요.');
+        setIsValid(true);
       }
     }
   };
-
   return (
     <Container>
       <Text>초대코드 입력</Text>
@@ -56,8 +60,9 @@ const InviteCodeInput = () => {
         placeholder="코드를 입력해주세요."
         value={code}
         onChange={handleCodeChange}
+        isValid={isValid}
       />
-      {message && <ErrorMessage>{message}</ErrorMessage>}
+      {!isValid && <ErrorMessage>{message}</ErrorMessage>}
       <CheckBtn onClick={handleSubmit}>확인</CheckBtn>
     </Container>
   );
@@ -88,7 +93,8 @@ const Input = styled.input`
   height: 59px;
   flex-shrink: 0;
   border-radius: 6px;
-  border: 0.8px solid var(--Gray, #adb6bd);
+  border: 0.8px solid
+    ${(props) => (props.isValid ? 'var(--Gray, #adb6bd)' : 'red')};
 
   text-indent: 19px;
   color: #000;
@@ -131,7 +137,14 @@ const CheckBtn = styled.button`
 `;
 
 const ErrorMessage = styled.div`
-  color: red;
+  color: #f00;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  margin-top: 17px;
 `;
 
 export default InviteCodeInput;

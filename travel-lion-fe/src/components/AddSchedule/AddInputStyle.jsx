@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import arrow from '../../images/TravelAccount/arrow.svg';
 
 export const Container = styled.div`
   display: flex;
@@ -61,32 +60,42 @@ export const Input = styled.input`
   border: 0.8px solid var(--Gray, #adb6bd);
 `;
 
-export const CountryDropdown = styled.select`
+export const CountryDropdown = styled.div`
   width: 339px;
-  height: 55px;
 
-  flex-shrink: 0;
+  max-height: 200px;
+  overflow-y: auto;
+
   color: #000;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   padding-left: 10px;
-  outline: none;
-  border: none;
-  -webkit-appearance: none;
-  appearance: none;
 
-  background: url(${arrow}) no-repeat 98% 50%/18px auto;
+  background: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 `;
 
-export const CountryOption = styled.option`
-  background-color: #fff;
-  color: #000;
-  outline: none;
-  border: none;
-  -webkit-appearance: none;
-  appearance: none;
+export const CountryOption = styled.div`
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+export const TextDrop = styled.div`
+  display: flex;
+  padding: 10px;
+  width: 339px;
+  align-items: center;
+`;
+
+export const NationText = styled.div`
+  width: 290px;
+  margin-left: 5px;
 `;
 
 export const DateModal = styled.div`

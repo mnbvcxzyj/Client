@@ -6,7 +6,7 @@ import arrow from '../../images/TravelAccount/backarrow.svg';
 const AddHeader = () => {
   return (
     <>
-      <BackDiv to="/travelaccountbook">
+      <BackDiv to="/">
         <img src={arrow} alt="뒤로" />
       </BackDiv>
     </>

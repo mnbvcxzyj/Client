@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import { getFlagEmoji } from '../../utils/flagEmoji';
+import Loading from '../../pages/Loading';
 
 const TravelItem = ({ travelData, isMinRemainingTime }) => {
   return (
@@ -33,8 +34,9 @@ const TravelItem = ({ travelData, isMinRemainingTime }) => {
               <div>
                 {travelData.nation} - {travelData.location}
               </div>
+              |
               <div>
-                {formatDate(travelData.startDate)} -{' '}
+                {formatDate(travelData.startDate)} -
                 {formatDate(travelData.endDate)}
               </div>
             </M.TravelInfo2>
@@ -70,12 +72,14 @@ const parseDday = (ddayString) => {
 
 export default function ListBlock() {
   const [travelDatas, setTravelDatas] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useContext(AuthContext);
   const { refreshAccessToken } = useAuth();
   const axiosInstance = createAxiosInstance(refreshAccessToken);
 
   useEffect(() => {
     if (user) {
+      setIsLoading(true);
       axiosInstance
         .get(`/${user.userId}/grouplist`, {
           headers: { Authorization: `Bearer ${user.accessToken}` },
@@ -92,24 +96,31 @@ export default function ListBlock() {
             '백엔드에서 데이터를 가져오는 중 오류가 발생했습니다.',
             error,
           );
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
-  }, [user, axiosInstance]);
+  }, [user]);
 
   return (
     <M.ListContainer>
       <M.Content>
         <M.ListText>여행 리스트</M.ListText>
-        {travelDatas.map((travelData) => {
-          const isMinRemainingTime =
-            parseDday(travelData.dday) === parseDday(travelDatas[0].dday);
-          return (
-            <TravelItem
-              travelData={travelData}
-              isMinRemainingTime={isMinRemainingTime}
-            />
-          );
-        })}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          travelDatas.map((travelData) => {
+            const isMinRemainingTime =
+              parseDday(travelData.dday) === parseDday(travelDatas[0].dday);
+            return (
+              <TravelItem
+                travelData={travelData}
+                isMinRemainingTime={isMinRemainingTime}
+              />
+            );
+          })
+        )}
       </M.Content>
     </M.ListContainer>
   );

@@ -23,7 +23,7 @@ const MyPageMain = () => {
   });
 
   //백엔드에서 사용자 정보를 가져오는 함수
-  //기본 이미지 필요 함
+  //기본 이미지 필요 함 -> basicProfile.jpg
   //로그인 할때 UUID 가져와야 함 -> Login.jsx
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -134,7 +134,7 @@ const GoInfo = styled.div`
   /* top: 106px; */
   display: flex;
   align-items: center;
-  width: 390px;
+  // width: 390px;
   height: 109px;
   margin-top: 33px;
   flex-shrink: 0;
@@ -175,8 +175,8 @@ const GoBtn = styled.div`
   right: 35px; */
   width: 24px;
   height: 24px;
-  margin-left: 166px;
   flex-shrink: 0;
+  margin-left: auto;
 `;
 
 const GreenBtn = styled.div`

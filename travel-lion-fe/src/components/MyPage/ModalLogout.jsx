@@ -1,6 +1,71 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './ModalBasic.module.css';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../api/auth/AuthContext';
+
+function ModalLogout({ setLogoutModalOpen, forceRerender }) {
+  // Modal 창을 useRef로 취득
+  const modalRef = useRef(null);
+  const navigate = useNavigate();
+  const { user, logout } = useAuth(); // AuthContext에서 user, logout 함수 가져옴
+
+  useEffect(() => {
+    const handler = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setLogoutModalOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+
+    return () => {
+      document.removeEventListener('mousedown', handler);
+    };
+  });
+
+  const closeModal = () => {
+    setLogoutModalOpen(false);
+    forceRerender(); // 강제 리렌더링 호출
+  };
+
+  // 로그아웃 처리 함수
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post('http://13.125.174.198/logout/', {
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+      });
+      if (response.status === 201) {
+        console.log('로그아웃 성공');
+        logout();
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('로그아웃 중 오류 발생:', error);
+      logout();
+      navigate('/login');
+    }
+    // 모달 창 닫기
+    setLogoutModalOpen(false);
+  };
+
+  return (
+    <div className={styles.mcontainer}>
+      <WhiteDiv ref={modalRef}>
+        <Text>로그아웃 하시겠습니까?</Text>
+        <CheckBtn onClick={handleLogout}>
+          <CheckText>확인</CheckText>
+        </CheckBtn>
+        <CancelBtn onClick={closeModal}>
+          <CancelText>취소</CancelText>
+        </CancelBtn>
+      </WhiteDiv>
+    </div>
+  );
+}
+export default ModalLogout;
 
 const WhiteDiv = styled.div`
   width: 280px;
@@ -29,7 +94,7 @@ const CheckBtn = styled.button`
   width: 103px;
   height: 35px;
   border-radius: 6px;
-  background: #05b70c;
+  background: #00bc78;
   margin-top: 22px;
   margin-right: 13px;
   margin-left: 31px;
@@ -39,7 +104,7 @@ const CancelBtn = styled.button`
   width: 103px;
   height: 35px;
   border-radius: 6px;
-  border: 1px solid #05b70c;
+  border: 1px solid #00bc78;
   background: #fff;
 `;
 
@@ -60,7 +125,7 @@ const CancelText = styled.div`
   width: 22px;
   height: 13px;
   flex-shrink: 0;
-  color: #05b70c;
+  color: #00bc78;
   font-family: Pretendard;
   font-size: 12px;
   font-style: normal;
@@ -68,51 +133,3 @@ const CancelText = styled.div`
   line-height: normal;
   margin: auto;
 `;
-
-function ModalBasic({ setLogoutModalOpen }) {
-  // 모달 끄기 (X버튼 onClick 이벤트 핸들러)
-  const closeModal = () => {
-    setLogoutModalOpen(false); //state변경하면 렌더링 되는거 아니었냐고!!!
-    console.log('취소 버튼 클릭');
-  };
-
-  // 모달 외부 클릭시 끄기 처리
-  // Modal 창을 useRef로 취득
-  const modalRef = useRef(null);
-
-  useEffect(() => {
-    // 이벤트 핸들러 함수
-    const handler = (event) => {
-      // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setLogoutModalOpen(false);
-      }
-    };
-
-    // 이벤트 핸들러 등록
-    document.addEventListener('mousedown', handler);
-    // document.addEventListener('touchstart', handler); // 모바일 대응
-
-    return () => {
-      // 이벤트 핸들러 해제
-      document.removeEventListener('mousedown', handler);
-      // document.removeEventListener('touchstart', handler); // 모바일 대응
-    };
-  }, []);
-
-  return (
-    // 모달창을 useRef로 잡아준다.
-    <div className={styles.mcontainer}>
-      <WhiteDiv ref={modalRef}>
-        <Text>로그아웃 하시겠습니까?</Text>
-        <CheckBtn>
-          <CheckText>확인</CheckText>
-        </CheckBtn>
-        <CancelBtn onClick={closeModal}>
-          <CancelText>취소</CancelText>
-        </CancelBtn>
-      </WhiteDiv>
-    </div>
-  );
-}
-export default ModalBasic;

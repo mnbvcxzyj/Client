@@ -1,36 +1,47 @@
-import React from 'react';
+// 컨텍스트 완료
+
+import React, { useState, useEffect, useContext } from 'react';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import goBack from '../../images/goBack.png';
 import share from '../../images/share.png';
 import auImg from '../../images/AU.png';
-import { travelData } from '../../data/TravelData';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+import { useMemo } from 'react';
 
-export default function Header() {
-  const firstTravel = travelData[1];
+import { GroupContext } from '../../contexts/GroupContext';
+import { PlanContext } from '../../contexts/PlanContext';
+
+export default function Header({ groupId }) {
+  const { group } = useContext(GroupContext);
+  const { plan } = useContext(PlanContext);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date
+      .toLocaleDateString('ko-KR', {
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replace('.', '/')
+      .replace('.', '');
+  };
 
   return (
     <>
       <HeaderContainer>
-        <NavLeft to="/">
+        <NavLeft to={`/travelaccountbook/${group.groupId}`}>
           <GoBackImg src={goBack} />
         </NavLeft>
         <TravelInfoDiv>
           <Image src={auImg} />
-          <TravelName>{firstTravel.title}</TravelName>
+          <TravelName>{group.title}</TravelName>
           <br />
-          <TravelLocation>{`${firstTravel.country}-${firstTravel.city} | `}</TravelLocation>
-          <TravelDate>{`${(firstTravel.firstDate.getMonth() + 1)
-            .toString()
-            .padStart(2, '0')}-${firstTravel.firstDate
-            .getDate()
-            .toString()
-            .padStart(2, '0')} ~ ${(firstTravel.lastDate.getMonth() + 1)
-            .toString()
-            .padStart(2, '0')}-${firstTravel.lastDate
-            .getDate()
-            .toString()
-            .padStart(2, '0')}`}</TravelDate>
+          <TravelLocation>{`${group.nation}-${group.location} |`}</TravelLocation>
+          <TravelDate>
+            {formatDate(group.startDate)} ~{formatDate(group.endDate)}
+          </TravelDate>
         </TravelInfoDiv>
         <Share to="">
           <ShareImg src={share} />
@@ -42,7 +53,7 @@ export default function Header() {
 
 const HeaderContainer = styled.div`
   width: 390px;
-  height: 110px;
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,8 +91,7 @@ const TravelInfoDiv = styled.div`
 
 const Image = styled.img`
   width: 26px;
-  margin-left: 11%;
-  margin-right: 5%;
+  margin: 3px;
 `;
 
 const TravelName = styled.span`

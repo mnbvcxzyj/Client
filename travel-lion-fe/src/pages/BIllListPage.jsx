@@ -2,14 +2,15 @@ import React from 'react';
 import Header from '../components/BillList/Header';
 import BillListBlock from '../components/BillList/BillListBlock';
 import CostPerPerson from '../components/BillList/CostPerPerson';
-import AllowUser from '../components/FollowRequestList/AllowUser';
-import IsMember from '../components/FollowRequestList/IsMember';
+import { useParams } from 'react-router-dom';
 
 export default function BillListPage() {
+  const { groupId, planId } = useParams();
+
   return (
     <>
-      <Header />
-      <BillListBlock></BillListBlock>
+      <Header groupId={groupId} planId={planId} />
+      <BillListBlock groupId={groupId} planId={planId} />
       <CostPerPerson></CostPerPerson>
     </>
   );

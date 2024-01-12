@@ -1,5 +1,4 @@
 import * as D from './DateContentStyle';
-import { categoryData } from '../../data/CategoryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import BottomModal from './BottomModal';
 import { Link, useParams } from 'react-router-dom';
@@ -126,7 +125,7 @@ const DateContent = ({ groupId }) => {
           </D.ExchangeRate>
         </D.TopWrapper>
 
-        {Array.from({ length: duration }, (_, i) => i + 1).map((day) => {
+        {Array.from({ length: duration + 1 }, (_, i) => i + 1).map((day) => {
           const plan = plans.find((plan) => plan.nDay === day);
           console.log(plan);
           return (
@@ -150,7 +149,7 @@ const DateContent = ({ groupId }) => {
                   </D.CategoryWrapper>
                 ))}
 
-              <Link to={`/newbill/${travelDatas.groupId}/${plans.id}`}>
+              <Link to={`/newbill/${travelDatas.groupId}/${day + 1}`}>
                 <D.InputBtn>사용 금액 입력</D.InputBtn>
               </Link>
             </D.DayWrapper>

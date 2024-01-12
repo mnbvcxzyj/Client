@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import { useMemo } from 'react';
+import { getFlagEmoji } from '../../utils/flagEmoji';
 
 export default function ListBlock() {
   const [travelDatas, setTravelDatas] = useState([]);
@@ -40,12 +41,6 @@ export default function ListBlock() {
         });
     }
   }, [user, axiosInstance]);
-
-  // 국기 이모지
-  const getFlagEmoji = (c) =>
-    String.fromCodePoint(
-      ...[...c.toUpperCase()].map((x) => 0x1f1a5 + x.charCodeAt()),
-    );
 
   const calculateDday = (startDate, endDate) => {
     const today = new Date();
@@ -169,9 +164,9 @@ export default function ListBlock() {
                     </M.TopDiv>
 
                     <M.TravelContainer>
-                      {/* <M.FlagEmoji>
-                        {getFlagEmoji(travelData.countryCode)}
-                      </M.FlagEmoji> */}
+                      <M.FlagEmoji>
+                        {getFlagEmoji(travelData.nation)}
+                      </M.FlagEmoji>
 
                       <M.TravelInfo>
                         <M.TravelTitle>{travelData.title}</M.TravelTitle>

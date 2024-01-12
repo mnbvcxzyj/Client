@@ -1,5 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
+function NoAccount() {
+  const navigate = useNavigate();
+
+  const goToLogin = () => {
+    navigate('/login');
+  };
+
+  return (
+    <div>
+      <Title>계정이 없는 사용자 입니다.</Title>
+      <Btn onClick={goToLogin}>
+        <BtnText>회원가입</BtnText>
+      </Btn>
+    </div>
+  );
+}
+
+export default NoAccount;
 
 const Title = styled.div`
   position: relative;
@@ -22,9 +42,10 @@ const Btn = styled.div`
   height: 45.31px;
   flex-shrink: 0;
   border-radius: 7.767px;
-  background: #05b70c;
+  background: #00bc78;
   margin: auto;
   top: 376px;
+  cursor: pointer;
 `;
 
 const BtnText = styled.div`
@@ -38,16 +59,3 @@ const BtnText = styled.div`
   font-weight: 700;
   line-height: normal;
 `;
-
-function NoAccount() {
-  return (
-    <div>
-      <Title>계정이 없는 사용자 입니다.</Title>
-      <Btn>
-        <BtnText>회원가입</BtnText>
-      </Btn>
-    </div>
-  );
-}
-
-export default NoAccount;

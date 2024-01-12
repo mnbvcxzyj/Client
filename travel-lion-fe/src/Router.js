@@ -29,6 +29,7 @@ import Invite from './components/Invite/Invite';
 import { AuthProvider } from './api/auth/AuthContext';
 import PrivateRoute from './PrivateRoute';
 import Complete from './components/Login/Complete';
+import NoAccount from './components/MyPage/NoAccount';
 import { UserProvider } from './contexts/UserContext';
 import { GroupProvider } from './contexts/GroupContext';
 import { PlanProvider } from './contexts/PlanContext';
@@ -112,27 +113,26 @@ export default function Router() {
                 <PrivateRoute element={MyPage} />
               }
             /> */}
-                    <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/mypage/account" element={<AccountManage />} />
-                    <Route
-                      path="/mypage/account/existingpasswd"
-                      element={<OldPasswd />}
-                    />
-                    <Route
-                      path="/mypage/account/changepasswd"
-                      element={<ChangePasswd />}
-                    />
-                    <Route
-                      path="/mypage/account/changename"
-                      element={<ChangeName />}
-                    />
-                    <Route path="/selectunit" element={<ModalExtend />} />
-                    <Route path="/addSchedule" element={<AddSchedulePage />} />
-                    <Route path="/currencymodal" element={<BottomModal />} />
-                    <Route path="/mypage/travellist" element={<TravelList />} />
-                    <Route path="/mypage/invite" element={<Invite />} />
-                  </Routes>
-                </BrowserRouter>
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/mypage/account" element={<AccountManage />} />
+            <Route
+              path="/mypage/account/existingpasswd"
+              element={<OldPasswd />}
+            />
+            <Route
+              path="/mypage/account/changepasswd"
+              element={<ChangePasswd />}
+            />
+            <Route path="/mypage/account/changename" element={<ChangeName />} />
+            <Route path="/mypage/account/noaccount" element={<NoAccount />} />
+            <Route path="/selectunit" element={<ModalExtend />} />
+            <Route path="/addSchedule" element={<AddSchedulePage />} />
+            <Route path="/currencymodal" element={<BottomModal />} />
+            <Route path="/mypage/travellist" element={<TravelList />} />
+            <Route path="/mypage/invite" element={<Invite />} />
+          </Routes>
+        </BrowserRouter>
+
               </CategoryProvider>
             </PlanProvider>
           </GroupProvider>

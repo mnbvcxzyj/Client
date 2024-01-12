@@ -24,7 +24,6 @@ export default function BillListBlock({ groupId, planId }) {
 
   //const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
 
-  const [travelDatas, setTravelDatas] = useState([]);
   const { refreshAccessToken } = useAuth();
 
   const { user } = useContext(UserContext);
@@ -32,17 +31,37 @@ export default function BillListBlock({ groupId, planId }) {
   const { plan } = useContext(PlanContext);
   const { category } = useContext(CategoryContext);
 
-  console.log('그룹정보', group);
-  console.log('플랜정보', plan);
-  console.log('카테고리 정보', category);
-
   const selectedPlan = plan.find(
     (item) => item.planId === parseInt(planId, 10),
   );
-  console.log(selectedPlan);
 
   const selectedCategories = selectedPlan ? category[selectedPlan.planId] : [];
-  console.log(selectedCategories);
+
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
+
+  const [travelDatas, setTravelDatas] = useState([]);
+
+  useEffect(() => {
+    const getCotegory = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/${user.userId}/grouplist/${groupId}/plan/${planId}/category`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+            },
+          },
+        );
+        setTravelDatas(response.data);
+      } catch (error) {
+        console.error('수정하려는 Category 데이터 요청 중 오류 발생:', error);
+      }
+    };
+    getCotegory();
+  }, [axiosInstance, user, groupId, planId, travelDatas]);
 
   return (
     <div>
@@ -60,8 +79,8 @@ export default function BillListBlock({ groupId, planId }) {
             <hr />
           </HrDivStyle>
           <BillList>
-            {selectedCategories &&
-              selectedCategories.map((category, index) => (
+            {travelDatas &&
+              travelDatas.map((category, index) => (
                 <BillItem key={index}>
                   <Link
                     to={`/billupdate/${groupId}/${planId}/${category.categoryId}`}
@@ -79,10 +98,15 @@ export default function BillListBlock({ groupId, planId }) {
                               }}
                             >
                               <CategoryImgStyle>
-                                <BillImage
-                                  src={categoryImages[plan.selectedCategory]}
-                                  alt={plan.selectedCategor}
-                                />
+                                {category.categoryTitle in categoryImages ? (
+                                  <BillImage
+                                    src={categoryImages[category.categoryTitle]}
+                                    alt={category.categoryTitle}
+                                  />
+                                ) : (
+                                  // 없으면 빈 이미지
+                                  <BillImage src="" alt="" />
+                                )}
                               </CategoryImgStyle>
                             </td>
                             <td
@@ -129,7 +153,7 @@ export default function BillListBlock({ groupId, planId }) {
           </BillList>
           <BtnStyleDiv>
             <NewBtn>
-              <NavList to={`/newbill/${group.groupId}/${plan.planId}`}>
+              <NavList to={`/newbill/${group.groupId}/${planId}`}>
                 <Plus>+</Plus>
               </NavList>
             </NewBtn>
@@ -157,6 +181,7 @@ const Container = styled.div`
 
   margin: 0 auto;
   background: #ffffff;
+  padding: 10px;
 `;
 
 const DateInfo = styled.div`
@@ -179,7 +204,7 @@ const Day = styled.span`
   letter-spacing: 0em;
   text-align: left;
 
-  margin: 30px;
+  margin: 20px;
 `;
 
 const Date = styled.span`
@@ -203,9 +228,7 @@ const BillList = styled.div`
   width: 100%;
 `;
 
-const BtnStyleDiv = styled.div`
-  margin: 30px;
-`;
+const BtnStyleDiv = styled.div``;
 
 const BillItem = styled.div`
   width: 304px;

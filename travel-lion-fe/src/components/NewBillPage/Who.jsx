@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import UserImg from '../../images/BillList/userImg.png';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Who() {
+  const { user } = useContext(UserContext);
   return (
     <Component>
       <WriterStyle>
@@ -12,7 +14,7 @@ export default function Who() {
             <UserImage src={UserImg} alt="사용자 이미지" />
           </td>
           <td style={{ verticalAlign: 'middle' }}>
-            <UserName>김세영</UserName>
+            <UserName>{user.nickname}</UserName>
           </td>
         </tr>
       </WriterStyle>

@@ -1,19 +1,24 @@
-import React from 'react';
+import { React, useContext } from 'react';
 import styled from 'styled-components';
 import walletImg from '../../images/BillList/wImg.png';
-
-import { travelData } from '../../data/TravelData';
+import { GroupContext } from '../../contexts/GroupContext';
+import { PlanContext } from '../../contexts/PlanContext';
 
 const CostPerPerson = () => {
-  const firstTravel = travelData[1];
+  const { group } = useContext(GroupContext);
+  const { plan } = useContext(PlanContext);
+
+  const memCnt = group.member.length;
+  console.log('사람수', memCnt);
+
   return (
     <>
       <BackgroundDiv>
         <ImgStyle>
           <WalletImg src={walletImg} alt="지갑이미지"></WalletImg>
         </ImgStyle>
-        <PersomCost>{firstTravel.amount / 4}원</PersomCost> /&nbsp;
-        <TotalCost>{firstTravel.amount}원</TotalCost>
+        <PersomCost>{plan[0].totalCost / memCnt}원</PersomCost> /&nbsp;
+        <TotalCost>{group.budget}원</TotalCost>
       </BackgroundDiv>
     </>
   );

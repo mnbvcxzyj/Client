@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
@@ -10,38 +10,55 @@ import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
 import { useNavigate } from 'react-router-dom';
 
-const categoryDataset = [
-  {
-    id: 1,
-    name: '식비',
-    img: CategoryImgFood,
-  },
-  {
-    id: 2,
-    name: '숙소',
-    img: CategoryImgHotel,
-  },
-  {
-    id: 3,
-    name: '교통비',
-    img: CategoryImgTransportation,
-  },
-  {
-    id: 4,
-    name: '기타',
-    img: CategoryImgEtc,
-  },
-  {
-    id: 5,
-    name: '직접 입력하기',
-    img: CategoryImgSelf,
-  },
-];
+const categoryDataset = [];
+
+if (categoryDataset.length === 0) {
+  const newData = [
+    {
+      id: 1,
+      name: '식비',
+      img: CategoryImgFood,
+    },
+    {
+      id: 2,
+      name: '숙소',
+      img: CategoryImgHotel,
+    },
+    {
+      id: 3,
+      name: '교통비',
+      img: CategoryImgTransportation,
+    },
+    {
+      id: 4,
+      name: '기타',
+      img: CategoryImgEtc,
+    },
+  ];
+
+  // 데이터 세션 스토리지에 저장
+  sessionStorage.setItem('categoryDataset', JSON.stringify(newData));
+}
+
+sessionStorage.setItem('categoryDataset', JSON.stringify(categoryDataset));
+console.log(sessionStorage.getItem('categoryDataset'));
 
 export default function Category({ onClickCategory, showAlert, setShowAlert }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
+
+  useEffect(() => {
+    if (!categoryDataset.find((cat) => cat.name === selectedCategory)) {
+      // 선택된 카테고리가 categoryDataset에 없으면 초기화
+      setSelectedCategory('');
+      setSelectedCategoryImg(null);
+    }
+  }, [categoryDataset, selectedCategory]);
+
+  const storedCategoryDataset = JSON.parse(
+    sessionStorage.getItem('categoryDataset') || '[]',
+  );
 
   const onClickOption = (name) => {
     const selectedCategoryName = name;
@@ -132,11 +149,38 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
               )}
             </Option>
           ))}
+          <Option
+            value="직접 입력하기"
+            onClick={() => navigate('/newcate')}
+            isSelected={selectedCategory === '직접 입력하기'}
+          >
+            <tr>
+              <td>
+                <CategoryImgStyle src={CategoryImgSelf} alt="직접 입력하기" />
+              </td>
+              <td
+                style={{
+                  verticalAlign: 'middle',
+                }}
+              >
+                <CategoryNameStyle>직접 입력하기</CategoryNameStyle>
+              </td>
+            </tr>
+            {selectedCategory === '직접 입력하기' && (
+              <CategoryCheaked src={ImgV} />
+            )}
+          </Option>
         </DropDown>
       )}
     </Component>
   );
 }
+
+// {
+//   id: 5,
+//   name: '직접 입력하기',
+//   img: CategoryImgSelf,
+// },
 
 const Component = styled.div`
   /* width: 87%;

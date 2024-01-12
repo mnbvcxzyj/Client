@@ -81,11 +81,7 @@ export default function NewBillBtn({ groupId, planId }) {
           },
         },
       );
-
-      console.log('저장성공:', response.data);
-
-      // Navigate to the desired page
-      navigate(`/billlist/${group.groupId}/${plan.planId}`);
+      navigate(`/billlist/${group.groupId}/${planId}`);
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
     }

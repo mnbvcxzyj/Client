@@ -3,11 +3,12 @@ import 'react-calendar/dist/Calendar.css';
 import { countryData } from '../../data/CountryData';
 import arrow from '../../images/TravelAccount/arrow.svg';
 import Calendar from 'react-calendar';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import * as F from './AddInputStyle';
 import { AuthContext } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
+import { getFlagEmoji } from '../../utils/flagEmoji';
+
 const AddInput = () => {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
@@ -17,6 +18,7 @@ const AddInput = () => {
   const [location, setLocation] = useState('');
   const [budget, setBudget] = useState(0);
   const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const { user, refreshAccessToken } = useContext(AuthContext);
   const axiosInstance = createAxiosInstance(refreshAccessToken);
@@ -31,6 +33,15 @@ const AddInput = () => {
     if (!isNaN(value)) {
       setBudget(numberCommas(value));
     }
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleCountrySelect = (countryName) => {
+    setNation(countryName);
+    setShowDropdown(false);
   };
 
   const formatDate = (date) => {
@@ -96,18 +107,27 @@ const AddInput = () => {
 
       <F.Wrapper>
         <F.Text>방문 국가를 선택해주세요.</F.Text>
-        <F.InputWrapper>
-          <F.CountryDropdown
-            value={nation}
-            onChange={(e) => setNation(e.target.value)}
-          >
+        <F.InputWrapper onClick={toggleDropdown}>
+          <F.TextDrop>
+            <span className={getFlagEmoji(nation)}></span>
+            <F.NationText> {nation}</F.NationText>
+
+            <img src={arrow} alt="⬇️" />
+          </F.TextDrop>
+        </F.InputWrapper>
+        {showDropdown && (
+          <F.CountryDropdown>
             {countryData.countries.map((country) => (
-              <F.CountryOption key={country.code} value={country.name}>
-                {country.flag}&nbsp;{country.name}
+              <F.CountryOption
+                key={country.code}
+                onClick={() => handleCountrySelect(country.name)}
+              >
+                <span className={getFlagEmoji(country.name)}></span>
+                &nbsp;{country.name}
               </F.CountryOption>
             ))}
           </F.CountryDropdown>
-        </F.InputWrapper>
+        )}
       </F.Wrapper>
 
       <F.Wrapper>

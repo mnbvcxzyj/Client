@@ -131,29 +131,33 @@ export const InputBtn = styled.div`
 export const CategoryWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 18px auto;
+
+  margin: 4px auto;
   width: 304px;
   height: 35px;
   border-radius: 6px;
   border: 0.6px solid var(--Gray, #adb6bd);
   background: var(--White, #fff);
+
+  padding: 0 15px;
 `;
 
 export const CategoryIcon = styled.div`
-  margin-left: 14px;
+  width: 5%;
 `;
 
 export const CategoryText = styled.div`
-  margin-left: 8px;
+  width: 70%;
   color: #000;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  margin-left: 10px;
 `;
 
 export const Amount = styled.div`
-  margin-left: 170px;
+  width: 25%;
   color: #00bc78;
   font-family: Pretendard;
   font-size: 14px;

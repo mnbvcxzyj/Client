@@ -39,6 +39,7 @@ const DateContent = ({ groupId }) => {
         })
         .then((response) => {
           setTravelDatas(response.data);
+
           handleChangeGroup(response.data); //컨텍스트에 저장
           setDuration(response.data.duration);
         })

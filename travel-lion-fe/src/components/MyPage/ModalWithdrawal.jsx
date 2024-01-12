@@ -41,7 +41,7 @@ function ModalBasic({ setWithdrawalModalOpen }) {
         <CheckBtn>
           <CheckText>확인</CheckText>
         </CheckBtn>
-        <CancelBtn onClick={closeModal}>
+        <CancelBtn>
           <CancelText>취소</CancelText>
         </CancelBtn>
       </WhiteDiv>

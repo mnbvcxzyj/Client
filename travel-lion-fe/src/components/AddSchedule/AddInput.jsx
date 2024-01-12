@@ -189,7 +189,7 @@ const AddInput = () => {
           />
         </F.InputWrapper>
       </F.Wrapper>
-      <F.AddButton to="/addSchedule" onClick={handleSubmit}>
+      <F.AddButton to="/" onClick={handleSubmit}>
         확인
       </F.AddButton>
     </F.Container>

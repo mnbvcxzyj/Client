@@ -27,7 +27,7 @@ export const countryData =
             "flag": "🇯🇵"
         },
         {
-            "name": "한국",
+            "name": "대한민국",
             "code": "KR",
             "flag": "🇰🇷"
         },

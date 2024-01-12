@@ -3,9 +3,9 @@ import share from '../../images/share.png';
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import AU from '../../images/AU.png';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
+import { getFlagEmoji } from '../../utils/flagEmoji';
 
 export default function Header({ groupId }) {
   const { user } = useContext(AuthContext);
@@ -53,7 +53,9 @@ export default function Header({ groupId }) {
         </NavLeft>
         <TravelInfoDiv>
           <Wrapper1>
-            <Image src={AU} alt="국기" />
+            <FlagImage>
+              <span className={getFlagEmoji(travelDatas.nation)}></span>
+            </FlagImage>
             <TravelName>{travelDatas.title}</TravelName>
           </Wrapper1>
           <Wrapper2>
@@ -134,8 +136,8 @@ const TravelInfoDiv = styled.div`
   width: 300px;
 `;
 
-const Image = styled.img`
-  width: 26px;
+const FlagImage = styled.div`
+  font-size: 20px;
 `;
 
 const TravelName = styled.div`

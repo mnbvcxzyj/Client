@@ -1,22 +1,8 @@
-// const countryCodes = {
-//     '한국': 'KR',
-//     '미국': 'US',
+import countries from 'i18n-iso-countries';
 
-// };
-
-
-// export const getFlagEmoji = (countryName) => {
-//     const countryCode = countryCodes[countryName];
-//     if (!countryCode) return '';
-
-//     const codePoints = countryCode.toUpperCase().split('').map(char => 127397 + char.charCodeAt());
-//     return String.fromCodePoint(...codePoints);
-// };
-
-import { countryData } from '../data/CountryData';
+countries.registerLocale(require("i18n-iso-countries/langs/ko.json"));
 
 export const getFlagEmoji = (countryName) => {
-    const country = countryData.countries.find(c => c.name === countryName);
-    return country ? country.flag : '';
+    const countryCode = countries.getAlpha2Code(countryName, 'ko');
+    return countryCode ? `fi fi-${countryCode.toLowerCase()}` : '';
 }
-

@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import MyPageHeader from './MyPageHeader';
 import ModalLogout from './ModalLogout';
 import ModalWithdrawal from './ModalWithdrawal';
+import axios from 'axios';
 
+//로그아웃 모달 취소버튼 안 먹힘
 const AccountManage = () => {
   const navigate = useNavigate();
 
@@ -18,19 +20,59 @@ const AccountManage = () => {
 
   const [data, setData] = useState('');
 
-  useEffect(() => {
-    // fetch('your-backend-api-url')
-    //   .then(response => response.text())
-    //   .then(data => setData(data))
-    //   .catch(error => console.error('Error fetching data:', error));
+  // 사용자 정보를 상태로 관리
+  const [userInfo, setUserInfo] = useState({
+    userId: '',
+    email: '',
+    nickname: '',
+    profile: '',
+  });
 
-    // 지금은 일단 임시로 문자열을 설정
-    setData('Hello World!');
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        // console.log('내가 불러 온 userId: ' + userId); //ok
+
+        if (!userId) {
+          console.error('No userId found');
+          return;
+        }
+        const response = await axios.get(
+          `http://13.125.174.198/profile/${userId}/`,
+        );
+
+        if (response.status === 200) {
+          setUserInfo({
+            userId: response.data.userId,
+            email: response.data.email,
+            nickname: response.data.nickname,
+            age: response.data.age,
+            profile: response.data.profile,
+          });
+          // const passwd_length = userInfo.passwd;
+          // console.log(userInfo.passwd); //undeefind
+          setData('hello'); //임시비번
+        } else {
+          console.error('Failed to fetch user info:', response.status);
+        }
+      } catch (error) {
+        console.error('There was an error fetching the user info:', error);
+      }
+    };
+
+    fetchUserInfo();
   }, []);
 
+  //비밀번호 * 표시
   function renderStars() {
     return '*'.repeat(data.length);
   }
+  const [forceUpdate, setForceUpdate] = useState(0);
+
+  const forceRerender = () => {
+    setForceUpdate((prev) => prev + 1);
+  };
 
   // 로그아웃 모달창 노출 여부 state
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -38,6 +80,7 @@ const AccountManage = () => {
   // 모달창 노출
   const showLogoutModal = () => {
     setLogoutModalOpen(true);
+    console.log('logoutModalOpen 상태:', logoutModalOpen);
   };
 
   // 탈퇴 모달창 노출 여부 state
@@ -49,7 +92,7 @@ const AccountManage = () => {
   };
 
   //프로필 이미지 관련 상태
-  //지금은 이미지 엑박 뜸
+  //지금은 이미지 액박 뜸
   const [profileImage, setProfileImage] = useState(null);
   const inputRef = useRef(null); // input 요소를 참조할 Ref를 생성 및 초기화
 
@@ -62,14 +105,19 @@ const AccountManage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('AccountManage 컴포넌트 리렌더링');
+  });
+
   return (
     <>
       <MyPageHeader />
       <Container>
         <ProfileImg
-          src={profileImage || '/images/google.jpg'}
+          src={userInfo.profile || 'images/basicProfile.jpg'}
           onClick={() => inputRef.current.click()}
-        />
+        ></ProfileImg>
+
         <input
           type="file"
           accept="image/*"
@@ -80,7 +128,7 @@ const AccountManage = () => {
         <div>
           <Text>닉네임</Text>
           <InputWrapper>
-            <ChangeDiv>불러온 닉네임</ChangeDiv>
+            <ChangeDiv>{userInfo.nickname}</ChangeDiv>
             <ChangeBtn onClick={handlePageNavigation2}>
               <ChangeText>변경</ChangeText>
             </ChangeBtn>
@@ -99,9 +147,14 @@ const AccountManage = () => {
 
         <LogoutBtn onClick={showLogoutModal}>
           <LogoutText>로그아웃</LogoutText>
-          {logoutModalOpen && (
-            <ModalLogout setLogoutModalOpen={setLogoutModalOpen} />
-          )}
+          {logoutModalOpen &&
+            (console.log('ModalLogout 렌더링'),
+            (
+              <ModalLogout
+                setLogoutModalOpen={setLogoutModalOpen}
+                forceRerender={forceRerender}
+              />
+            ))}
         </LogoutBtn>
         <Withdrawal onClick={showWithdrawalModal}>
           <WithdrawalText>계정 탈퇴</WithdrawalText>
@@ -131,7 +184,6 @@ const ProfileImg = styled.img`
   height: 60px;
   flex-shrink: 0;
   border-radius: 60px;
-  background: url(''), lightgray 50% / cover no-repeat;
 `;
 
 //닉네임

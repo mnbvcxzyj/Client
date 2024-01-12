@@ -8,20 +8,18 @@ import { createAxiosInstance } from '../../api/auth/Axios';
 import { getFlagEmoji } from '../../utils/flagEmoji';
 
 const TravelItem = ({ travelData, isMinRemainingTime }) => {
-  const isExpired = parseDday(travelData.dday) < 0;
-
   return (
     <Link to={`/travelaccountbook/${travelData.groupId}`}>
       <M.TravelItem
         key={travelData.title}
-        isExpired={isExpired}
+        isExpired={!isMinRemainingTime}
         isMinRemainingTime={isMinRemainingTime}
       >
         <M.TopDiv>
           <M.DdayText>{travelData.dday.replace('일', '')}</M.DdayText>
           <M.ShareLogo>
             <img
-              src={isExpired ? shareLogoWhite : shareLogoGreen}
+              src={isMinRemainingTime ? shareLogoWhite : shareLogoGreen}
               alt="sharelogo"
             />
           </M.ShareLogo>
@@ -83,9 +81,10 @@ export default function ListBlock() {
           headers: { Authorization: `Bearer ${user.accessToken}` },
         })
         .then((response) => {
-          const sortedData = response.data.sort(
-            (a, b) => parseDday(a.dday) - parseDday(b.dday),
-          );
+          const currentDate = new Date();
+          const sortedData = response.data
+            .filter((data) => new Date(data.endDate) >= currentDate)
+            .sort((a, b) => parseDday(a.dday) - parseDday(b.dday));
           setTravelDatas(sortedData);
         })
         .catch((error) => {

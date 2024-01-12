@@ -9,6 +9,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { PlanContext } from '../../contexts/PlanContext';
 import { CategoryContext } from '../../contexts/CategoryContext';
 import { GroupContext } from '../../contexts/GroupContext';
+
 const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('KRW');
@@ -40,6 +41,7 @@ const DateContent = ({ groupId }) => {
 
           handleChangeGroup(response.data); //컨텍스트에 저장
           setDuration(response.data.duration);
+          console.log(duration);
         })
         .catch((error) => {
           console.error('API 요청 중 오류 발생:', error);
@@ -131,6 +133,11 @@ const DateContent = ({ groupId }) => {
             <D.DayWrapper key={day}>
               <D.DayText>
                 <div>{day}일차</div>
+                {plan && (
+                  <div>
+                    {plan.date}({plan.dayOfWeek})
+                  </div>
+                )}
               </D.DayText>
 
               {plan &&

@@ -84,7 +84,7 @@ export default function Router() {
 
                     {/* 여행별 가계부 페이지 - 입력된 세부 예산 수정  */}
                     <Route
-                      path="/billupdate/:index"
+                      path="/billupdate/:groupId/:planId/:categoryId"
                       element={<BillUpdatePage />}
                     />
 

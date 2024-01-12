@@ -9,9 +9,12 @@ import auImg from '../../images/AU.png';
 import { GroupContext } from '../../contexts/GroupContext';
 import { PlanContext } from '../../contexts/PlanContext';
 
-export default function Header(groupId, planId) {
+export default function Header({ groupId, planId }) {
   const { group } = useContext(GroupContext);
   const { plan } = useContext(PlanContext);
+
+  console.log('헤더의 그룹', group);
+  console.log('헤더의 플랜', plan);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

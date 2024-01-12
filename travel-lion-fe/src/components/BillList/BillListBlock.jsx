@@ -13,7 +13,7 @@ import { GroupContext } from '../../contexts/GroupContext';
 import { PlanContext } from '../../contexts/PlanContext';
 import { CategoryContext } from '../../contexts/CategoryContext';
 
-export default function BillListBlock() {
+export default function BillListBlock({ groupId, planId }) {
   const categoryImages = {
     식비: CategoryImgFood,
     숙소: CategoryImgHotel,
@@ -35,15 +35,24 @@ export default function BillListBlock() {
   console.log('그룹정보', group);
   console.log('플랜정보', plan);
   console.log('카테고리 정보', category);
+
+  const selectedPlan = plan.find(
+    (item) => item.planId === parseInt(planId, 10),
+  );
+  console.log(selectedPlan);
+
+  const selectedCategories = selectedPlan ? category[selectedPlan.planId] : [];
+  console.log(selectedCategories);
+
   return (
     <div>
       <BackgroundDiv>
         <Container>
           <DateInfo>
             <Day>
-              {plan.nDay}일차
+              {selectedPlan.nDay}일차
               <Date>
-                {plan.date}({plan.dayOfWeek})
+                {selectedPlan.date}({selectedPlan.dayOfWeek})
               </Date>
             </Day>
           </DateInfo>
@@ -51,69 +60,72 @@ export default function BillListBlock() {
             <hr />
           </HrDivStyle>
           <BillList>
-            {category.map((item, index) => (
-              <BillItem key={index}>
-                <Link
-                  to={`/billupdate/${group.groupId}/${plan.planId}/${category.categoryId}`}
-                >
-                  <BillInfo>
-                    <Table>
-                      <tbody>
-                        <tr>
-                          <td
-                            rowSpan={2}
-                            style={{
-                              textAlign: 'center',
-                              width: '70px',
-                              verticalAlign: 'middle',
-                            }}
-                          >
-                            <CategoryImgStyle>
-                              <BillImage
-                                src={categoryImages[plan.selectedCategory]}
-                                alt={plan.selectedCategor}
-                              />
-                            </CategoryImgStyle>
-                          </td>
-                          <td
-                            style={{
-                              width: '130px',
-                              borderBottom: '0.4px solid #ADB6BD',
-                            }}
-                          >
-                            <BillCategory>{plan.selectedCategory}</BillCategory>
-                          </td>
-                          <td
-                            style={{
-                              textAlign: 'right',
-                              borderBottom: '0.4px solid #ADB6BD',
-                            }}
-                          >
-                            <BillAmount>{`${
-                              plan.billValue >= 10000000
-                                ? '9999999+'
-                                : plan.billValue + '원'
-                            }`}</BillAmount>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <BillMemo>
-                              {plan.memoValue.length > 11
-                                ? `${plan.memoValue.slice(0, 10)}...`
-                                : plan.memoValue}
-                            </BillMemo>
-                          </td>
-                          <td>
-                            <BillAuthor>{plan.whoValue}</BillAuthor>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </BillInfo>
-                </Link>
-              </BillItem>
-            ))}
+            {selectedCategories &&
+              selectedCategories.map((category, index) => (
+                <BillItem key={index}>
+                  <Link
+                    to={`/billupdate/${groupId}/${planId}/${category.categoryId}`}
+                  >
+                    <BillInfo>
+                      <Table>
+                        <tbody>
+                          <tr>
+                            <td
+                              rowSpan={2}
+                              style={{
+                                textAlign: 'center',
+                                width: '70px',
+                                verticalAlign: 'middle',
+                              }}
+                            >
+                              <CategoryImgStyle>
+                                <BillImage
+                                  src={categoryImages[plan.selectedCategory]}
+                                  alt={plan.selectedCategor}
+                                />
+                              </CategoryImgStyle>
+                            </td>
+                            <td
+                              style={{
+                                width: '130px',
+                                borderBottom: '0.4px solid #ADB6BD',
+                              }}
+                            >
+                              <BillCategory>
+                                {category.categoryTitle}
+                              </BillCategory>
+                            </td>
+                            <td
+                              style={{
+                                textAlign: 'right',
+                                borderBottom: '0.4px solid #ADB6BD',
+                              }}
+                            >
+                              <BillAmount>{`${
+                                category.cost >= 10000000
+                                  ? '9999999+'
+                                  : category.cost + '원'
+                              }`}</BillAmount>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <BillMemo>
+                                {category.memo.length > 11
+                                  ? `${category.memo.slice(0, 10)}...`
+                                  : category.memo}
+                              </BillMemo>
+                            </td>
+                            <td>
+                              <BillAuthor>{category.writer}</BillAuthor>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </BillInfo>
+                  </Link>
+                </BillItem>
+              ))}
           </BillList>
           <BtnStyleDiv>
             <NewBtn>

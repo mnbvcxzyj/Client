@@ -8,7 +8,7 @@ import { createAxiosInstance } from '../../api/auth/Axios';
 import { useMemo } from 'react';
 import { getFlagEmoji } from '../../utils/flagEmoji';
 
-export default function ListBlock() {
+export default function ListBlock(planId) {
   const [travelDatas, setTravelDatas] = useState([]);
   const { user } = useContext(AuthContext);
   const { refreshAccessToken } = useAuth();

@@ -6,6 +6,9 @@ import { Link, useParams } from 'react-router-dom';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { PlanContext } from '../../contexts/PlanContext';
+import { CategoryContext } from '../../contexts/CategoryContext';
+import { GroupContext } from '../../contexts/GroupContext';
 
 const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -15,7 +18,10 @@ const DateContent = ({ groupId }) => {
   const [travelDatas, setTravelDatas] = useState([]);
   const { refreshAccessToken } = useAuth();
 
-  const [duration, setDuration] = useState(0);
+  //컨택스트에 저장하는 부분
+  const { plan, handleChangePlan } = useContext(PlanContext);
+  const { category, handleChangeCategory } = useContext(CategoryContext);
+  const { group, handleChangeGroup } = useContext(GroupContext);
 
   const axiosInstance = useMemo(
     () => createAxiosInstance(refreshAccessToken),
@@ -32,7 +38,7 @@ const DateContent = ({ groupId }) => {
         })
         .then((response) => {
           setTravelDatas(response.data);
-          setDuration(response.data.duration);
+          handleChangeGroup(response.data); //컨텍스트에 저장
         })
         .catch((error) => {
           console.error('API 요청 중 오류 발생:', error);
@@ -54,7 +60,6 @@ const DateContent = ({ groupId }) => {
   const [plans, setPlans] = useState([]);
   const [categories, setCategories] = useState({});
 
-  console.log(plans);
   // 여행
   useEffect(() => {
     const fetchPlans = async () => {
@@ -68,8 +73,10 @@ const DateContent = ({ groupId }) => {
           },
         );
         setPlans(response.data);
+        handleChangePlan(response.data);
         response.data.forEach((plan) => {
           fetchCategoryDetails(plan.planId); // 카테고리
+          handleChangeCategory(plan.planId); //컨텍스트에 저장
         });
       } catch (error) {
         console.error('Plan 데이터 요청 중 오류 발생:', error);
@@ -78,6 +85,8 @@ const DateContent = ({ groupId }) => {
 
     fetchPlans();
   }, [axiosInstance, user, groupId]);
+
+  console.log(plans);
 
   // 카테고리 데이터 가져오기
   const fetchCategoryDetails = async (planId) => {
@@ -91,10 +100,13 @@ const DateContent = ({ groupId }) => {
         },
       );
       setCategories((prev) => ({ ...prev, [planId]: response.data }));
+      handleChangeCategory((prev) => ({ ...prev, [planId]: response.data })); //컨텍스트에 저장
     } catch (error) {
       console.error('Category 데이터 요청 중 오류 발생:', error);
     }
   };
+
+  console.log(categories);
 
   return (
     <>
@@ -117,33 +129,27 @@ const DateContent = ({ groupId }) => {
           </D.ExchangeRate>
         </D.TopWrapper>
 
-        {Array.from({ length: duration }, (_, i) => i + 1).map((day) => {
-          const plan = plans.find((plan) => plan.nDay === day);
-          return (
-            <D.DayWrapper key={day}>
-              <D.DayText>
-                <div>{day}일차</div>
-                {plan && (
-                  <div>
-                    {plan.date}({plan.dayOfWeek})
-                  </div>
-                )}
-              </D.DayText>
-              {plan &&
-                categories[plan.planId] &&
-                categories[plan.planId].map((category) => (
-                  <D.CategoryWrapper key={category.categoryId}>
-                    <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
-                    <D.CategoryText>{category.categoryTitle}</D.CategoryText>
-                    <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
-                  </D.CategoryWrapper>
-                ))}
-              <Link to="/newbill">
-                <D.InputBtn>사용 금액 입력</D.InputBtn>
-              </Link>
-            </D.DayWrapper>
-          );
-        })}
+        {plans.map((plan) => (
+          <D.DayWrapper key={plan.planId}>
+            <D.DayText>
+              <div>{plan.nDay}일차</div>
+              <div>
+                {plan.date}({plan.dayOfWeek})
+              </div>
+            </D.DayText>
+            {categories[plan.planId] &&
+              categories[plan.planId].map((category) => (
+                <D.CategoryWrapper key={category.categoryId}>
+                  <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
+                  <D.CategoryText>{category.categoryTitle}</D.CategoryText>
+                  <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
+                </D.CategoryWrapper>
+              ))}
+            <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
+              <D.InputBtn>사용 금액 입력</D.InputBtn>
+            </Link>
+          </D.DayWrapper>
+        ))}
       </D.Container>
       {isBottomSheetOpen && (
         <BottomModal

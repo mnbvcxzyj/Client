@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import Emoji from './Emoji';
 import Who from './Who';
 import Category from './Category';
 import Bill from './Bill';
 import Memo from './Memo';
 import { styled } from 'styled-components';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+import axios from 'axios';
 
-export default function NewBillBtn() {
+import { UserContext } from '../../contexts/UserContext';
+import { GroupContext } from '../../contexts/GroupContext';
+import { PlanContext } from '../../contexts/PlanContext';
+import { CategoryContext } from '../../contexts/CategoryContext';
+
+export default function NewBillBtn({ groupId, planId }) {
   const navigate = useNavigate();
   const [selectedEmoji, setSelectedEmoji] = useState('');
   const [whoValue, setWhoValue] = useState('');
@@ -25,8 +33,22 @@ export default function NewBillBtn() {
     setSelectedCategory(categoryName);
   };
 
+  const { user } = useContext(AuthContext);
+  const [travelDatas, setTravelDatas] = useState([]);
+  const { refreshAccessToken } = useAuth();
+
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
+
+  const { user: user1 } = useContext(UserContext);
+  const { group } = useContext(GroupContext);
+  const { plan } = useContext(PlanContext);
+  const { category } = useContext(CategoryContext);
+
   //저장하는 부분
-  const handleSaveToStorage = () => {
+  const handleSaveToStorage = async () => {
     if (selectedCategory === '' || billValue === '') {
       if (selectedCategory === '') setShowCategoryAlert(true);
       if (billValue === '') setShowBillAlert(true);
@@ -34,21 +56,39 @@ export default function NewBillBtn() {
     }
     setShowCategoryAlert(false);
     setShowBillAlert(false);
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
+
+    //const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
 
     const newItem = {
-      selectedEmoji,
-      whoValue,
-      selectedCategory,
-      billValue,
-      memoValue,
+      group: groupId,
+      plan: planId,
+      categoryTitle: selectedCategory,
+      memo: memoValue,
+      emoji: selectedEmoji,
+      cost: billValue,
     };
-    storedList.push(newItem);
 
-    sessionStorage.setItem('billList', JSON.stringify(storedList));
+    //storedList.push(newItem);
+    //sessionStorage.setItem('billList', JSON.stringify(storedList));
 
-    console.log('저장:', storedList);
-    navigate('/billlist');
+    try {
+      const response = await axiosInstance.post(
+        `/${user.userId}/grouplist/${group.groupId}/plan/${planId}/category`,
+        newItem,
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        },
+      );
+
+      console.log('저장성공:', response.data);
+
+      // Navigate to the desired page
+      navigate(`/billlist/${group.groupId}/${plan.planId}`);
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
   };
 
   return (

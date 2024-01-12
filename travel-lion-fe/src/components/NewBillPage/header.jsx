@@ -1,23 +1,43 @@
-import React from 'react';
+//완료
+
+import React, { useContext } from 'react';
 import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import goBack from '../../images/goBack.png';
 import share from '../../images/share.png';
 import auImg from '../../images/AU.png';
+import { GroupContext } from '../../contexts/GroupContext';
+import { PlanContext } from '../../contexts/PlanContext';
 
-export default function Header() {
+export default function Header(groupId, planId) {
+  const { group } = useContext(GroupContext);
+  const { plan } = useContext(PlanContext);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date
+      .toLocaleDateString('ko-KR', {
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replace('.', '/')
+      .replace('.', '');
+  };
+
   return (
     <>
       <HeaderContainer>
-        <NavLeft to="/billlist">
+        <NavLeft to={`/billlist/${group.groupId}/${planId}`}>
           <GoBackImg src={goBack} />
         </NavLeft>
         <TravelInfoDiv>
           <Image src={auImg} />
-          <TravelName>졸업여행</TravelName>
+          <TravelName>{group.title}</TravelName>
           <br />
-          <TravelLocation>호주-시드니 | </TravelLocation>
-          <TravelDate>07.09 ~ 08.01</TravelDate>
+          <TravelLocation>{`${group.nation}-${group.location} |`}</TravelLocation>
+          <TravelDate>
+            {formatDate(group.startDate)} ~{formatDate(group.endDate)}
+          </TravelDate>
         </TravelInfoDiv>
         <Share to="">
           <ShareImg src={share} />
@@ -67,8 +87,7 @@ const TravelInfoDiv = styled.div`
 
 const Image = styled.img`
   width: 26px;
-  margin-left: 11%;
-  margin-right: 5%;
+  margin: 3px;
 `;
 
 const TravelName = styled.span`

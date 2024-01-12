@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../../api/auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { createAxiosInstance } from '../../api/auth/Axios';
+import { UserContext } from '../../contexts/UserContext';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,6 +14,7 @@ function Login() {
   const navigate = useNavigate();
 
   const { login, refreshAccessToken } = useContext(AuthContext);
+  const { user, handleChangeUser } = useContext(UserContext);
   const axiosInstance = createAxiosInstance(refreshAccessToken);
 
   const handleEmailChange = (e) => {
@@ -35,6 +37,7 @@ function Login() {
         console.log(response.data);
         const uuid = response.data.userId; // UUID 추출
         localStorage.setItem('userId', uuid); // 로컬 저장소에 저장
+        handleChangeUser(response.data); //컨텍스트에 로그인정보 저장
         console.log('저장된 userId: ' + uuid);
         console.log('로그인 성공!');
         navigate('/');

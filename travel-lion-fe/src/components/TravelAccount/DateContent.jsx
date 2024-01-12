@@ -50,7 +50,7 @@ const DateContent = ({ groupId }) => {
 
   const [plans, setPlans] = useState([]);
   const [categories, setCategories] = useState({});
-
+  console.log(plans);
   // 여행
   useEffect(() => {
     const fetchPlans = async () => {

@@ -82,6 +82,7 @@ export const DayText = styled.div`
   display: flex;
   align-items: center;
   margin-top: 23px;
+  margin-bottom: 10px;
   gap: 13px;
 
   :nth-child(1) {

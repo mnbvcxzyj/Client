@@ -89,14 +89,16 @@ export const TravelInfo = styled.div`
 
 export const TravelDetail = styled.div`
   display: flex;
-  margin-top: 29px;
-  margin-left: 22px;
+  padding: 25px;
 `;
 
-export const Participants = styled.div``;
+export const Participants = styled.div`
+  width: 60%;
+`;
 
 export const AmountText = styled.div`
-  margin-left: 127px;
+  width: 40%;
+  text-align: right;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;

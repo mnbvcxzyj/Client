@@ -33,6 +33,7 @@ const NavContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
+  z-index: 9999;
 `;
 
 const NavBtn = styled.div`

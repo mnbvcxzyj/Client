@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import * as T from './TravelListStyle';
+import '/node_modules/flag-icons/css/flag-icons.min.css';
 import arrow from '../../images/TravelAccount/backarrow.svg';
 import { AuthContext } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
@@ -65,167 +65,48 @@ const TravelList = () => {
 
   return (
     <>
-      <Container>
-        <BackDiv to="/mypage">
+      <T.Container>
+        <T.BackDiv to="/mypage">
           <img src={arrow} alt="<" />
-          <Text>여행 리스트 관리</Text>
-        </BackDiv>
-
-        <DropdownContainer>
-          <DropdownHeader onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+          <T.Text>여행 리스트 관리</T.Text>
+        </T.BackDiv>
+        <T.DropdownContainer>
+          <T.DropdownHeader onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             {sortOption === 'newest' && '최신순'}
             {sortOption === 'oldest' && '오래된순'}
             {sortOption === 'alphabetical' && '가나다순'}&nbsp;▼
-          </DropdownHeader>
+          </T.DropdownHeader>
           {isDropdownOpen && (
-            <DropdownList>
-              <DropdownItem onClick={() => onSelectSortOption('newest')}>
+            <T.DropdownList>
+              <T.DropdownItem onClick={() => onSelectSortOption('newest')}>
                 최신순
-              </DropdownItem>
-              <DropdownItem onClick={() => onSelectSortOption('oldest')}>
+              </T.DropdownItem>
+              <T.DropdownItem onClick={() => onSelectSortOption('oldest')}>
                 오래된순
-              </DropdownItem>
-              <DropdownItem onClick={() => onSelectSortOption('alphabetical')}>
+              </T.DropdownItem>
+              <T.DropdownItem
+                onClick={() => onSelectSortOption('alphabetical')}
+              >
                 가나다순
-              </DropdownItem>
-            </DropdownList>
+              </T.DropdownItem>
+            </T.DropdownList>
           )}
-        </DropdownContainer>
-
-        <ListWrap>
+        </T.DropdownContainer>
+        <T.ListWrap>
           {travelList.map((travel) => (
-            <ListBox key={travel.groupId}>
-              <Flag>{getFlagEmoji(travel.nation)}</Flag>
-              <Title title={travel.title}>{travel.title}</Title>
-              <DateText>
+            <T.ListBox key={travel.groupId}>
+              <T.Flag>
+                <span className={getFlagEmoji(travel.nation)}></span>
+              </T.Flag>
+              <T.Title title={travel.title}>{travel.title}</T.Title>
+              <T.DateText>
                 {formatDate(travel.startDate)} - {formatDate(travel.endDate)}
-              </DateText>
-            </ListBox>
+              </T.DateText>
+            </T.ListBox>
           ))}
-        </ListWrap>
-      </Container>
+        </T.ListWrap>
+      </T.Container>
     </>
   );
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 390px;
-  margin: 0 auto;
-`;
-
-const BackDiv = styled(Link)`
-  display: flex;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 390px;
-  margin-top: 50px;
-  margin-bottom: 55px;
-
-  :nth-child(1) {
-    margin-left: 25px;
-  }
-`;
-
-const Text = styled.div`
-  color: var(--Darkgray, #353a40);
-  font-family: Pretendard;
-  font-size: 22px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  margin-left: 76px;
-`;
-
-const DropdownContainer = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  margin: 0 30px 10px;
-`;
-
-const DropdownHeader = styled.div`
-  cursor: pointer;
-
-  color: var(--Darkgray, #353a40);
-  font-family: Pretendard;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
-const DropdownList = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: 10;
-  background: white;
-  overflow: hidden;
-`;
-
-const DropdownItem = styled.div`
-  padding: 8px 16px;
-  cursor: pointer;
-  color: var(--Darkgray, #353a40);
-  font-family: Pretendard;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  &:hover {
-    background-color: #f0f0f0;
-  }
-`;
-
-const ListWrap = styled.div`
-  margin: 0 auto;
-`;
-
-const ListBox = styled.div`
-  display: flex;
-  align-items: center;
-
-  width: 360px;
-  height: 107px;
-  flex-shrink: 0;
-  border-radius: 24px;
-  background: #f3f3f3;
-  margin-bottom: 10px;
-  padding: 0 30px;
-`;
-
-const Flag = styled.div`
-  width: 10%;
-  font-size: 25px;
-`;
-
-const Title = styled.div`
-  width: 60%;
-  color: #000;
-  font-family: Pretendard;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  margin-left: 17px;
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`;
-
-const DateText = styled.div`
-  color: #525252;
-  width: 30%;
-  font-family: Pretendard;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-left: 20px;
-`;
-
 export default TravelList;

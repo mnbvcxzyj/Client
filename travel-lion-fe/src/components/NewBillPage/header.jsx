@@ -5,9 +5,9 @@ import { styled } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import goBack from '../../images/goBack.png';
 import share from '../../images/share.png';
-import auImg from '../../images/AU.png';
 import { GroupContext } from '../../contexts/GroupContext';
 import { PlanContext } from '../../contexts/PlanContext';
+import { getFlagEmoji } from '../../utils/flagEmoji';
 
 export default function Header({ groupId, planId }) {
   const { group } = useContext(GroupContext);
@@ -34,7 +34,7 @@ export default function Header({ groupId, planId }) {
           <GoBackImg src={goBack} />
         </NavLeft>
         <TravelInfoDiv>
-          <Image src={auImg} />
+          <FlagSpan className={getFlagEmoji(group.nation)}></FlagSpan>&nbsp;
           <TravelName>{group.title}</TravelName>
           <br />
           <TravelLocation>{`${group.nation}-${group.location} |`}</TravelLocation>
@@ -88,9 +88,8 @@ const TravelInfoDiv = styled.div`
   margin: 0 auto;
 `;
 
-const Image = styled.img`
-  width: 26px;
-  margin: 3px;
+const FlagSpan = styled.span`
+  font-size: 20px;
 `;
 
 const TravelName = styled.span`

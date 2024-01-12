@@ -27,7 +27,9 @@ const TravelItem = ({ travelData, isMinRemainingTime }) => {
         </M.TopDiv>
 
         <M.TravelContainer>
-          <M.FlagEmoji>{getFlagEmoji(travelData.nation)}</M.FlagEmoji>
+          <M.FlagEmoji>
+            <span className={getFlagEmoji(travelData.nation)}></span>
+          </M.FlagEmoji>
           <M.TravelInfo>
             <M.TravelTitle>{travelData.title}</M.TravelTitle>
             <M.TravelInfo2>

@@ -5,13 +5,19 @@ import arrow from '../../images/TravelAccount/backarrow.svg';
 import { AuthContext } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import { getFlagEmoji } from '../../utils/flagEmoji';
+import { useNavigate } from 'react-router-dom';
 
 const TravelList = () => {
   const { user, refreshAccessToken } = useContext(AuthContext);
   const [travelList, setTravelList] = useState([]);
   const [sortOption, setSortOption] = useState('newest');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const goToInvite = (userId, groupId) => {
+    navigate('/mypage/travellist/invite/${groupId}', {
+      state: { userId, groupId },
+    });
+  };
   const axiosInstance = createAxiosInstance(refreshAccessToken);
 
   useEffect(() => {
@@ -87,7 +93,11 @@ const TravelList = () => {
         </T.DropdownContainer>
         <T.ListWrap>
           {travelList.map((travel) => (
-            <T.ListBox key={travel.groupId}>
+            <T.ListBox
+              key={travel.groupId}
+              onClick={() => goToInvite(user.userId, travel.groupId)}
+            >
+              <p>{travel.groupId}</p>
               <T.Flag>
                 <span className={getFlagEmoji(travel.nation)}></span>
               </T.Flag>

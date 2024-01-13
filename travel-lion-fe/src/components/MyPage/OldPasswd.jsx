@@ -1,16 +1,52 @@
-import React from 'react';
+import { React, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../api/auth/AuthContext';
 
 function OldPasswd() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const userId = location.state?.userId;
+  const [oldPassword, setOldPassword] = useState('');
+  const { user } = useAuth();
 
-  const handlePageNavigation = () => {
-    navigate('/mypage/account/changepasswd');
+  const handleOldPasswordChange = (e) => {
+    setOldPassword(e.target.value);
+    console.log(oldPassword);
   };
 
   const goToAccountInfo = () => {
     navigate('/mypage/account');
+  };
+
+  const goToChangePasswd = () => {
+    navigate('/mypage/account/changepasswd', {
+      state: { userId: userId },
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(oldPassword); //입력한 비번 잘 들어 옴
+    console.log(userId);
+    try {
+      const response = await axios.patch(
+        `http://13.125.174.198/profile/${userId}/`,
+        {
+          password: oldPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        },
+      );
+      console.log('성공');
+      goToChangePasswd();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -34,9 +70,13 @@ function OldPasswd() {
       </HeaderWrapper>
       <Text>기존 비밀번호 입력</Text>
       <PasswdDiv>
-        <PasswdInput type="password"></PasswdInput>
+        <PasswdInput
+          type="password"
+          value={oldPassword}
+          onChange={handleOldPasswordChange}
+        ></PasswdInput>
       </PasswdDiv>
-      <Btn onClick={handlePageNavigation}>
+      <Btn onClick={handleSubmit}>
         <BtnText>확인</BtnText>
       </Btn>
     </Container>

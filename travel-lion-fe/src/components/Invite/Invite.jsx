@@ -4,16 +4,21 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
-import InviteFunc from './InviteFunc';
 
-//초대코드 보내기
-//그룹 먼저 불러와서 총무 수정
-//공유범위
+//1. 초대코드 보내기
+//2. 그룹 정보 먼저 불러와서
+//3. 총무 수정
+//4. 공유범위
 function Invite() {
   const [selectedOption, setSelectedOption] = useState('');
   const [nicknames, setNicknames] = useState([]);
   const { user, refreshAccessToken, setUser } = useAuth();
-  const userId = user?.userId;
+  const [editPermission, setEditPermission] = useState(false);
+  const [leaderNickname, setLeaderNickname] = useState(''); // 리더 닉네임 상태 변수 추가
+  const [selectedLeader, setSelectedLeader] = useState(''); //리더 변경을 위한 드롭다운 상태변수
+  const [newLeaderId, setNewLeaderId] = useState(''); //새로운 리더 ID를 저장할 상태 변수
+
+  // const userId = user?.userId;
 
   // const { groupId } = useParams(); // URL 경로에서 groupId 취득
   const location = useLocation();
@@ -23,9 +28,14 @@ function Invite() {
     navigate('/mypage/travellist');
   };
 
-  //바뀔때마다 post 요청
+  //4. 공유범위) 바뀔때마다 post 요청
+  //총무: false
+  //모두: true
   const handleDropdownChange = async (event) => {
+    const newEditPermission = event.target.value === 'all';
     setSelectedOption(event.target.value);
+    setEditPermission(newEditPermission);
+    // setSelectedOption(event.target.value);
 
     const editPermission = event.target.value === 'all' ? true : false;
 
@@ -42,6 +52,7 @@ function Invite() {
         },
       );
       console.log('편집 권한 변경: ', response.data);
+      console.log('공유 범위:', editPermission);
     } catch (error) {
       console.error('편집 권한 변경 중 오류 발생: ', error);
     }
@@ -61,34 +72,7 @@ function Invite() {
     setIsValidEmail(validateEmail(inputEmail));
   };
 
-  // useEffect(() => {
-  //   // API를 호출하여 그룹 데이터를 가져옵니다.
-  //   axios
-  //     .post(`http://13.125.174.198/group/${groupId}/set_leader`, {
-  //       new_leader_id: userId,
-
-  //       headers: {
-  //         Authorization: `Bearer ${user?.accessToken}`,
-  //       },
-  //       params: {
-  //         groupId: groupId,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       // API 응답을 처리합니다.
-  //       const data = response.data;
-  //       console.log('그룹 아이디:', response.data.groupId);
-  //       console.log('리더:', response.data.leader);
-
-  //       // 멤버 배열을 추출하고 닉네임을 추출하여 상태 변수에 저장합니다.
-  //       const groupNicknames = data.member.map((member) => member.nickname);
-  //       setNicknames(groupNicknames);
-  //     })
-  //     .catch((error) => {
-  //       console.error('API 요청 중 오류 발생: ', error);
-  //     });
-  // }, [groupId]); // groupId가 변경될 때마다 useEffect가 호출
-
+  //이메일로 초대코드 보내기 ok
   const sendInvitation = () => {
     if (isValidEmail) {
       const apiUrl = `http://13.125.174.198/groups/${groupId}/invite/`;
@@ -116,8 +100,80 @@ function Invite() {
     }
   };
 
-  //권한수정
-  const editAuthority = () => {};
+  //그룹 불러오기 ok
+  //UUID
+  //닉네임
+  useEffect(() => {
+    const fetchGroupInfo = async () => {
+      try {
+        const response = await axios.get(
+          `http://13.125.174.198/group/${groupId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.accessToken}`,
+            },
+          },
+        );
+        const groupInfo = response.data;
+        console.log(response.data);
+        if (groupInfo && groupInfo.member) {
+          console.log('그룹존재');
+          // 멤버의 id와 nickname을 저장합니다.
+          setNicknames(
+            groupInfo.member.map((member) => ({
+              id: member.id,
+              nickname: member.nickname,
+            })),
+          );
+          const leader = groupInfo.leader;
+          if (leader) {
+            setLeaderNickname(leader.nickname); // 현재 리더의 닉네임을 설정합니다.
+          }
+          console.log('멤버 id', groupInfo.member[0].nickname); //소히 걸푸란
+        } else {
+          console.error('그룹 정보에 회원 목록이 없습니다.');
+        }
+      } catch (error) {
+        console.error('그룹 정보를 불러오는 중 오류 발생: ', error);
+      }
+    };
+
+    fetchGroupInfo();
+  }, [groupId, user?.accessToken]);
+
+  //새로운 총무
+  const handleLeaderChange = (event) => {
+    // const selectedMember = nicknames.find(
+    //   (nickname) => nickname.id === event.target.value,
+    // );
+    // setNewLeaderId(selectedMember ? selectedMember.id : '');
+    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감.. 바보
+  };
+
+  //총무 변경
+  //리더의 UUID 필요
+  //리더의 닉네임
+  const changeLeader = async () => {
+    try {
+      console.log('새로운 총무Id', newLeaderId); //닉네임이 들어감
+      const response = await axios.post(
+        `http://13.125.174.198/group/${groupId}/set_leader`,
+        {
+          new_leader_id: newLeaderId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        },
+      );
+      console.log('리더 변경 성공: ', response.data);
+      alert('리더가 성공적으로 변경되었습니다.');
+    } catch (error) {
+      console.error('리더 변경 중 오류 발생: ', error);
+      alert('리더를 변경하는 데 실패했습니다.');
+    }
+  };
 
   return (
     <Container>
@@ -158,15 +214,21 @@ function Invite() {
           <option value="private">총무만 수정 가능</option>
         </Dropdown>
         <SelectedValue>
-          {selectedOption === 'all' ? '모두 수정 가능' : '총무만 수정 가능'}
+          {editPermission ? '모두 수정 가능' : '총무만 수정 가능'}
         </SelectedValue>
       </DropdownContainer>
+      <Text2>현재 총무: {leaderNickname}</Text2>
       <Text2>총무 변경</Text2>
-      <ul>
-        {nicknames.map((nickname, index) => (
-          <li key={index}>{nickname}</li>
-        ))}
-      </ul>
+      <DropdownContainer>
+        <Dropdown value={newLeaderId} onChange={handleLeaderChange}>
+          {nicknames.map((member, index) => (
+            <option key={index} value={member.id}>
+              {member.nickname}
+            </option>
+          ))}
+        </Dropdown>
+      </DropdownContainer>
+      <button onClick={changeLeader}>총무 변경</button>
     </Container>
   );
 }

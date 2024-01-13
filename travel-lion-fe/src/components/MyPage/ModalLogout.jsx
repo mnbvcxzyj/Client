@@ -15,10 +15,6 @@ function ModalLogout({ setLogoutModalOpen, logoutModalOpen }) {
     const handler = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setLogoutModalOpen(false);
-        console.log(
-          '영역이 아니면 모달이 닫히는 부분에서 출력:',
-          setLogoutModalOpen,
-        );
       }
     };
     document.addEventListener('mousedown', handler);
@@ -27,12 +23,6 @@ function ModalLogout({ setLogoutModalOpen, logoutModalOpen }) {
       document.removeEventListener('mousedown', handler);
     };
   });
-
-  const closeModal = () => {
-    setLogoutModalOpen(false);
-    console.log('closeModal 함수 안에서 출력:', setLogoutModalOpen);
-    // forceRerender(); // 강제 리렌더링 호출
-  }; //안 먹힘
 
   // 로그아웃 처리 함수
   const handleLogout = async () => {
@@ -54,6 +44,12 @@ function ModalLogout({ setLogoutModalOpen, logoutModalOpen }) {
     }
     // 모달 창 닫기
     setLogoutModalOpen(false);
+  };
+
+  const closeModal = async (event) => {
+    setLogoutModalOpen(false);
+    console.log('모달이 닫힌 후 실행될 코드', logoutModalOpen);
+    event.stopPropagation();
   };
 
   return (

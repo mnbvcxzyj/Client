@@ -10,6 +10,7 @@ import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
 import { useNavigate } from 'react-router-dom';
 
+//안 쓰는 파일
 const categoryDataset = [
   {
     id: 1,

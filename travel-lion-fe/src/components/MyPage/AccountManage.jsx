@@ -76,11 +76,6 @@ const AccountManage = () => {
   function renderStars() {
     return '*'.repeat(data.length);
   }
-  const [forceUpdate, setForceUpdate] = useState(0);
-
-  const forceRerender = () => {
-    setForceUpdate((prev) => prev + 1);
-  };
 
   // 로그아웃 모달창 노출 여부 state
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -88,7 +83,6 @@ const AccountManage = () => {
   // 모달창 노출
   const showLogoutModal = () => {
     setLogoutModalOpen(true);
-    console.log('logoutModalOpen 상태:', logoutModalOpen);
   };
 
   // 탈퇴 모달창 노출 여부 state

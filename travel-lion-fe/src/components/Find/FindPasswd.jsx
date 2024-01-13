@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
 
 function FindPasswd() {
   const [email, setEmail] = useState('');
@@ -27,6 +30,29 @@ function FindPasswd() {
     }
   };
 
+  const handleEmailSubmit = async () => {
+    if (!isValid) {
+      alert('유효한 이메일 주소를 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        'http://13.125.174.198/password_reset/',
+        {
+          email: email,
+        },
+      );
+
+      if (response.status === 200) {
+        alert('비밀번호 재설정 링크가 이메일로 발송되었습니다.');
+      }
+    } catch (error) {
+      console.error('비밀번호 재설정 이메일 발송 중 오류 발생:', error);
+      alert('이메일 발송에 실패했습니다. 나중에 다시 시도해주세요.');
+    }
+  };
+
   return (
     <Container>
       <Logo src={`/images/logo.png`} />
@@ -43,7 +69,7 @@ function FindPasswd() {
         onChange={handleEmailChange}
       />
       <ErrorMessage isVisible={!isValid}>{errorMessage}</ErrorMessage>
-      <Btn>이메일 발송</Btn>
+      <Btn onClick={handleEmailSubmit}>이메일 발송</Btn>
     </Container>
   );
 }

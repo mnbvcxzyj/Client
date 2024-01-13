@@ -230,7 +230,7 @@ const BillImage = styled.img`
   width: 28px;
   margin-top: 8px;
 
-  margin 0 auto;
+  margin: 0 auto;
 `;
 
 const BillInfo = styled.div``;

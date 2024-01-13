@@ -149,7 +149,7 @@ const DateContent = ({ groupId }) => {
                   </D.CategoryWrapper>
                 ))}
 
-              <Link to={`/newbill/${travelDatas.groupId}/${day + 1}`}>
+              <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
                 <D.InputBtn>사용 금액 입력</D.InputBtn>
               </Link>
             </D.DayWrapper>

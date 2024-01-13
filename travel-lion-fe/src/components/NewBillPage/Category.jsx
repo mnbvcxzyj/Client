@@ -10,10 +10,10 @@ import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
 import { useNavigate } from 'react-router-dom';
 
-const categoryDataset = [];
+const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
 
-if (categoryDataset.length === 0) {
-  const newData = [
+if (!storedCategoryDataset) {
+  const initialCategoryDataset = [
     {
       id: 1,
       name: '식비',
@@ -36,25 +36,31 @@ if (categoryDataset.length === 0) {
     },
   ];
 
-  // 데이터 세션 스토리지에 저장
-  sessionStorage.setItem('categoryDataset', JSON.stringify(newData));
+  // 초기 데이터를 세션 스토리지에 저장
+  sessionStorage.setItem(
+    'categoryDataset',
+    JSON.stringify(initialCategoryDataset),
+  );
 }
 
-sessionStorage.setItem('categoryDataset', JSON.stringify(categoryDataset));
-console.log(sessionStorage.getItem('categoryDataset'));
+const parsedCategoryDataset = JSON.parse(
+  sessionStorage.getItem('categoryDataset'),
+);
 
-export default function Category({ onClickCategory, showAlert, setShowAlert }) {
+console.log(parsedCategoryDataset);
+
+export default function Category({
+  onClickCategory,
+  showAlert,
+  setShowAlert,
+  groupId,
+  planId,
+}) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
 
-  useEffect(() => {
-    if (!categoryDataset.find((cat) => cat.name === selectedCategory)) {
-      // 선택된 카테고리가 categoryDataset에 없으면 초기화
-      setSelectedCategory('');
-      setSelectedCategoryImg(null);
-    }
-  }, [categoryDataset, selectedCategory]);
+  console.log(groupId, planId);
 
   const storedCategoryDataset = JSON.parse(
     sessionStorage.getItem('categoryDataset') || '[]',
@@ -63,7 +69,7 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
   const onClickOption = (name) => {
     const selectedCategoryName = name;
 
-    const selectedCategoryInfo = categoryDataset.find(
+    const selectedCategoryInfo = parsedCategoryDataset.find(
       (category) => category.name === selectedCategoryName,
     );
 
@@ -119,13 +125,13 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
       </SelectButton>
       {isDropDown && (
         <DropDown>
-          {categoryDataset.map((category) => (
+          {storedCategoryDataset.map((category) => (
             <Option
               value={category.name}
               key={category.id}
               onClick={() => {
                 if (category.name === '직접 입력하기') {
-                  navigate('/newcate');
+                  navigate(`/newcate/${groupId}/${planId}`);
                 } else {
                   onClickOption(category.name);
                 }
@@ -151,7 +157,7 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
           ))}
           <Option
             value="직접 입력하기"
-            onClick={() => navigate('/newcate')}
+            onClick={() => navigate(`/newcate/${groupId}/${planId}`)}
             isSelected={selectedCategory === '직접 입력하기'}
           >
             <tr>

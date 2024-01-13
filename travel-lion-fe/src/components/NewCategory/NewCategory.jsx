@@ -1,28 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const NewCategory = () => {
+const NewCategory = ({ groupId, planId }) => {
+  const [categoryName, setCategoryName] = useState('');
+
   const navigate = useNavigate();
 
+  const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
+  const parsedCategoryDataset = JSON.parse(storedCategoryDataset);
+
+  //읽어온 데이터 출력
+  console.log(parsedCategoryDataset);
+
   const handleAddCategory = () => {
-    navigate('/newBill');
+    if (!categoryName.trim()) {
+      console.log('비어있는경우에는 추가할 수 없음');
+      return;
+    }
+    const isDuplicate = parsedCategoryDataset.some(
+      (category) => category.name === categoryName,
+    );
+
+    if (isDuplicate) {
+      console.error('이름이 겹치는 경우에는 추가할 수 없음');
+      return;
+    }
+
+    const newCategory = {
+      id: parsedCategoryDataset.length + 1,
+      name: categoryName,
+    };
+
+    // 새로운 카테고리를 기존 데이터에 추가
+    const updatedCategoryDataset = [...parsedCategoryDataset, newCategory];
+
+    sessionStorage.setItem(
+      'categoryDataset',
+      JSON.stringify(updatedCategoryDataset),
+    );
+
+    navigate(`/newBill/${groupId}/${planId}`);
   };
 
   return (
     <>
       <Container>
-        <GoBack to="/newbill">
+        <GoBack to={`/newbill/${groupId}/${planId}`}>
           <GoBackImg src={goBack} alt="뒤로가기 이미지" />
         </GoBack>
         <Title>카테고리 추가 입력</Title>
-        <NewCategoryInput />
+        <NewCategoryInput
+          type="text"
+          value={categoryName}
+          onChange={(e) => setCategoryName(e.target.value)}
+        />
         <PlusBtn onClick={handleAddCategory}>
           <BtnText>추가</BtnText>
         </PlusBtn>
-        <GoEdit to="/editcate">
+        <GoEdit to={`/editcate/${groupId}/${planId}`}>
           <GoEditCategory>카테고리 편집 &gt; </GoEditCategory>
         </GoEdit>
       </Container>

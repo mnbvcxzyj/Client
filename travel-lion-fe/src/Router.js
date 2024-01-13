@@ -89,20 +89,14 @@ export default function Router() {
                     />
 
                     {/* 여행별 가계부 페이지 - 카테고리 추가 입력  */}
-                    <Route
-                      path="/newcate/:groupId/:planId"
-                      element={<NewCategoryPage />}
-                    />
+                    <Route path="/newcate" element={<NewCategoryPage />} />
 
                     {/* 여행별 가계부 페이지 - 카테고리 편집 */}
-                    <Route
-                      path="/editcate/:groupId/:planId"
-                      element={<EditCategoryPage />}
-                    />
+                    <Route path="/editcate" element={<EditCategoryPage />} />
 
                     {/* 여행별 가계부 페이지 - 카테고리 수정 */}
                     <Route
-                      path="/renamecate/:groupId/:planId"
+                      path="/renamecate"
                       element={<RenameCategoryPage />}
                     />
 
@@ -112,13 +106,6 @@ export default function Router() {
                       element={<FollowRequestListPage />}
                     />
 
-                    {/* 마이페이지 */}
-                    {/* <Route
-              path="/mypage"
-              element={
-                <PrivateRoute element={MyPage} />
-              }
-            /> */}
                     <Route path="/mypage" element={<MyPage />} />
                     <Route path="/mypage/account" element={<AccountManage />} />
                     <Route

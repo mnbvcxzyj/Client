@@ -32,6 +32,7 @@ function NormalJoin2() {
         console.log('회원가입 성공:', response.data);
         navigate('/join/complete'); //complete 페이지로 이동
       } catch (error) {
+        alert('이미 등록된 이메일이거나 잘못된 접근입니다.');
         console.error('Signup error:', error.response);
       }
     } else {

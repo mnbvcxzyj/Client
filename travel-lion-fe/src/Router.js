@@ -93,7 +93,6 @@ export default function Router() {
                         element={<BillUpdatePage />}
                       />
 
-
                       {/* 여행별 가계부 페이지 - 카테고리 추가 입력  */}
                       <Route
                         path="/newcate/:groupId/:planId"
@@ -118,35 +117,44 @@ export default function Router() {
                         element={<FollowRequestListPage />}
                       />
 
-                    <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/mypage/account" element={<AccountManage />} />
-                    <Route
-                      path="/mypage/account/existingpasswd"
-                      element={<OldPasswd />}
-                    />
-                    <Route
-                      path="/mypage/account/changepasswd"
-                      element={<ChangePasswd />}
-                    />
-                    <Route
-                      path="/mypage/account/changename"
-                      element={<ChangeName />}
-                    />
-                    <Route
-                      path="/mypage/account/noaccount"
-                      element={<NoAccount />}
-                    />
-                    <Route path="/selectunit" element={<ModalExtend />} />
-                    <Route path="/addSchedule" element={<AddSchedulePage />} />
-                    <Route path="/currencymodal" element={<BottomModal />} />
-                    <Route path="/mypage/travellist" element={<TravelList />} />
-                    <Route
-                      path="/mypage/travellist/invite/:groupId"
-                      element={<Invite />}
-                    />
-                  </Routes>
-                </BrowserRouter>
-
+                      <Route path="/mypage" element={<MyPage />} />
+                      <Route
+                        path="/mypage/account"
+                        element={<AccountManage />}
+                      />
+                      <Route
+                        path="/mypage/account/existingpasswd"
+                        element={<OldPasswd />}
+                      />
+                      <Route
+                        path="/mypage/account/changepasswd"
+                        element={<ChangePasswd />}
+                      />
+                      <Route
+                        path="/mypage/account/changename"
+                        element={<ChangeName />}
+                      />
+                      <Route
+                        path="/mypage/account/noaccount"
+                        element={<NoAccount />}
+                      />
+                      <Route path="/selectunit" element={<ModalExtend />} />
+                      <Route
+                        path="/addSchedule"
+                        element={<AddSchedulePage />}
+                      />
+                      <Route path="/currencymodal" element={<BottomModal />} />
+                      <Route
+                        path="/mypage/travellist"
+                        element={<TravelList />}
+                      />
+                      <Route
+                        path="/mypage/travellist/invite/:groupId"
+                        element={<Invite />}
+                      />
+                    </Routes>
+                  </BrowserRouter>
+                </CategoryTitleProvider>
               </CategoryProvider>
             </PlanProvider>
           </GroupProvider>

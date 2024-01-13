@@ -4,8 +4,11 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
+import InviteFunc from './InviteFunc';
 
-//초대코드 보내기, 총무 수정, 공유범위
+//초대코드 보내기
+//그룹 먼저 불러와서 총무 수정
+//공유범위
 function Invite() {
   const [selectedOption, setSelectedOption] = useState('');
   const [nicknames, setNicknames] = useState([]);
@@ -20,8 +23,28 @@ function Invite() {
     navigate('/mypage/travellist');
   };
 
-  const handleDropdownChange = (event) => {
+  //바뀔때마다 post 요청
+  const handleDropdownChange = async (event) => {
     setSelectedOption(event.target.value);
+
+    const editPermission = event.target.value === 'all' ? true : false;
+
+    try {
+      const response = await axios.post(
+        `http://13.125.174.198/group/${groupId}/set_edit`,
+        {
+          editPer: editPermission,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        },
+      );
+      console.log('편집 권한 변경: ', response.data);
+    } catch (error) {
+      console.error('편집 권한 변경 중 오류 발생: ', error);
+    }
   };
 
   const [email, setEmail] = useState('');
@@ -38,38 +61,36 @@ function Invite() {
     setIsValidEmail(validateEmail(inputEmail));
   };
 
-  useEffect(() => {
-    // API를 호출하여 그룹 데이터를 가져옵니다.
-    axios
-      .post(`http://13.125.174.198/group/${groupId}/set_leader`, {
-        new_leader_id: userId,
+  // useEffect(() => {
+  //   // API를 호출하여 그룹 데이터를 가져옵니다.
+  //   axios
+  //     .post(`http://13.125.174.198/group/${groupId}/set_leader`, {
+  //       new_leader_id: userId,
 
-        headers: {
-          Authorization: `Bearer ${user?.accessToken}`,
-        },
-        params: {
-          groupId: groupId,
-        },
-      })
-      .then((response) => {
-        // API 응답을 처리합니다.
-        const data = response.data;
-        console.log(response.data.groupId);
-        console.log(response.data.leader);
+  //       headers: {
+  //         Authorization: `Bearer ${user?.accessToken}`,
+  //       },
+  //       params: {
+  //         groupId: groupId,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       // API 응답을 처리합니다.
+  //       const data = response.data;
+  //       console.log('그룹 아이디:', response.data.groupId);
+  //       console.log('리더:', response.data.leader);
 
-        // 멤버 배열을 추출하고 닉네임을 추출하여 상태 변수에 저장합니다.
-        const groupNicknames = data.member.map((member) => member.nickname);
-        setNicknames(groupNicknames);
-      })
-      .catch((error) => {
-        console.error('API 요청 중 오류 발생: ', error);
-      });
-  }, [groupId]); // groupId가 변경될 때마다 useEffect가 호출됩니다.
+  //       // 멤버 배열을 추출하고 닉네임을 추출하여 상태 변수에 저장합니다.
+  //       const groupNicknames = data.member.map((member) => member.nickname);
+  //       setNicknames(groupNicknames);
+  //     })
+  //     .catch((error) => {
+  //       console.error('API 요청 중 오류 발생: ', error);
+  //     });
+  // }, [groupId]); // groupId가 변경될 때마다 useEffect가 호출
 
-  //초대코드 보내기
   const sendInvitation = () => {
     if (isValidEmail) {
-      // API 엔드포인트에 POST 요청을 보냅니다.
       const apiUrl = `http://13.125.174.198/groups/${groupId}/invite/`;
       axios
         .post(
@@ -84,19 +105,20 @@ function Invite() {
           },
         )
         .then((response) => {
-          // 초대 메일이 성공적으로 보내졌을 때의 처리를 작성합니다.
           alert('초대 메일을 성공적으로 보냈습니다.');
         })
         .catch((error) => {
-          // 오류 처리를 작성합니다.
-          console.error('초대 메일을 보내는 동안 오류가 발생했습니다: ', error);
+          console.error('초대 메일을 보내는 동안 에러 발생: ', error);
           alert('초대 메일을 보내는 데 실패했습니다.');
         });
     } else {
-      // 이메일 형식이 유효하지 않을 때의 처리를 작성합니다.
       alert('유효한 이메일 주소를 입력해주세요.');
     }
   };
+
+  //권한수정
+  const editAuthority = () => {};
+
   return (
     <Container>
       <Back onClick={goToTravellist}>

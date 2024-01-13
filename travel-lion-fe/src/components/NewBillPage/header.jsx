@@ -1,20 +1,39 @@
-//완료
-
-import React, { useContext } from 'react';
-import { styled } from 'styled-components';
-import { NavLink } from 'react-router-dom';
+// 예지
 import goBack from '../../images/goBack.png';
 import share from '../../images/share.png';
-import { GroupContext } from '../../contexts/GroupContext';
-import { PlanContext } from '../../contexts/PlanContext';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
 import { getFlagEmoji } from '../../utils/flagEmoji';
 
-export default function Header({ groupId, planId }) {
-  const { group } = useContext(GroupContext);
-  const { plan } = useContext(PlanContext);
+export default function Header({ groupId }) {
+  const { user } = useContext(AuthContext);
+  const [travelDatas, setTravelDatas] = useState([]);
+  const { refreshAccessToken } = useAuth();
 
-  console.log('헤더의 그룹', group);
-  console.log('헤더의 플랜', plan);
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
+
+  useEffect(() => {
+    if (user) {
+      axiosInstance
+        .get(`/${user.userId}/grouplist/${groupId}`, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        })
+        .then((response) => {
+          setTravelDatas(response.data);
+        })
+        .catch((error) => {
+          console.error('API 요청 중 오류 발생:', error);
+        });
+    }
+  }, [axiosInstance, user, groupId]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -30,17 +49,23 @@ export default function Header({ groupId, planId }) {
   return (
     <>
       <HeaderContainer>
-        <NavLeft to={`/billlist/${group.groupId}/${planId}`}>
+        <NavLeft to={`/travelaccountbook/${groupId}`}>
           <GoBackImg src={goBack} />
         </NavLeft>
         <TravelInfoDiv>
-          <FlagSpan className={getFlagEmoji(group.nation)}></FlagSpan>&nbsp;
-          <TravelName>{group.title}</TravelName>
-          <br />
-          <TravelLocation>{`${group.nation}-${group.location} |`}</TravelLocation>
-          <TravelDate>
-            {formatDate(group.startDate)} ~{formatDate(group.endDate)}
-          </TravelDate>
+          <Wrapper1>
+            <FlagImage>
+              <span className={getFlagEmoji(travelDatas.nation)}></span>
+            </FlagImage>
+            <TravelName>{travelDatas.title}</TravelName>
+          </Wrapper1>
+          <Wrapper2>
+            <TravelLocation>{`${travelDatas.nation}-${travelDatas.location} |`}</TravelLocation>
+            <TravelDate>
+              {formatDate(travelDatas.startDate)} ~
+              {formatDate(travelDatas.endDate)}
+            </TravelDate>
+          </Wrapper2>
         </TravelInfoDiv>
         <Share to="">
           <ShareImg src={share} />
@@ -52,7 +77,7 @@ export default function Header({ groupId, planId }) {
 
 const HeaderContainer = styled.div`
   width: 390px;
-  padding: 10px;
+  height: 110px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,37 +109,50 @@ const ShareImg = styled.img`
 `;
 
 const TravelInfoDiv = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
   margin: 0 auto;
+  width: 300px;
 `;
 
-const FlagSpan = styled.span`
+const FlagImage = styled.div`
   font-size: 20px;
 `;
 
-const TravelName = styled.span`
+const TravelName = styled.div`
+  color: #fff;
   font-family: Pretendard;
   font-size: 22px;
+  font-style: normal;
   font-weight: 700;
-  line-height: 26px;
-  letter-spacing: 0em;
-  text-align: left;
+  line-height: normal;
+  margin-left: 11px;
+  white-space: nowrap;
 `;
 
-const TravelLocation = styled.span`
+const TravelLocation = styled.div`
   font-family: Pretendard;
   font-size: 12px;
   font-weight: 500;
   line-height: 14px;
-  letter-spacing: 0em;
-  text-align: left;
 `;
 
-const TravelDate = styled.span`
+const TravelDate = styled.div`
   font-family: Pretendard;
   font-size: 12px;
   font-weight: 500;
   line-height: 14px;
-  letter-spacing: 0em;
-  text-align: left;
+  margin-left: 3px;
+`;
+
+const Wrapper1 = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Wrapper2 = styled.div`
+  display: flex;
+  margin-top: 10px;
 `;

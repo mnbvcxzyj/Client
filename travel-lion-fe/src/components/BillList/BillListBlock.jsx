@@ -50,7 +50,7 @@ export default function BillListBlock({ groupId, planId }) {
         <Container>
           <DateInfo>
             <Day>
-              {selectedPlan.nDay}일차
+              {selectedPlan.nday}일차
               <Date>
                 {selectedPlan.date}({selectedPlan.dayOfWeek})
               </Date>
@@ -230,7 +230,7 @@ const BillImage = styled.img`
   width: 28px;
   margin-top: 8px;
 
-  margin 0 auto;
+  margin: 0 auto;
 `;
 
 const BillInfo = styled.div``;

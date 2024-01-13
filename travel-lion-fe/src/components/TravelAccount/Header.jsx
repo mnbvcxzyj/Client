@@ -74,27 +74,6 @@ export default function Header({ groupId }) {
   );
 }
 
-// {
-//     "groupId": 0,
-//     "leader": "string",
-//     "member": [
-//       {
-//         "email": "user@example.com",
-//         "nickname": "string"
-//       }
-//     ],
-//     "title": "string",
-//     "nation": "string",
-//     "location": "string",
-//     "startDate": "2023-09-10",
-//     "endDate": "2023-09-10",
-//     "duration": "string",
-//     "budget": 0,
-//     "spentMoney": "string",
-//     "dday": "string"
-//     “editPer”: “boolean”
-//   }
-
 const HeaderContainer = styled.div`
   width: 390px;
   height: 110px;

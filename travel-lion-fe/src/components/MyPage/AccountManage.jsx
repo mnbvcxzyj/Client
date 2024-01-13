@@ -14,7 +14,9 @@ const AccountManage = () => {
   const { user } = useAuth();
 
   const handlePageNavigation = () => {
-    navigate('/mypage/account/existingpasswd');
+    navigate('/mypage/account/existingpasswd', {
+      state: { userId: userInfo.userId },
+    });
   };
 
   const handlePageNavigation2 = () => {
@@ -116,7 +118,6 @@ const AccountManage = () => {
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
-
     try {
       const response = await axios.patch(
         `http://13.125.174.198/profile/${userId}/`,
@@ -137,7 +138,7 @@ const AccountManage = () => {
         // 여기에 UI 업데이트 로직 추가
         setUserInfo((prevUserInfo) => ({
           ...prevUserInfo,
-          profile: response.data.newProfileImageUrl, // 가정: response.data.newProfileImageUrl이 새로운 이미지 URL
+          profile: response.data.profile, // 가정: response.data.newProfileImageUrl이 새로운 이미지 URL
         }));
       }
     } catch (error) {

@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { CategoryTitleContext } from '../../contexts/CategoryTitleContext';
 
-const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
-
-// 저장된 데이터를 JavaScript 객체로 파싱
-const parsedCategoryDataset = JSON.parse(storedCategoryDataset);
-
-// 예제: 읽어온 데이터 출력
-console.log(parsedCategoryDataset);
-
-const RenameCategory = ({ groupId, planId }) => {
+const RenameCategory = ({ groupId, planId, categoryId }) => {
   const navigate = useNavigate();
+  const [newCategoryName, setNewCategoryName] = useState('');
 
-  const handleAddCategory = () => {
+  const { categoryTitle, handleChangeCategoryTitle } =
+    useContext(CategoryTitleContext);
+  console.log(categoryTitle);
+  console.log('categoryId:', categoryId);
+  console.log('newCategoryName:', newCategoryName);
+
+  const handleEditCategory = () => {
     navigate(`/editcate/${groupId}/${planId}`);
   };
 
@@ -26,8 +26,11 @@ const RenameCategory = ({ groupId, planId }) => {
           <GoBackImg src={goBack} alt="뒤로가기 이미지" />
         </GoBack>
         <Title>카테고리 수정</Title>
-        <NewCategoryInput />
-        <PlusBtn onClick={handleAddCategory}>
+        <NewCategoryInput
+          value={newCategoryName}
+          onChange={(e) => setNewCategoryName(e.target.value)}
+        />
+        <PlusBtn onClick={handleEditCategory}>
           <BtnText>확인</BtnText>
         </PlusBtn>
       </Container>

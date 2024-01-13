@@ -50,7 +50,7 @@ export default function BillListBlock({ groupId, planId }) {
         <Container>
           <DateInfo>
             <Day>
-              {selectedPlan.nDay}일차
+              {selectedPlan.nday}일차
               <Date>
                 {selectedPlan.date}({selectedPlan.dayOfWeek})
               </Date>

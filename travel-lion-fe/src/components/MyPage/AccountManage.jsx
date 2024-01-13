@@ -7,7 +7,6 @@ import ModalWithdrawal from './ModalWithdrawal';
 import axios from 'axios';
 import { useAuth } from '../../api/auth/AuthContext';
 
-//로그아웃 모달 취소버튼 안 먹힘
 //프로필 이미지 DB 저장
 //비밀번호 변경...
 const AccountManage = () => {
@@ -60,7 +59,7 @@ const AccountManage = () => {
           });
           // const passwd_length = userInfo.passwd;
           // console.log(userInfo.passwd); //undeefind
-          setData('passwd'); //임시비번
+          setData('passwd'); //임시비번 표시를 해야해서 get밖에 못 씀
         } else {
           console.error('Failed to fetch user info:', response.status);
         }
@@ -110,10 +109,13 @@ const AccountManage = () => {
 
   const handleProfileImageSubmit = async () => {
     const formData = new FormData();
-    // input 태그를 통해 선택된 이미지 파일 객체를 FormData에 추가합니다.
-    // 'file'은 서버가 요구하는 필드 키(key)로 가정합니다.
     formData.append('file', profileImage);
     const userId = localStorage.getItem('userId');
+
+    // FormData 내용 확인 (선택적)
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     try {
       const response = await axios.patch(
@@ -132,6 +134,11 @@ const AccountManage = () => {
         // 성공적으로 업로드된 경우, 응답을 처리합니다.
         console.log('프로필 이미지가 업데이트되었습니다:', response.data);
         // 추가적인 상태 업데이트나 사용자에게 알림 등의 처리를 할 수 있습니다.
+        // 여기에 UI 업데이트 로직 추가
+        setUserInfo((prevUserInfo) => ({
+          ...prevUserInfo,
+          profile: response.data.newProfileImageUrl, // 가정: response.data.newProfileImageUrl이 새로운 이미지 URL
+        }));
       }
     } catch (error) {
       console.error('프로필 이미지 업데이트 중 오류가 발생했습니다:', error);
@@ -145,7 +152,11 @@ const AccountManage = () => {
       <Container>
         <ProfileImg
           //원래 src={profileImage}
-          src={previewImage || userInfo.profile || '/images/basicProfile.jpg'}
+          src={
+            profileImage
+              ? URL.createObjectURL(profileImage)
+              : '/images/basicProfile.jpg'
+          }
           onClick={() => inputRef.current.click()}
         ></ProfileImg>
         <input

@@ -153,8 +153,14 @@ function Login() {
         </SaveIdBtn>
         <SaveIdText>아이디 저장</SaveIdText>
       </SaveDiv>
-      <Join onClick={goToJoin}>회원가입</Join>
-      <Find onClick={goToFind}>ID/PW 찾기</Find>
+      {/* <div>
+        <Join onClick={goToJoin}>회원가입</Join>
+        <Find onClick={goToFind}>ID/PW 찾기</Find>
+      </div> */}
+      <Wrapper>
+        <Join onClick={goToJoin}>회원가입</Join>
+        <Find onClick={goToFind}>ID/PW 찾기</Find>
+      </Wrapper>
       <SimpleLogin>
         간편 로그인<br></br>
         <SocialLogin src={`/images/naver.png`} alt="Naver"></SocialLogin>
@@ -166,6 +172,14 @@ function Login() {
 }
 
 export default Login;
+
+const Wrapper = styled.div`
+  display: flex;
+`;
+
+const HalfDiv = styled.div`
+  flex: 1; // Flex 아이템이 부모 컨테이너의 공간을 1:1 비율로 차지합니다.
+`;
 
 const CenterDiv = styled.div`
   position: relative;
@@ -280,10 +294,8 @@ const CheckText = styled.div`
   cursor: pointer;
 `;
 
-const Join = styled.text`
-  position: absolute;
-  top: 463px;
-  width: 130px;
+const Join = styled.div`
+  flex: 1; // Flex 아이템이 부모 컨테이너의 공간을 1:1 비율로 차지합니다.
   color: var(--Gray, #adb6bd);
   font-family: Pretendard;
   font-size: 15px;
@@ -291,13 +303,13 @@ const Join = styled.text`
   font-weight: 600;
   line-height: normal;
   margin-left: 15px;
+  margin-top: 290px;
   cursor: pointer;
+  padding: 10px, 10px, 10px, 0px;
 `;
 
-const Find = styled.text`
-  position: absolute;
-  top: 463px;
-  width: 290px;
+const Find = styled.div`
+  flex: 1; // Flex 아이템이 부모 컨테이너의 공간을 1:1 비율로 차지합니다.
   color: var(--Gray, #adb6bd);
   text-align: right;
   font-family: Pretendard;
@@ -306,12 +318,13 @@ const Find = styled.text`
   font-weight: 600;
   line-height: normal;
   margin-left: 30px;
+  margin-top: 290px;
   cursor: pointer;
 `;
 
 const SimpleLogin = styled.div`
   position: relative;
-  top: 400px;
+  top: 53px;
   color: var(--Gray, #adb6bd);
   text-align: center;
   font-family: Pretendard;

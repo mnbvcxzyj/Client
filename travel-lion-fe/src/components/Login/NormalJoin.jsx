@@ -43,12 +43,9 @@ function NormalJoin() {
     }
   }, []);
 
-  //새로 만든 함수 onChange
-  //저장
   const onChangeVerificationCode = (event) => {
     const verificationCodeCurrent = event.target.value;
     setVerificationCode(verificationCodeCurrent);
-    // checkVerificationCode(verificationCode);
   };
 
   //렌더링
@@ -63,9 +60,8 @@ function NormalJoin() {
   };
 
   // Box 컴포넌트 분리
-  //ols3040015@gmail.com
   const renderBox = () => (
-    <Box key={boxes.length + 1}>
+    <RenderBox key={boxes.length + 1} isCodeValid={isCodeValid}>
       <CheckNumInput
         id="verificationCodeInput"
         type="text"
@@ -75,7 +71,7 @@ function NormalJoin() {
       <NewSendBtn onClick={checkCode}>
         <SentText>확인</SentText>
       </NewSendBtn>
-    </Box>
+    </RenderBox>
   );
 
   //이메일 인증 버튼
@@ -100,7 +96,7 @@ function NormalJoin() {
 
   //ols3040015@gmail.com
   const sendVerificationEmail = async (email) => {
-    const axiosInstance = createAxiosInstance(refreshAccessToken); // 인증 상태가 업데이트된 Axios 인스턴스를 생성합니다.
+    const axiosInstance = createAxiosInstance(refreshAccessToken);
 
     try {
       const response = await axiosInstance.post(
@@ -116,7 +112,6 @@ function NormalJoin() {
       );
 
       if (response.status === 200) {
-        //내가 입력한걸 보내서 맞는지 확인
         console.log('인증번호 전송 완료', response.data);
       }
     } catch (error) {
@@ -128,63 +123,6 @@ function NormalJoin() {
     }
   };
 
-  // 인증번호 검증 함수
-  //verificationCode 들어 옴
-  //ols3040015@gmail.com
-  // const checkVerificationCode = async (verificationCode) => {
-  //   console.log('함수에서 보는 유저에게 입력받은 인증번호:', verificationCode);
-  //   try {
-  //     const response = await axios.post(
-  //       'http://13.125.174.198/verify_email/',
-  //       {
-  //         email: email,
-  //         verification_code: verificationCode,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${user?.accessToken}`,
-  //         },
-  //       },
-  //     );
-
-  //     console.log('응답: ', response.status);
-
-  //     if (response.status === 200) {
-  //       console.log('인증번호 확인 완료');
-  //       setIsCodeValid(true); // 인증번호가 맞으면 상태 업데이트
-  //       alert('인증번호가 확인되었습니다.');
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       console.error('인증번호 확인 중 오류 발생 401 ERROR:', error);
-  //       // 토큰 갱신 로직
-  //       try {
-  //         const newTokens = await refreshAccessToken(); // 토큰 갱신 시도
-  //         // 갱신된 토큰으로 재시도
-  //         if (newTokens && newTokens.accessToken) {
-  //           axios.defaults.headers.common[
-  //             'Authorization'
-  //           ] = `Bearer ${newTokens.accessToken}`;
-
-  //           // 갱신된 토큰으로 재시도
-  //           return checkVerificationCode(verificationCode); //아래도 있는게 맞아?
-  //         }
-  //         return checkVerificationCode(verificationCode); // 재귀 호출을 통해 다시 시도
-  //       } catch (refreshError) {
-  //         //여기서 에러
-  //         console.error('인증번호 확인 중 오류 발생 A:', refreshError);
-  //         alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
-  //         setIsCodeValid(false);
-  //         window.locatioreload();
-  //       }
-  //     } else {
-  //       console.error('인증번호 확인 중 오류 발생 B:', error);
-  //       alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
-  //       setIsCodeValid(false);
-  //       window.locatioreload();
-  //     }
-  //   }
-  // };
   const checkVerificationCode = async (verificationCode) => {
     console.log('함수에서 보는 유저에게 입력받은 인증번호:', verificationCode);
     try {
@@ -205,7 +143,7 @@ function NormalJoin() {
 
       if (response.status === 201) {
         console.log('인증번호 확인 완료');
-        setIsCodeValid(true); // 인증번호가 맞으면 상태 업데이트
+        setIsCodeValid(true);
         alert('인증번호가 확인되었습니다.');
       }
     } catch (error) {
@@ -291,6 +229,9 @@ function NormalJoin() {
     const newValue = !checkInfo;
     setCheckInfo(newValue);
   };
+
+  //버튼 색상 상태 체크
+  const isButtonActive = checkAge && checkService && checkInfo && isCodeValid;
 
   return (
     <BigDiv>
@@ -569,8 +510,8 @@ function NormalJoin() {
         <CheckText>개인정보 수집 및 이용에 동의합니다.</CheckText>
       </CheckDiv>
 
-      <Btn onClick={gotoNormalJoin2}>
-        <BtnText>다음</BtnText>
+      <Btn onClick={gotoNormalJoin2} isActive={isButtonActive}>
+        <BtnText isActive={isButtonActive}>다음</BtnText>
       </Btn>
     </BigDiv>
   );
@@ -640,6 +581,25 @@ const Box = styled.div`
     props.isPassword || props.isPasswordConfirm
       ? '1.5px solid #00bc78'
       : '1.5px solid var(--Gray, #adb6bd)'};
+`;
+
+const RenderBox = styled.div`
+  position: relative;
+  width: 340px;
+  height: 55px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
+  align-items: center; /* 수직 가운데 정렬 */
+
+  span {
+    display: inline-block;
+  }
+  border: 1.5px solid
+    ${(props) => (props.isCodeValid ? '#00db78' : 'var(--Gray, #adb6bd)')};
 `;
 
 const WarningMessage = styled.span`
@@ -782,14 +742,14 @@ const Btn = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #e2e2e2;
-  display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
-  align-items: center; /* 수직 가운데 정렬 */
+  background: ${(props) => (props.isActive ? '#00bc78' : '#e2e2e2')};
+  display: flex;
+  align-items: center;
   justify-content: center;
 `;
 
 const BtnText = styled.div`
-  color: #979797;
+  color: ${(props) => (props.isActive ? '#fff' : '#979797')};
   font-family: SUIT;
   font-size: 18px;
   font-style: normal;

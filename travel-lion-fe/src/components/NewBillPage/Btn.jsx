@@ -81,7 +81,7 @@ export default function NewBillBtn({ groupId, planId }) {
           },
         },
       );
-      navigate(`/billlist/${group.groupId}/${planId}`);
+      navigate(`/billlist/${groupId}/${planId}`);
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
     }

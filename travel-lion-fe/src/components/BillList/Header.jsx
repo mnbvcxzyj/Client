@@ -57,7 +57,7 @@ export default function Header({ groupId }) {
             <FlagImage>
               <span className={getFlagEmoji(travelDatas.nation)}></span>
             </FlagImage>
-            <TravelName>{travelDatas.title}메롱메롱</TravelName>
+            <TravelName>{travelDatas.title}</TravelName>
           </Wrapper1>
           <Wrapper2>
             <TravelLocation>{`${travelDatas.nation}-${travelDatas.location} |`}</TravelLocation>

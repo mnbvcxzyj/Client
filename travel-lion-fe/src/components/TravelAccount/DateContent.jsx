@@ -8,13 +8,14 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { PlanContext } from '../../contexts/PlanContext';
 import { CategoryContext } from '../../contexts/CategoryContext';
 import { GroupContext } from '../../contexts/GroupContext';
-
+import Loading from '../../pages/Loading';
 const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('KRW');
   const { user } = useContext(AuthContext);
   const [travelDatas, setTravelDatas] = useState([]);
   const { refreshAccessToken } = useAuth();
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
   // 윤경) 컨택스트에 저장하는 부분
   const { plan, handleChangePlan } = useContext(PlanContext);
@@ -28,6 +29,7 @@ const DateContent = ({ groupId }) => {
 
   // 여행 가져오기
   useEffect(() => {
+    setIsLoading(true);
     if (user) {
       axiosInstance
         .get(`/${user.userId}/grouplist/${groupId}`, {
@@ -38,9 +40,11 @@ const DateContent = ({ groupId }) => {
         .then((response) => {
           setTravelDatas(response.data);
           handleChangeGroup(response.data); //컨텍스트에 저장
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error('API 요청 중 오류 발생:', error);
+          setIsLoading(false);
         });
     }
   }, [axiosInstance, user, groupId]);
@@ -102,49 +106,55 @@ const DateContent = ({ groupId }) => {
 
   return (
     <>
-      <D.Container>
-        <D.TopWrapper>
-          <D.AmountDiv>
-            <D.Text>여행 경비 총합</D.Text>
-            <D.TravelExpense>
-              {Number(travelDatas.spentMoney).toLocaleString()}원 /
-            </D.TravelExpense>
-          </D.AmountDiv>
-          &nbsp;
-          <D.AmountDiv>
-            <D.Text>예산</D.Text>
-            <D.Budget>{Number(travelDatas.budget).toLocaleString()}원</D.Budget>
-          </D.AmountDiv>
-          <D.ExchangeRate onClick={toggleBottomSheet}>
-            {selectedCurrency}
-            <img src={arrow} alt=">" />
-          </D.ExchangeRate>
-        </D.TopWrapper>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <D.Container>
+          <D.TopWrapper>
+            <D.AmountDiv>
+              <D.Text>여행 경비 총합</D.Text>
+              <D.TravelExpense>
+                {Number(travelDatas.spentMoney).toLocaleString()}원 /
+              </D.TravelExpense>
+            </D.AmountDiv>
+            &nbsp;
+            <D.AmountDiv>
+              <D.Text>예산</D.Text>
+              <D.Budget>
+                {Number(travelDatas.budget).toLocaleString()}원
+              </D.Budget>
+            </D.AmountDiv>
+            <D.ExchangeRate onClick={toggleBottomSheet}>
+              {selectedCurrency}
+              <img src={arrow} alt=">" />
+            </D.ExchangeRate>
+          </D.TopWrapper>
 
-        {plans.map((plan) => (
-          <D.DayWrapper key={plan.planId}>
-            <D.DayText>
-              <div>{plan.nDay}일차</div>
-              <div>
-                {plan.date}({plan.dayOfWeek})
-              </div>
-            </D.DayText>
+          {plans.map((plan) => (
+            <D.DayWrapper key={plan.planId}>
+              <D.DayText>
+                <div>{plan.nDay}일차</div>
+                <div>
+                  {plan.date}({plan.dayOfWeek})
+                </div>
+              </D.DayText>
 
-            {categories[plan.planId] &&
-              categories[plan.planId].map((category) => (
-                <D.CategoryWrapper key={category.categoryId}>
-                  <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
-                  <D.CategoryText>{category.categoryTitle}</D.CategoryText>
-                  <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
-                </D.CategoryWrapper>
-              ))}
+              {categories[plan.planId] &&
+                categories[plan.planId].map((category) => (
+                  <D.CategoryWrapper key={category.categoryId}>
+                    <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
+                    <D.CategoryText>{category.categoryTitle}</D.CategoryText>
+                    <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
+                  </D.CategoryWrapper>
+                ))}
 
-            <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
-              <D.InputBtn>사용 금액 입력</D.InputBtn>
-            </Link>
-          </D.DayWrapper>
-        ))}
-      </D.Container>
+              <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
+                <D.InputBtn>사용 금액 입력</D.InputBtn>
+              </Link>
+            </D.DayWrapper>
+          ))}
+        </D.Container>
+      )}
       {isBottomSheetOpen && (
         <BottomModal
           selectedCurrency={selectedCurrency}

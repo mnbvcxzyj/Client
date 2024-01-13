@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
@@ -9,84 +9,8 @@ import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
 import { useNavigate } from 'react-router-dom';
-
-const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
-
-// if (!storedCategoryDataset) {
-//   const initialCategoryDataset = [
-//     {
-//       id: 1,
-//       name: '식비',
-//       img: CategoryImgFood,
-//     },
-//     {
-//       id: 2,
-//       name: '숙소',
-//       img: CategoryImgHotel,
-//     },
-//     {
-//       id: 3,
-//       name: '교통비',
-//       img: CategoryImgTransportation,
-//     },
-//     {
-//       id: 4,
-//       name: '기타',
-//       img: CategoryImgEtc,
-//     },
-//   ];
-
-//   // 초기 데이터를 세션 스토리지에 저장
-//   sessionStorage.setItem(
-//     'categoryDataset',
-//     JSON.stringify(initialCategoryDataset),
-//   );
-// }
-
-const parsedCategoryDataset = JSON.parse(
-  sessionStorage.getItem('categoryDataset'),
-);
-
-console.log(parsedCategoryDataset);
-
-// export default function Category({
-//   onClickCategory,
-//   showAlert,
-//   setShowAlert,
-//   groupId,
-//   planId,
-// }) {
-//   const [isDropDown, setIsDropDown] = useState(false);
-//   const [selectedCategory, setSelectedCategory] = useState('');
-//   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
-
-//   console.log(groupId, planId);
-
-//   const storedCategoryDataset = JSON.parse(
-//     sessionStorage.getItem('categoryDataset') || '[]',
-//   );
-
-//   const onClickOption = (name) => {
-//     const selectedCategoryName = name;
-
-//     const selectedCategoryInfo = parsedCategoryDataset.find(
-//       (category) => category.name === selectedCategoryName,
-//     );
-
-//     if (selectedCategoryInfo) {
-//       onClickCategory(selectedCategoryName);
-//       setSelectedCategory(selectedCategoryName);
-//       setSelectedCategoryImg(selectedCategoryInfo.img);
-//       setIsDropDown(false);
-//       setShowAlert(false);
-//     }
-//   };
-
-//   const onClickSelect = () => {
-//     setIsDropDown(!isDropDown);
-//   };
-
-//   const navigate = useNavigate();
+import { CategoryTitleContext } from '../../contexts/CategoryTitleContext';
+import { CategoryContext } from '../../contexts/CategoryContext';
 
 export default function Category({
   onClickCategory,
@@ -98,21 +22,65 @@ export default function Category({
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
-
-  const [storedCategoryDataset, setStoredCategoryDataset] = useState([]);
-
   const navigate = useNavigate();
 
+  const { category, handleChangeCategory } = useContext(CategoryContext);
+  console.log(category);
+  const { categoryTitle, handleChangeCategoryTitle } =
+    useContext(CategoryTitleContext);
+  console.log(categoryTitle);
+
+  // 초기값이 비어있는 경우에만 초기값 설정
   useEffect(() => {
-    const updatedCategoryDataset = JSON.parse(
-      sessionStorage.getItem('categoryDataset') || '[]',
-    );
-    setStoredCategoryDataset(updatedCategoryDataset);
-  }, [groupId, planId]);
+    if (categoryTitle.length === 0) {
+      const defaultCategories = [
+        {
+          id: 1,
+          name: '식비',
+          img: CategoryImgFood,
+        },
+        {
+          id: 2,
+          name: '숙소',
+          img: CategoryImgHotel,
+        },
+        {
+          id: 3,
+          name: '교통비',
+          img: CategoryImgTransportation,
+        },
+        {
+          id: 4,
+          name: '기타',
+          img: CategoryImgEtc,
+        },
+      ];
+      handleChangeCategoryTitle(defaultCategories);
+    }
+  }, [categoryTitle, handleChangeCategoryTitle]);
+
+  //초기 카테고리 설정 (카테고리가 비어있지 않은 경우)
+  useEffect(() => {
+    const newCategoryTitles = Object.values(category).flatMap((arr) => {
+      return arr
+        .filter(
+          (item) => !categoryTitle.some((ct) => ct.name === item.categoryTitle),
+        )
+        .map((item) => ({ name: item.categoryTitle }));
+    });
+
+    if (newCategoryTitles.length > 0) {
+      handleChangeCategoryTitle((prev) => [...prev, ...newCategoryTitles]);
+    }
+  }, [category, categoryTitle, handleChangeCategoryTitle]);
+
+  useEffect(() => {
+    handleChangeCategoryTitle(categoryTitle);
+  }, [categoryTitle]);
 
   const onClickOption = (name) => {
     const selectedCategoryName = name;
-    const selectedCategoryInfo = parsedCategoryDataset.find(
+    const selectedCategoryInfo = categoryTitle.find(
       (category) => category.name === selectedCategoryName,
     );
 
@@ -129,10 +97,7 @@ export default function Category({
     setIsDropDown(!isDropDown);
   };
 
-  // const storedCategoryDataset = JSON.parse(
-  //   sessionStorage.getItem('categoryDataset') || '[]',
-  // );
-
+  console.log('여기서도 카테고리 배열 불러온거 출력해', categoryTitle);
   return (
     <Component>
       <Demand>
@@ -169,16 +134,12 @@ export default function Category({
       </SelectButton>
       {isDropDown && (
         <DropDown>
-          {storedCategoryDataset.map((category) => (
+          {categoryTitle.map((category) => (
             <Option
               value={category.name}
               key={category.id}
               onClick={() => {
-                if (category.name === '직접 입력하기') {
-                  navigate(`/newcate/${groupId}/${planId}`);
-                } else {
-                  onClickOption(category.name);
-                }
+                onClickOption(category.name);
               }}
               isSelected={category.name === selectedCategory}
             >

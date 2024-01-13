@@ -1,49 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { CategoryTitleContext } from '../../contexts/CategoryTitleContext';
 
 const NewCategory = ({ groupId, planId }) => {
   const [categoryName, setCategoryName] = useState('');
 
   const navigate = useNavigate();
 
-  const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
-  const parsedCategoryDataset = JSON.parse(storedCategoryDataset);
-
-  //읽어온 데이터 출력
-  console.log(parsedCategoryDataset);
+  const { categoryTitle, handleChangeCategoryTitle } =
+    useContext(CategoryTitleContext);
+  console.log('카테고리 배열 불러온거 출력', categoryTitle);
 
   const handleAddCategory = () => {
-    if (!categoryName.trim()) {
-      console.log('비어있는경우에는 추가할 수 없음');
+    if (!categoryName || categoryTitle.some((ct) => ct.name === categoryName)) {
       return;
     }
-    const isDuplicate = parsedCategoryDataset.some(
-      (category) => category.name === categoryName,
-    );
-
-    if (isDuplicate) {
-      console.error('이름이 겹치는 경우에는 추가할 수 없음');
-      return;
-    }
-
     const newCategory = {
-      id: parsedCategoryDataset.length + 1,
+      id: categoryTitle.length + 1,
       name: categoryName,
+      img: '',
     };
 
-    // 새로운 카테고리를 기존 데이터에 추가
-    const updatedCategoryDataset = [...parsedCategoryDataset, newCategory];
+    const newCategoryTitle = [...categoryTitle, newCategory];
+    handleChangeCategoryTitle(newCategoryTitle);
 
-    sessionStorage.setItem(
-      'categoryDataset',
-      JSON.stringify(updatedCategoryDataset),
-    );
+    setCategoryName('');
 
     navigate(`/newBill/${groupId}/${planId}`);
   };
+
+  useEffect(() => {
+    handleChangeCategoryTitle(categoryTitle);
+  }, [categoryTitle]);
 
   return (
     <>

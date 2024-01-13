@@ -12,42 +12,81 @@ import { useNavigate } from 'react-router-dom';
 
 const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
 
-if (!storedCategoryDataset) {
-  const initialCategoryDataset = [
-    {
-      id: 1,
-      name: '식비',
-      img: CategoryImgFood,
-    },
-    {
-      id: 2,
-      name: '숙소',
-      img: CategoryImgHotel,
-    },
-    {
-      id: 3,
-      name: '교통비',
-      img: CategoryImgTransportation,
-    },
-    {
-      id: 4,
-      name: '기타',
-      img: CategoryImgEtc,
-    },
-  ];
+// if (!storedCategoryDataset) {
+//   const initialCategoryDataset = [
+//     {
+//       id: 1,
+//       name: '식비',
+//       img: CategoryImgFood,
+//     },
+//     {
+//       id: 2,
+//       name: '숙소',
+//       img: CategoryImgHotel,
+//     },
+//     {
+//       id: 3,
+//       name: '교통비',
+//       img: CategoryImgTransportation,
+//     },
+//     {
+//       id: 4,
+//       name: '기타',
+//       img: CategoryImgEtc,
+//     },
+//   ];
 
-  // 초기 데이터를 세션 스토리지에 저장
-  sessionStorage.setItem(
-    'categoryDataset',
-    JSON.stringify(initialCategoryDataset),
-  );
-}
+//   // 초기 데이터를 세션 스토리지에 저장
+//   sessionStorage.setItem(
+//     'categoryDataset',
+//     JSON.stringify(initialCategoryDataset),
+//   );
+// }
 
 const parsedCategoryDataset = JSON.parse(
   sessionStorage.getItem('categoryDataset'),
 );
 
 console.log(parsedCategoryDataset);
+
+// export default function Category({
+//   onClickCategory,
+//   showAlert,
+//   setShowAlert,
+//   groupId,
+//   planId,
+// }) {
+//   const [isDropDown, setIsDropDown] = useState(false);
+//   const [selectedCategory, setSelectedCategory] = useState('');
+//   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
+
+//   console.log(groupId, planId);
+
+//   const storedCategoryDataset = JSON.parse(
+//     sessionStorage.getItem('categoryDataset') || '[]',
+//   );
+
+//   const onClickOption = (name) => {
+//     const selectedCategoryName = name;
+
+//     const selectedCategoryInfo = parsedCategoryDataset.find(
+//       (category) => category.name === selectedCategoryName,
+//     );
+
+//     if (selectedCategoryInfo) {
+//       onClickCategory(selectedCategoryName);
+//       setSelectedCategory(selectedCategoryName);
+//       setSelectedCategoryImg(selectedCategoryInfo.img);
+//       setIsDropDown(false);
+//       setShowAlert(false);
+//     }
+//   };
+
+//   const onClickSelect = () => {
+//     setIsDropDown(!isDropDown);
+//   };
+
+//   const navigate = useNavigate();
 
 export default function Category({
   onClickCategory,
@@ -60,15 +99,19 @@ export default function Category({
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
 
-  console.log(groupId, planId);
+  const [storedCategoryDataset, setStoredCategoryDataset] = useState([]);
 
-  const storedCategoryDataset = JSON.parse(
-    sessionStorage.getItem('categoryDataset') || '[]',
-  );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const updatedCategoryDataset = JSON.parse(
+      sessionStorage.getItem('categoryDataset') || '[]',
+    );
+    setStoredCategoryDataset(updatedCategoryDataset);
+  }, [groupId, planId]);
 
   const onClickOption = (name) => {
     const selectedCategoryName = name;
-
     const selectedCategoryInfo = parsedCategoryDataset.find(
       (category) => category.name === selectedCategoryName,
     );
@@ -86,12 +129,13 @@ export default function Category({
     setIsDropDown(!isDropDown);
   };
 
-  const navigate = useNavigate();
+  // const storedCategoryDataset = JSON.parse(
+  //   sessionStorage.getItem('categoryDataset') || '[]',
+  // );
 
   return (
     <Component>
       <Demand>
-        {' '}
         &nbsp; 카테고리를 선택해주세요. <Rq>(필수)</Rq>
       </Demand>
       <SelectButton
@@ -181,12 +225,6 @@ export default function Category({
     </Component>
   );
 }
-
-// {
-//   id: 5,
-//   name: '직접 입력하기',
-//   img: CategoryImgSelf,
-// },
 
 const Component = styled.div`
   /* width: 87%;

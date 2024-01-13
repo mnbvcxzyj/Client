@@ -2,19 +2,20 @@ import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
 
 //사이트 자체 회원가입
-//유효성 검사 코드
 function NormalJoin() {
   const navigate = useNavigate();
+  const { user, refreshAccessToken, setUser } = useAuth();
 
   const gotoNormalJoin2 = () => {
     // 통과
     if (isEmail && isPassword && isPasswordConfirm) {
       navigate('/join/normal2', { state: { email, password } });
     } else {
-      // 유효성 검사에 실패한 경우의 처리
-      console.log('유효성 검사에 실패했습니다.');
+      alert('회원가입에 필요한 정보를 입력해주세요');
     }
   };
 
@@ -23,15 +24,15 @@ function NormalJoin() {
   const [emailMessage, setEmailMessage] = useState('');
   const [isEmail, setIsEmail] = useState(false);
   const [boxes, setBoxes] = useState([]); // Box 요소를 관리하는 배열
-  const [countdown, setCountdown] = useState(0); // 카운트 다운 상태 변수 추가
-  const [isCounting, setIsCounting] = useState(false); // 카운트 다운 중 여부
+
+  const [isCodeValid, setIsCodeValid] = useState(false); // 입력된 인증번호가 맞는지 여부
+  const [verificationCode, setVerificationCode] = useState(''); // 사용자가 입력한 인증번호 상태
 
   const onChangeEmail = useCallback((e) => {
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
-    setEmail(emailCurrent);
-    console.log(emailCurrent); //나중에 없앨것
+    setEmail(emailCurrent); //ok
 
     if (!emailRegex.test(emailCurrent)) {
       setEmailMessage('이메일 형식으로 입력해주세요.');
@@ -42,49 +43,190 @@ function NormalJoin() {
     }
   }, []);
 
+  //새로 만든 함수 onChange
+  //저장
+  const onChangeVerificationCode = (event) => {
+    const verificationCodeCurrent = event.target.value;
+    setVerificationCode(verificationCodeCurrent);
+    // checkVerificationCode(verificationCode);
+  };
+
+  //렌더링
   useEffect(() => {
-    let timer;
+    console.log('유저에게 입력받은 인증번호: ', verificationCode);
+  }, [verificationCode]);
 
-    if (isCounting && countdown > 0) {
-      timer = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000); // 1초마다 1씩 감소
-    } else if (countdown === 0) {
-      setIsCounting(false);
-    }
+  const checkCode = () => {
+    const input = document.getElementById('verificationCodeInput');
+    const code = input.value;
+    checkVerificationCode(code); // 현재 입력
+  };
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isCounting, countdown]);
+  // Box 컴포넌트 분리
+  //ols3040015@gmail.com
+  const renderBox = () => (
+    <Box key={boxes.length + 1}>
+      <CheckNumInput
+        id="verificationCodeInput"
+        type="text"
+        placeholder="인증번호"
+        onChange={onChangeVerificationCode}
+      />
+      <NewSendBtn onClick={checkCode}>
+        <SentText>확인</SentText>
+      </NewSendBtn>
+    </Box>
+  );
 
+  //이메일 인증 버튼
   const onSendBtnClick = useCallback(() => {
     if (isEmail) {
       // 현재 이메일이 올바를 때만 Box 추가
-
       const isBoxAlreadyAdded = boxes.length > 0;
 
-      const newBox = (
-        <Box key={boxes.length + 1}>
-          <CheckNumInput type="text" placeholder="인증번호"></CheckNumInput>
-          <CountDown>
-            {Math.floor(countdown / 60)}:{countdown % 60}
-          </CountDown>
-        </Box>
-      );
-
       // 이미 추가된 상태라면 카운트 다운만 업데이트
-      if (isBoxAlreadyAdded) {
-        setCountdown(300);
-        setIsCounting(true);
+      if (!isBoxAlreadyAdded) {
+        setBoxes([...boxes, renderBox()]);
+        // setCountdown(300);
+        // setIsCounting(true);
+        console.log('전송하는 이메일: ', email);
+        sendVerificationEmail(email);
       } else {
-        // 처음 추가될 때만 Box 추가 및 카운트 다운 시작
-        setCountdown(300);
-        setIsCounting(true);
-        setBoxes([newBox]);
+        // setCountdown(300);
+        // setIsCounting(true);
       }
     }
-  }, [isEmail, boxes]);
+  }, [email, isEmail, boxes]);
+
+  //ols3040015@gmail.com
+  const sendVerificationEmail = async (email) => {
+    const axiosInstance = createAxiosInstance(refreshAccessToken); // 인증 상태가 업데이트된 Axios 인스턴스를 생성합니다.
+
+    try {
+      const response = await axiosInstance.post(
+        '/send_verification_email/',
+        {
+          email: email,
+        },
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${user?.accessToken}`,
+        //   },
+        // },
+      );
+
+      if (response.status === 200) {
+        //내가 입력한걸 보내서 맞는지 확인
+        console.log('인증번호 전송 완료', response.data);
+      }
+    } catch (error) {
+      console.error(
+        '인증 이메일 전송 중 오류 발생:',
+        error.response ? error.response.data : error,
+      );
+      alert('인증 이메일을 전송할 수 없습니다. 다시 시도해주세요.');
+    }
+  };
+
+  // 인증번호 검증 함수
+  //verificationCode 들어 옴
+  //ols3040015@gmail.com
+  // const checkVerificationCode = async (verificationCode) => {
+  //   console.log('함수에서 보는 유저에게 입력받은 인증번호:', verificationCode);
+  //   try {
+  //     const response = await axios.post(
+  //       'http://13.125.174.198/verify_email/',
+  //       {
+  //         email: email,
+  //         verification_code: verificationCode,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${user?.accessToken}`,
+  //         },
+  //       },
+  //     );
+
+  //     console.log('응답: ', response.status);
+
+  //     if (response.status === 200) {
+  //       console.log('인증번호 확인 완료');
+  //       setIsCodeValid(true); // 인증번호가 맞으면 상태 업데이트
+  //       alert('인증번호가 확인되었습니다.');
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 401) {
+  //       console.error('인증번호 확인 중 오류 발생 401 ERROR:', error);
+  //       // 토큰 갱신 로직
+  //       try {
+  //         const newTokens = await refreshAccessToken(); // 토큰 갱신 시도
+  //         // 갱신된 토큰으로 재시도
+  //         if (newTokens && newTokens.accessToken) {
+  //           axios.defaults.headers.common[
+  //             'Authorization'
+  //           ] = `Bearer ${newTokens.accessToken}`;
+
+  //           // 갱신된 토큰으로 재시도
+  //           return checkVerificationCode(verificationCode); //아래도 있는게 맞아?
+  //         }
+  //         return checkVerificationCode(verificationCode); // 재귀 호출을 통해 다시 시도
+  //       } catch (refreshError) {
+  //         //여기서 에러
+  //         console.error('인증번호 확인 중 오류 발생 A:', refreshError);
+  //         alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
+  //         setIsCodeValid(false);
+  //         window.location.reload();
+  //       }
+  //     } else {
+  //       console.error('인증번호 확인 중 오류 발생 B:', error);
+  //       alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
+  //       setIsCodeValid(false);
+  //       window.location.reload();
+  //     }
+  //   }
+  // };
+  const checkVerificationCode = async (verificationCode) => {
+    console.log('함수에서 보는 유저에게 입력받은 인증번호:', verificationCode);
+    try {
+      const response = await axios.post(
+        'http://13.125.174.198/verify_email/',
+        {
+          email: email,
+          verification_code: verificationCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        },
+      );
+
+      console.log('응답: ', response.status);
+
+      if (response.status === 201) {
+        console.log('인증번호 확인 완료');
+        setIsCodeValid(true); // 인증번호가 맞으면 상태 업데이트
+        alert('인증번호가 확인되었습니다.');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.error('인증번호 확인 중 오류 발생 401 ERROR:', error);
+        try {
+          const newTokens = await refreshAccessToken(); // 토큰 갱신 시도
+          if (newTokens && newTokens.accessToken) {
+            setUser({ ...user, accessToken: newTokens.accessToken }); // 새 토큰으로 상태 업데이트
+            return checkVerificationCode(verificationCode); // 갱신된 토큰으로 재시도
+          }
+        } catch (refreshError) {
+          console.error('세션 만료', refreshError);
+        }
+      } else {
+        console.error('인증번호 확인 중 오류 발생 B:', error);
+        alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
+        setIsCodeValid(false);
+      }
+    }
+  };
 
   //비밀번호
   const [password, setPassword] = useState('');
@@ -93,7 +235,7 @@ function NormalJoin() {
 
   const onChangePassword = useCallback((e) => {
     const passwordRegex =
-      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-]).{8,20}$/;
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-]).{7,20}$/;
     const passwordCurrent = e.target.value;
     setPassword(passwordCurrent);
 
@@ -153,7 +295,7 @@ function NormalJoin() {
   return (
     <BigDiv>
       <Join>회원가입</Join>
-      <Box isEmail={isEmail} isValid={isEmail}>
+      <EmailBox isEmail={isEmail} isValid={isEmail}>
         <EmailInput
           type="text"
           value={email}
@@ -163,7 +305,7 @@ function NormalJoin() {
         <SendBtn onClick={onSendBtnClick}>
           <SentText>인증</SentText>
         </SendBtn>
-      </Box>
+      </EmailBox>
       <WarningMessage isSuccess={isEmail}>{emailMessage}</WarningMessage>
 
       {boxes}
@@ -458,7 +600,7 @@ const Join = styled.div`
   justify-content: center;
 `;
 
-const Box = styled.div`
+const EmailBox = styled.div`
   position: relative;
   width: 340px;
   height: 55px;
@@ -475,7 +617,25 @@ const Box = styled.div`
   }
   border: 1.5px solid
     ${(props) => (props.isEmail ? '#00bc78' : 'var(--Gray, #adb6bd)')};
-  /* 비밀번호 관련 스타일을 동적으로 추가합니다. */
+`;
+
+const Box = styled.div`
+  position: relative;
+  width: 340px;
+  height: 55px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex; /* Flexbox를 사용하여 내부 요소를 가운데 정렬합니다. */
+  align-items: center; /* 수직 가운데 정렬 */
+
+  span {
+    display: inline-block;
+  }
+
+  /* 비밀번호 */
   border: ${(props) =>
     props.isPassword || props.isPasswordConfirm
       ? '1.5px solid #00bc78'
@@ -496,6 +656,18 @@ const WarningMessage = styled.span`
 `;
 
 const SendBtn = styled.div`
+  display: inline-flex;
+  padding: 5px 7px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  background: #00bc78;
+  cursor: pointer;
+  position: absolute;
+  margin-left: 291px;
+`;
+
+const NewSendBtn = styled.div`
   display: inline-flex;
   padding: 5px 7px;
   justify-content: center;

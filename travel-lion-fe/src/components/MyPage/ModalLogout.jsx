@@ -5,16 +5,20 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/auth/AuthContext';
 
-function ModalLogout({ setLogoutModalOpen, forceRerender }) {
+function ModalLogout({ setLogoutModalOpen, logoutModalOpen }) {
   // Modal 창을 useRef로 취득
   const modalRef = useRef(null);
   const navigate = useNavigate();
-  const { user, logout } = useAuth(); // AuthContext에서 user, logout 함수 가져옴
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handler = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setLogoutModalOpen(false);
+        console.log(
+          '영역이 아니면 모달이 닫히는 부분에서 출력:',
+          setLogoutModalOpen,
+        );
       }
     };
     document.addEventListener('mousedown', handler);
@@ -26,8 +30,9 @@ function ModalLogout({ setLogoutModalOpen, forceRerender }) {
 
   const closeModal = () => {
     setLogoutModalOpen(false);
-    forceRerender(); // 강제 리렌더링 호출
-  };
+    console.log('closeModal 함수 안에서 출력:', setLogoutModalOpen);
+    // forceRerender(); // 강제 리렌더링 호출
+  }; //안 먹힘
 
   // 로그아웃 처리 함수
   const handleLogout = async () => {

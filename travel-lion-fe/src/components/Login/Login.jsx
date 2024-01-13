@@ -51,6 +51,10 @@ function Login() {
     navigate('/join/normal');
   };
 
+  const goToFind = () => {
+    navigate('/login/find');
+  };
+
   return (
     <CenterDiv>
       <EmailBox>
@@ -150,7 +154,7 @@ function Login() {
         <SaveIdText>아이디 저장</SaveIdText>
       </SaveDiv>
       <Join onClick={goToJoin}>회원가입</Join>
-      <Find>ID/PW 찾기</Find>
+      <Find onClick={goToFind}>ID/PW 찾기</Find>
       <SimpleLogin>
         간편 로그인<br></br>
         <SocialLogin src={`/images/naver.png`} alt="Naver"></SocialLogin>
@@ -276,7 +280,7 @@ const CheckText = styled.div`
   cursor: pointer;
 `;
 
-const Join = styled.span`
+const Join = styled.text`
   position: absolute;
   top: 463px;
   width: 130px;
@@ -302,6 +306,7 @@ const Find = styled.text`
   font-weight: 600;
   line-height: normal;
   margin-left: 30px;
+  cursor: pointer;
 `;
 
 const SimpleLogin = styled.div`

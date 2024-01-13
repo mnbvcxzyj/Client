@@ -5,10 +5,14 @@ import MyPageHeader from './MyPageHeader';
 import ModalLogout from './ModalLogout';
 import ModalWithdrawal from './ModalWithdrawal';
 import axios from 'axios';
+import { useAuth } from '../../api/auth/AuthContext';
 
 //로그아웃 모달 취소버튼 안 먹힘
+//프로필 이미지 DB 저장
+//비밀번호 변경...
 const AccountManage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handlePageNavigation = () => {
     navigate('/mypage/account/existingpasswd');
@@ -20,7 +24,6 @@ const AccountManage = () => {
 
   const [data, setData] = useState('');
 
-  // 사용자 정보를 상태로 관리
   const [userInfo, setUserInfo] = useState({
     userId: '',
     email: '',
@@ -40,6 +43,11 @@ const AccountManage = () => {
         }
         const response = await axios.get(
           `http://13.125.174.198/profile/${userId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.accessToken}`,
+            },
+          },
         );
 
         if (response.status === 200) {
@@ -52,7 +60,7 @@ const AccountManage = () => {
           });
           // const passwd_length = userInfo.passwd;
           // console.log(userInfo.passwd); //undeefind
-          setData('hello'); //임시비번
+          setData('passwd'); //임시비번
         } else {
           console.error('Failed to fetch user info:', response.status);
         }
@@ -92,32 +100,60 @@ const AccountManage = () => {
   };
 
   //프로필 이미지 관련 상태
-  //지금은 이미지 액박 뜸
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState('');
   const inputRef = useRef(null); // input 요소를 참조할 Ref를 생성 및 초기화
+  const [previewImage, setPreviewImage] = useState('');
 
   //프로필 이미지 업로드 핸들러
   const handleProfileImageUpload = (e) => {
-    const selectedImage = e.target.files[0];
-    if (selectedImage) {
-      // 선택한 이미지를 상태에 저장
-      setProfileImage(URL.createObjectURL(selectedImage));
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file); // 파일 객체 저장
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl); // 미리보기 URL 저장
     }
   };
 
-  useEffect(() => {
-    console.log('AccountManage 컴포넌트 리렌더링');
-  });
+  const handleProfileImageSubmit = async () => {
+    const formData = new FormData();
+    // input 태그를 통해 선택된 이미지 파일 객체를 FormData에 추가합니다.
+    // 'file'은 서버가 요구하는 필드 키(key)로 가정합니다.
+    formData.append('file', profileImage);
+    const userId = localStorage.getItem('userId');
+
+    try {
+      const response = await axios.patch(
+        `http://13.125.174.198/profile/${userId}/`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${user?.accessToken}`, // 실제 토큰 값으로 대체해야 합니다.
+          },
+        },
+      );
+
+      console.log(formData);
+      if (response.status === 200) {
+        // 성공적으로 업로드된 경우, 응답을 처리합니다.
+        console.log('프로필 이미지가 업데이트되었습니다:', response.data);
+        // 추가적인 상태 업데이트나 사용자에게 알림 등의 처리를 할 수 있습니다.
+      }
+    } catch (error) {
+      console.error('프로필 이미지 업데이트 중 오류가 발생했습니다:', error);
+      // 오류 처리 로직
+    }
+  };
 
   return (
     <>
       <MyPageHeader />
       <Container>
         <ProfileImg
-          src={userInfo.profile || 'images/basicProfile.jpg'}
+          //원래 src={profileImage}
+          src={previewImage || userInfo.profile || '/images/basicProfile.jpg'}
           onClick={() => inputRef.current.click()}
         ></ProfileImg>
-
         <input
           type="file"
           accept="image/*"
@@ -125,6 +161,7 @@ const AccountManage = () => {
           ref={inputRef}
           onChange={handleProfileImageUpload}
         />
+        <button onClick={handleProfileImageSubmit}>이미지 업로드</button>
         <div>
           <Text>닉네임</Text>
           <InputWrapper>
@@ -147,14 +184,12 @@ const AccountManage = () => {
 
         <LogoutBtn onClick={showLogoutModal}>
           <LogoutText>로그아웃</LogoutText>
-          {logoutModalOpen &&
-            (console.log('ModalLogout 렌더링'),
-            (
-              <ModalLogout
-                setLogoutModalOpen={setLogoutModalOpen}
-                forceRerender={forceRerender}
-              />
-            ))}
+          {logoutModalOpen && (
+            <ModalLogout
+              setLogoutModalOpen={setLogoutModalOpen}
+              logoutModalOpen={logoutModalOpen}
+            />
+          )}
         </LogoutBtn>
         <Withdrawal onClick={showWithdrawalModal}>
           <WithdrawalText>계정 탈퇴</WithdrawalText>
@@ -182,8 +217,11 @@ const Container = styled.div`
 const ProfileImg = styled.img`
   width: 60px;
   height: 60px;
-  flex-shrink: 0;
-  border-radius: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: auto;
+  display: block;
+  cursor: pointer;
 `;
 
 //닉네임

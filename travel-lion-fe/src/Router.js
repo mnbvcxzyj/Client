@@ -135,7 +135,10 @@ export default function Router() {
                     <Route path="/addSchedule" element={<AddSchedulePage />} />
                     <Route path="/currencymodal" element={<BottomModal />} />
                     <Route path="/mypage/travellist" element={<TravelList />} />
-                    <Route path="/mypage/invite" element={<Invite />} />
+                    <Route
+                      path="/mypage/travellist/invite/:groupId"
+                      element={<Invite />}
+                    />
                   </Routes>
                 </BrowserRouter>
               </CategoryProvider>

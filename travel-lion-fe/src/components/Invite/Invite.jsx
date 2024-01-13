@@ -1,5 +1,155 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+
+//초대코드 보내기, 총무 수정, 공유범위
+function Invite() {
+  const [selectedOption, setSelectedOption] = useState('');
+  const [nicknames, setNicknames] = useState([]);
+  const { user, refreshAccessToken, setUser } = useAuth();
+  const userId = user?.userId;
+
+  // const { groupId } = useParams(); // URL 경로에서 groupId 취득
+  const location = useLocation();
+  const { groupId } = location.state;
+  const navigate = useNavigate();
+  const goToTravellist = () => {
+    navigate('/mypage/travellist');
+  };
+
+  const handleDropdownChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const [email, setEmail] = useState('');
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleEmailChange = (event) => {
+    const inputEmail = event.target.value;
+    setEmail(inputEmail);
+    setIsValidEmail(validateEmail(inputEmail));
+  };
+
+  useEffect(() => {
+    // API를 호출하여 그룹 데이터를 가져옵니다.
+    axios
+      .post(`http://13.125.174.198/group/${groupId}/set_leader`, {
+        new_leader_id: userId,
+
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+        params: {
+          groupId: groupId,
+        },
+      })
+      .then((response) => {
+        // API 응답을 처리합니다.
+        const data = response.data;
+        console.log(response.data.groupId);
+        console.log(response.data.leader);
+
+        // 멤버 배열을 추출하고 닉네임을 추출하여 상태 변수에 저장합니다.
+        const groupNicknames = data.member.map((member) => member.nickname);
+        setNicknames(groupNicknames);
+      })
+      .catch((error) => {
+        console.error('API 요청 중 오류 발생: ', error);
+      });
+  }, [groupId]); // groupId가 변경될 때마다 useEffect가 호출됩니다.
+
+  //초대코드 보내기
+  const sendInvitation = () => {
+    if (isValidEmail) {
+      // API 엔드포인트에 POST 요청을 보냅니다.
+      const apiUrl = `http://13.125.174.198/groups/${groupId}/invite/`;
+      axios
+        .post(
+          apiUrl,
+          {
+            invite_email: email,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user?.accessToken}`,
+            },
+          },
+        )
+        .then((response) => {
+          // 초대 메일이 성공적으로 보내졌을 때의 처리를 작성합니다.
+          alert('초대 메일을 성공적으로 보냈습니다.');
+        })
+        .catch((error) => {
+          // 오류 처리를 작성합니다.
+          console.error('초대 메일을 보내는 동안 오류가 발생했습니다: ', error);
+          alert('초대 메일을 보내는 데 실패했습니다.');
+        });
+    } else {
+      // 이메일 형식이 유효하지 않을 때의 처리를 작성합니다.
+      alert('유효한 이메일 주소를 입력해주세요.');
+    }
+  };
+  return (
+    <Container>
+      <Back onClick={goToTravellist}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+        >
+          <path
+            d="M13.8647 19.3415L6.14175 11.6415C6.05008 11.5499 5.985 11.4506 5.9465 11.3436C5.908 11.2367 5.88905 11.1221 5.88966 10.9999C5.88966 10.8776 5.90861 10.7631 5.9465 10.6561C5.98438 10.5492 6.04947 10.4499 6.14175 10.3582L13.8647 2.63529C14.0786 2.4214 14.3459 2.31445 14.6667 2.31445C14.9876 2.31445 15.2626 2.42904 15.4917 2.6582C15.7209 2.88737 15.8355 3.15473 15.8355 3.46029C15.8355 3.76584 15.7209 4.0332 15.4917 4.26237L8.75425 10.9999L15.4917 17.7374C15.7056 17.9513 15.8126 18.215 15.8126 18.5285C15.8126 18.842 15.698 19.113 15.4688 19.3415C15.2397 19.5707 14.9723 19.6853 14.6667 19.6853C14.3612 19.6853 14.0938 19.5707 13.8647 19.3415Z"
+            fill="#868686"
+          />
+        </svg>
+      </Back>
+      <Text1>
+        플랜을 누구와
+        <br />
+        공유하시겠어요?
+      </Text1>
+      <Text2>초대하기</Text2>
+      <p>초대할 그룹 ID: {groupId}</p>
+      <DivEmail>
+        <InputEmail
+          placeholder="이메일 주소를 입력하세요."
+          value={email}
+          onChange={handleEmailChange}
+        ></InputEmail>
+        {isValidEmail && <BtnInvite onClick={sendInvitation}>초대</BtnInvite>}
+      </DivEmail>
+      <Text2>공유 범위</Text2>
+      <DropdownContainer>
+        <ArrowIcon />
+        <Dropdown value={selectedOption} onChange={handleDropdownChange}>
+          <option value="all">모두 수정 가능</option>
+          <option value="private">총무만 수정 가능</option>
+        </Dropdown>
+        <SelectedValue>
+          {selectedOption === 'all' ? '모두 수정 가능' : '총무만 수정 가능'}
+        </SelectedValue>
+      </DropdownContainer>
+      <Text2>총무 변경</Text2>
+      <ul>
+        {nicknames.map((nickname, index) => (
+          <li key={index}>{nickname}</li>
+        ))}
+      </ul>
+    </Container>
+  );
+}
+
+export default Invite;
 
 const Container = styled.div`
   position: relative;
@@ -136,72 +286,3 @@ const SelectedValue = styled.div`
   pointer-events: none;
   color: var(--Darkgray, #353a40);
 `;
-
-function Invite() {
-  const [selectedOption, setSelectedOption] = useState('');
-
-  const handleDropdownChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
-  const [email, setEmail] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(false);
-
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-  };
-
-  const handleEmailChange = (event) => {
-    const inputEmail = event.target.value;
-    setEmail(inputEmail);
-    setIsValidEmail(validateEmail(inputEmail));
-  };
-
-  return (
-    <Container>
-      <Back>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 22 22"
-          fill="none"
-        >
-          <path
-            d="M13.8647 19.3415L6.14175 11.6415C6.05008 11.5499 5.985 11.4506 5.9465 11.3436C5.908 11.2367 5.88905 11.1221 5.88966 10.9999C5.88966 10.8776 5.90861 10.7631 5.9465 10.6561C5.98438 10.5492 6.04947 10.4499 6.14175 10.3582L13.8647 2.63529C14.0786 2.4214 14.3459 2.31445 14.6667 2.31445C14.9876 2.31445 15.2626 2.42904 15.4917 2.6582C15.7209 2.88737 15.8355 3.15473 15.8355 3.46029C15.8355 3.76584 15.7209 4.0332 15.4917 4.26237L8.75425 10.9999L15.4917 17.7374C15.7056 17.9513 15.8126 18.215 15.8126 18.5285C15.8126 18.842 15.698 19.113 15.4688 19.3415C15.2397 19.5707 14.9723 19.6853 14.6667 19.6853C14.3612 19.6853 14.0938 19.5707 13.8647 19.3415Z"
-            fill="#868686"
-          />
-        </svg>
-      </Back>
-      <Text1>
-        플랜을 누구과
-        <br />
-        공유하시겠어요?
-      </Text1>
-      <Text2>초대하기</Text2>
-      <DivEmail>
-        <InputEmail
-          placeholder="이메일 주소를 입력하세요."
-          value={email}
-          onChange={handleEmailChange}
-        ></InputEmail>
-        {isValidEmail && <BtnInvite>초대</BtnInvite>}
-      </DivEmail>
-      <Text2>공유 범위</Text2>
-      <DropdownContainer>
-        <ArrowIcon />
-        <Dropdown value={selectedOption} onChange={handleDropdownChange}>
-          <option value="all">모두 수정 가능</option>
-          <option value="private">총무만 수정 가능</option>
-        </Dropdown>
-        <SelectedValue>
-          {selectedOption === 'all' ? '모두 수정 가능' : '총무만 수정 가능'}
-        </SelectedValue>
-      </DropdownContainer>
-      <Text2>총무 변경</Text2>
-    </Container>
-  );
-}
-
-export default Invite;

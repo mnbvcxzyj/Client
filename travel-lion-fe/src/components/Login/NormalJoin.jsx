@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
+import styled from 'styled-components';
 
 //사이트 자체 회원가입
 function NormalJoin() {
@@ -175,13 +175,13 @@ function NormalJoin() {
   //         console.error('인증번호 확인 중 오류 발생 A:', refreshError);
   //         alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
   //         setIsCodeValid(false);
-  //         window.location.reload();
+  //         window.locatioreload();
   //       }
   //     } else {
   //       console.error('인증번호 확인 중 오류 발생 B:', error);
   //       alert('인증번호를 확인할 수 없습니다. 다시 시도해주세요.');
   //       setIsCodeValid(false);
-  //       window.location.reload();
+  //       window.locatioreload();
   //     }
   //   }
   // };

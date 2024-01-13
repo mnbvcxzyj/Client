@@ -104,7 +104,7 @@ export const Title = styled.div`
   font-weight: 700;
   line-height: normal;
   margin-left: 17px;
-
+  cursor: pointer;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

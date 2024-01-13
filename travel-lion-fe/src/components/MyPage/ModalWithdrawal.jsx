@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/auth/AuthContext';
 
 function ModalBasic({ setWithdrawalModalOpen }) {
-  const closeModal = () => {
-    setWithdrawalModalOpen(false); //state변경하면 렌더링 되는거 아니었냐고!!!
-    console.log('취소 버튼 클릭');
+  const closeModal = (event) => {
+    setWithdrawalModalOpen(false);
+    event.stopPropagation();
   };
 
   const modalRef = useRef(null);
@@ -55,7 +55,7 @@ function ModalBasic({ setWithdrawalModalOpen }) {
         <CheckBtn onClick={handleWithdrawalConfirm}>
           <CheckText>확인</CheckText>
         </CheckBtn>
-        <CancelBtn>
+        <CancelBtn onClick={closeModal}>
           <CancelText>취소</CancelText>
         </CancelBtn>
       </WhiteDiv>

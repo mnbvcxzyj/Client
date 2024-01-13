@@ -93,7 +93,7 @@ export const TravelDetail = styled.div`
 `;
 
 export const Participants = styled.div`
-  width: 60%;
+  width: 50%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -101,7 +101,7 @@ export const Participants = styled.div`
 `;
 
 export const AmountText = styled.div`
-  width: 40%;
+  width: 50%;
   text-align: right;
   font-size: 20px;
   font-style: normal;

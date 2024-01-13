@@ -41,10 +41,6 @@ const TravelList = () => {
         return list.sort(
           (a, b) => new Date(a.startDate) - new Date(b.startDate),
         );
-      case 'oldest':
-        return list.sort(
-          (a, b) => new Date(b.startDate) - new Date(a.startDate),
-        );
       case 'alphabetical':
         return list.sort((a, b) => a.title.localeCompare(b.title));
       default:
@@ -73,7 +69,6 @@ const TravelList = () => {
         <T.DropdownContainer>
           <T.DropdownHeader onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             {sortOption === 'newest' && '최신순'}
-            {sortOption === 'oldest' && '오래된순'}
             {sortOption === 'alphabetical' && '가나다순'}&nbsp;▼
           </T.DropdownHeader>
           {isDropdownOpen && (
@@ -81,9 +76,7 @@ const TravelList = () => {
               <T.DropdownItem onClick={() => onSelectSortOption('newest')}>
                 최신순
               </T.DropdownItem>
-              <T.DropdownItem onClick={() => onSelectSortOption('oldest')}>
-                오래된순
-              </T.DropdownItem>
+
               <T.DropdownItem
                 onClick={() => onSelectSortOption('alphabetical')}
               >

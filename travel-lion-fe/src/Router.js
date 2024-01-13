@@ -34,6 +34,7 @@ import { UserProvider } from './contexts/UserContext';
 import { GroupProvider } from './contexts/GroupContext';
 import { PlanProvider } from './contexts/PlanContext';
 import { CategoryProvider } from './contexts/CategoryContext';
+import { CategoryTitleProvider } from './contexts/CategoryTitleContext';
 
 export default function Router() {
   return (
@@ -43,110 +44,121 @@ export default function Router() {
           <GroupProvider>
             <PlanProvider>
               <CategoryProvider>
-                <BrowserRouter>
-                  <Routes>
-                    {/* 메인페이지 */}
-                    <Route path="/" element={<MainPage />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/join" element={<Join />} />
-                    <Route path="/join/normal" element={<NormalJoin />} />
-                    <Route path="/join/normal2" element={<NormalJoin2 />} />
-                    <Route path="/join/complete" element={<Complete />} />
-                    <Route path="/login/find" element={<FindPasswd />} />
-                    <Route
-                      path="/login/find/complete"
-                      element={<SendEmailComplete />}
-                    />
+                <CategoryTitleProvider>
+                  <BrowserRouter>
+                    <Routes>
+                      {/* 메인페이지 */}
+                      <Route path="/" element={<MainPage />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/join" element={<Join />} />
+                      <Route path="/join/normal" element={<NormalJoin />} />
+                      <Route path="/join/normal2" element={<NormalJoin2 />} />
+                      <Route path="/join/complete" element={<Complete />} />
+                      <Route path="/login/find" element={<FindPasswd />} />
+                      <Route
+                        path="/login/find/complete"
+                        element={<SendEmailComplete />}
+                      />
 
-                    {/* 일정 추가 페이지 */}
-                    <Route path="/addSchedule" element={<AddSchedulePage />} />
+                      {/* 일정 추가 페이지 */}
+                      <Route
+                        path="/addSchedule"
+                        element={<AddSchedulePage />}
+                      />
 
-                    {/* 초대 코드 입력 페이지  */}
-                    <Route path="/invitecode" element={<InviteCodePage />} />
+                      {/* 초대 코드 입력 페이지  */}
+                      <Route path="/invitecode" element={<InviteCodePage />} />
 
-                    {/* 여행별 가계부 페이지 - (첫 화면 및 통화단위 모달)  */}
-                    <Route
-                      path="/travelaccountbook/:groupId"
-                      element={<TravelAccountBookPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - (첫 화면 및 통화단위 모달)  */}
+                      <Route
+                        path="/travelaccountbook/:groupId"
+                        element={<TravelAccountBookPage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 일정별 가계부 상세  */}
-                    <Route
-                      path="/billlist/:groupId/:planId"
-                      element={<BillListPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 일정별 가계부 상세  */}
+                      <Route
+                        path="/billlist/:groupId/:planId"
+                        element={<BillListPage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 예산 추가 입력 */}
-                    <Route
-                      path="/newbill/:groupId/:planId"
-                      element={<NewBillPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 예산 추가 입력 */}
+                      <Route
+                        path="/newbill/:groupId/:planId"
+                        element={<NewBillPage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 입력된 세부 예산 수정  */}
-                    <Route
-                      path="/billupdate/:groupId/:planId/:categoryId"
-                      element={<BillUpdatePage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 입력된 세부 예산 수정  */}
+                      <Route
+                        path="/billupdate/:groupId/:planId/:categoryId"
+                        element={<BillUpdatePage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 카테고리 추가 입력  */}
-                    <Route
-                      path="/newcate/:groupId/:planId"
-                      element={<NewCategoryPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 카테고리 추가 입력  */}
+                      <Route
+                        path="/newcate/:groupId/:planId"
+                        element={<NewCategoryPage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 카테고리 편집 */}
-                    <Route
-                      path="/editcate/:groupId/:planId"
-                      element={<EditCategoryPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 카테고리 편집 */}
+                      <Route
+                        path="/editcate/:groupId/:planId"
+                        element={<EditCategoryPage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 카테고리 수정 */}
-                    <Route
-                      path="/renamecate/:groupId/:planId"
-                      element={<RenameCategoryPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 카테고리 수정 */}
+                      <Route
+                        path="/renamecate/:groupId/:planId/:categoryId"
+                        element={<RenameCategoryPage />}
+                      />
 
-                    {/* 여행별 가계부 페이지 - 팔로우 요청 목록 */}
-                    <Route
-                      path="/followrequest"
-                      element={<FollowRequestListPage />}
-                    />
+                      {/* 여행별 가계부 페이지 - 팔로우 요청 목록 */}
+                      <Route
+                        path="/followrequest"
+                        element={<FollowRequestListPage />}
+                      />
 
-                    {/* 마이페이지 */}
-                    {/* <Route
+                      {/* 마이페이지 */}
+                      {/* <Route
               path="/mypage"
               element={
                 <PrivateRoute element={MyPage} />
               }
             /> */}
-                    <Route path="/mypage" element={<MyPage />} />
-                    <Route path="/mypage/account" element={<AccountManage />} />
-                    <Route
-                      path="/mypage/account/existingpasswd"
-                      element={<OldPasswd />}
-                    />
-                    <Route
-                      path="/mypage/account/changepasswd"
-                      element={<ChangePasswd />}
-                    />
-                    <Route
-                      path="/mypage/account/changename"
-                      element={<ChangeName />}
-                    />
-                    <Route
-                      path="/mypage/account/noaccount"
-                      element={<NoAccount />}
-                    />
-                    <Route path="/selectunit" element={<ModalExtend />} />
-                    <Route path="/addSchedule" element={<AddSchedulePage />} />
-                    <Route path="/currencymodal" element={<BottomModal />} />
-                    <Route path="/mypage/travellist" element={<TravelList />} />
-                    <Route
-                      path="/mypage/travellist/invite/:groupId"
-                      element={<Invite />}
-                    />
-                  </Routes>
-                </BrowserRouter>
+                      <Route path="/mypage" element={<MyPage />} />
+                      <Route
+                        path="/mypage/account"
+                        element={<AccountManage />}
+                      />
+                      <Route
+                        path="/mypage/account/existingpasswd"
+                        element={<OldPasswd />}
+                      />
+                      <Route
+                        path="/mypage/account/changepasswd"
+                        element={<ChangePasswd />}
+                      />
+                      <Route
+                        path="/mypage/account/changename"
+                        element={<ChangeName />}
+                      />
+                      <Route
+                        path="/mypage/account/noaccount"
+                        element={<NoAccount />}
+                      />
+                      <Route path="/selectunit" element={<ModalExtend />} />
+                      <Route
+                        path="/addSchedule"
+                        element={<AddSchedulePage />}
+                      />
+                      <Route path="/currencymodal" element={<BottomModal />} />
+                      <Route
+                        path="/mypage/travellist"
+                        element={<TravelList />}
+                      />
+                      <Route path="/mypage/invite" element={<Invite />} />
+                    </Routes>
+                  </BrowserRouter>
+                </CategoryTitleProvider>
               </CategoryProvider>
             </PlanProvider>
           </GroupProvider>

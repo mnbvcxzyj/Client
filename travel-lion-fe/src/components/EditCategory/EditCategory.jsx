@@ -1,36 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink, useNavigate } from 'react-router-dom';
-
-const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
-
-// 저장된 데이터를 JavaScript 객체로 파싱
-const parsedCategoryDataset = JSON.parse(storedCategoryDataset);
-
-// 예제: 읽어온 데이터 출력
-console.log(parsedCategoryDataset);
+import { CategoryTitleContext } from '../../contexts/CategoryTitleContext';
 
 const EditCategory = ({ groupId, planId }) => {
   const navigate = useNavigate();
-  const [updatedCategoryDataset, setUpdatedCategoryDataset] = useState(
-    parsedCategoryDataset,
-  );
 
-  const handleRenameCategory = () => {
-    navigate(`/renamecate/${groupId}/${planId}`);
+  const { categoryTitle, handleChangeCategoryTitle } =
+    useContext(CategoryTitleContext);
+
+  const handleRenameCategory = (categoryId) => {
+    console.log(categoryId);
+    navigate(`/renamecate/${groupId}/${planId}/${categoryId}`);
   };
 
   const handleDeleteCategory = (categoryId) => {
-    const newCategoryDataset = updatedCategoryDataset.filter(
+    const newCategoryDataset = categoryTitle.filter(
       (category) => category.id !== categoryId,
     );
-    setUpdatedCategoryDataset(newCategoryDataset);
 
-    sessionStorage.setItem(
-      'categoryDataset',
-      JSON.stringify(newCategoryDataset),
-    );
+    handleChangeCategoryTitle(newCategoryDataset);
   };
 
   return (
@@ -41,10 +31,13 @@ const EditCategory = ({ groupId, planId }) => {
         </GoBack>
         <Title>카테고리 편집</Title>
         <CategoryItems>
-          {parsedCategoryDataset.map((category) => (
+          {categoryTitle.map((category) => (
             <React.Fragment key={category.id}>
               <CategoryImg
-                src={category.img}
+                src={
+                  category.img ||
+                  'https://img.freepik.com/premium-vector/free-vector-transparent-background_775271-183.jpg'
+                }
                 alt={`Category ${category.name}`}
               />
               <CategoryName>{category.name}</CategoryName>
@@ -54,7 +47,9 @@ const EditCategory = ({ groupId, planId }) => {
                 >
                   삭제
                 </CategoryDelBtn>
-                <CategoryEditBtn onClick={handleRenameCategory}>
+                <CategoryEditBtn
+                  onClick={() => handleRenameCategory(category.id)}
+                >
                   수정
                 </CategoryEditBtn>
               </BtnStyleDiv>

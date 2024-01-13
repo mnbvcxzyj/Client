@@ -10,11 +10,6 @@ import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import axios from 'axios';
 
-import { UserContext } from '../../contexts/UserContext';
-import { GroupContext } from '../../contexts/GroupContext';
-import { PlanContext } from '../../contexts/PlanContext';
-import { CategoryContext } from '../../contexts/CategoryContext';
-
 export default function NewBillBtn({ groupId, planId }) {
   const navigate = useNavigate();
   const [selectedEmoji, setSelectedEmoji] = useState('');
@@ -41,11 +36,6 @@ export default function NewBillBtn({ groupId, planId }) {
     () => createAxiosInstance(refreshAccessToken),
     [refreshAccessToken],
   );
-
-  const { user: user1 } = useContext(UserContext);
-  const { group } = useContext(GroupContext);
-  const { plan } = useContext(PlanContext);
-  const { category } = useContext(CategoryContext);
 
   //저장하는 부분
   const handleSaveToStorage = async () => {

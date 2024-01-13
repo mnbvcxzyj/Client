@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
@@ -10,43 +10,66 @@ import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
 import { useNavigate } from 'react-router-dom';
 
-const categoryDataset = [
-  {
-    id: 1,
-    name: '식비',
-    img: CategoryImgFood,
-  },
-  {
-    id: 2,
-    name: '숙소',
-    img: CategoryImgHotel,
-  },
-  {
-    id: 3,
-    name: '교통비',
-    img: CategoryImgTransportation,
-  },
-  {
-    id: 4,
-    name: '기타',
-    img: CategoryImgEtc,
-  },
-  {
-    id: 5,
-    name: '직접 입력하기',
-    img: CategoryImgSelf,
-  },
-];
+const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
 
-export default function Category({ onClickCategory, showAlert, setShowAlert }) {
+if (!storedCategoryDataset) {
+  const initialCategoryDataset = [
+    {
+      id: 1,
+      name: '식비',
+      img: CategoryImgFood,
+    },
+    {
+      id: 2,
+      name: '숙소',
+      img: CategoryImgHotel,
+    },
+    {
+      id: 3,
+      name: '교통비',
+      img: CategoryImgTransportation,
+    },
+    {
+      id: 4,
+      name: '기타',
+      img: CategoryImgEtc,
+    },
+  ];
+
+  // 초기 데이터를 세션 스토리지에 저장
+  sessionStorage.setItem(
+    'categoryDataset',
+    JSON.stringify(initialCategoryDataset),
+  );
+}
+
+const parsedCategoryDataset = JSON.parse(
+  sessionStorage.getItem('categoryDataset'),
+);
+
+console.log(parsedCategoryDataset);
+
+export default function Category({
+  onClickCategory,
+  showAlert,
+  setShowAlert,
+  groupId,
+  planId,
+}) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
 
+  console.log(groupId, planId);
+
+  const storedCategoryDataset = JSON.parse(
+    sessionStorage.getItem('categoryDataset') || '[]',
+  );
+
   const onClickOption = (name) => {
     const selectedCategoryName = name;
 
-    const selectedCategoryInfo = categoryDataset.find(
+    const selectedCategoryInfo = parsedCategoryDataset.find(
       (category) => category.name === selectedCategoryName,
     );
 
@@ -102,13 +125,13 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
       </SelectButton>
       {isDropDown && (
         <DropDown>
-          {categoryDataset.map((category) => (
+          {storedCategoryDataset.map((category) => (
             <Option
               value={category.name}
               key={category.id}
               onClick={() => {
                 if (category.name === '직접 입력하기') {
-                  navigate('/newcate');
+                  navigate(`/newcate/${groupId}/${planId}`);
                 } else {
                   onClickOption(category.name);
                 }
@@ -132,11 +155,38 @@ export default function Category({ onClickCategory, showAlert, setShowAlert }) {
               )}
             </Option>
           ))}
+          <Option
+            value="직접 입력하기"
+            onClick={() => navigate(`/newcate/${groupId}/${planId}`)}
+            isSelected={selectedCategory === '직접 입력하기'}
+          >
+            <tr>
+              <td>
+                <CategoryImgStyle src={CategoryImgSelf} alt="직접 입력하기" />
+              </td>
+              <td
+                style={{
+                  verticalAlign: 'middle',
+                }}
+              >
+                <CategoryNameStyle>직접 입력하기</CategoryNameStyle>
+              </td>
+            </tr>
+            {selectedCategory === '직접 입력하기' && (
+              <CategoryCheaked src={ImgV} />
+            )}
+          </Option>
         </DropDown>
       )}
     </Component>
   );
 }
+
+// {
+//   id: 5,
+//   name: '직접 입력하기',
+//   img: CategoryImgSelf,
+// },
 
 const Component = styled.div`
   /* width: 87%;

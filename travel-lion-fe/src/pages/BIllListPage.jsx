@@ -11,7 +11,7 @@ export default function BillListPage() {
     <>
       <Header groupId={groupId} planId={planId} />
       <BillListBlock groupId={groupId} planId={planId} />
-      <CostPerPerson></CostPerPerson>
+      <CostPerPerson />
     </>
   );
 }

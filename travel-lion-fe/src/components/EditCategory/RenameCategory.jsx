@@ -4,17 +4,25 @@ import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const RenameCategory = () => {
+const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
+
+// 저장된 데이터를 JavaScript 객체로 파싱
+const parsedCategoryDataset = JSON.parse(storedCategoryDataset);
+
+// 예제: 읽어온 데이터 출력
+console.log(parsedCategoryDataset);
+
+const RenameCategory = ({ groupId, planId }) => {
   const navigate = useNavigate();
 
   const handleAddCategory = () => {
-    navigate('/editcate');
+    navigate(`/editcate/${groupId}/${planId}`);
   };
 
   return (
     <>
       <Container>
-        <GoBack to="/editcate">
+        <GoBack to={`/editcate/${groupId}/${planId}`}>
           <GoBackImg src={goBack} alt="뒤로가기 이미지" />
         </GoBack>
         <Title>카테고리 수정</Title>

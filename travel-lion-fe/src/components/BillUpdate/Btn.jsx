@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import Emoji from '../NewBillPage/Emoji';
 import Who from './Who';
 import Category from './Category';
@@ -6,8 +6,12 @@ import Bill from './bill';
 import Memo from './Memo';
 import { styled } from 'styled-components';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
+import { UserContext } from '../../contexts/UserContext';
+import axios from 'axios';
 
-export default function BillUpdateBtn() {
+export default function BillUpdateBtn({ groupId, planId, categoryId }) {
   const navigate = useNavigate();
   const [selectedEmoji, setSelectedEmoji] = useState('');
   const [whoValue, setWhoValue] = useState('');
@@ -16,6 +20,9 @@ export default function BillUpdateBtn() {
   const [memoValue, setMemoValue] = useState('');
   const [showBillAlert, setShowBillAlert] = useState(false);
 
+  const [categoryData, setCategoryData] = useState({});
+
+  const index = '';
   const handleBillValueChange = (value) => {
     setBillValue(value);
   };
@@ -24,10 +31,46 @@ export default function BillUpdateBtn() {
     setSelectedCategory(categoryName);
   };
 
-  const { index } = useParams();
+  const { user } = useContext(UserContext);
+  const { refreshAccessToken } = useAuth();
 
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
+
+  // 지출내용불러오기
   useEffect(() => {
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
+    const getCotegory = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/${user.userId}/grouplist/${groupId}/plan/${planId}/category/${categoryId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+            },
+          },
+        );
+        setCategoryData(response.data);
+      } catch (error) {
+        console.error('수정하려는 Category 데이터 요청 중 오류 발생:', error);
+      }
+    };
+    getCotegory();
+  }, [axiosInstance, user, groupId, planId, categoryId]);
+
+  const transformedData = {
+    selectedEmoji: categoryData.emoji,
+    whoValue: categoryData.writer,
+    selectedCategory: categoryData.categoryTitle,
+    billValue: categoryData.cost,
+    memoValue: categoryData.memo,
+  };
+
+  //지출내용 수정하기
+  useEffect(() => {
+    const storedList = transformedData || [];
+    console.log('형태 바꿔서 출력하기', storedList);
     const itemToUpdate = storedList[index];
     console.log(itemToUpdate);
 
@@ -38,43 +81,56 @@ export default function BillUpdateBtn() {
       setBillValue(itemToUpdate.billValue);
       setMemoValue(itemToUpdate.memoValue);
     }
-  }, [index]);
+  }, [categoryId]);
 
   //수정 기능 구현
-  const handleUpdateStorage = () => {
+  const handleUpdateStorage = async () => {
     if (billValue === '') {
       setShowBillAlert(true);
       return;
     }
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
 
-    sessionStorage.setItem('billList', JSON.stringify(storedList));
+    try {
+      const response = await axiosInstance.put(
+        `/${user.userId}/grouplist/${groupId}/plan/${planId}/category/${categoryId}`,
+        {
+          group: groupId,
+          plan: planId,
+          categoryTitle: selectedCategory,
+          memo: memoValue,
+          emoji: selectedEmoji,
+          cost: billValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        },
+      );
 
-    const itemToUpdate = storedList[index];
-    itemToUpdate.selectedEmoji = selectedEmoji;
-    itemToUpdate.whoValue = whoValue;
-    itemToUpdate.selectedCategory = selectedCategory;
-    itemToUpdate.billValue = billValue;
-    itemToUpdate.memoValue = memoValue;
-
-    storedList[index] = itemToUpdate;
-
-    sessionStorage.setItem('billList', JSON.stringify(storedList));
-
-    console.log('이 인덱스의 배열의 값은:', storedList[index]);
-    console.log('Updated Bill List:', storedList);
-    navigate('/billlist');
+      console.log('수정 성공:', response.data);
+      navigate(`/billlist/${groupId}/${planId}`);
+    } catch (error) {
+      console.error('수정 중 오류 발생:', error);
+    }
   };
 
   //삭제기능 구현
-  const handleDeleteStorage = () => {
-    const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
-
-    if (storedList && storedList[index]) {
-      storedList.splice(index, 1);
-      sessionStorage.setItem('billList', JSON.stringify(storedList));
+  const handleDeleteStorage = async () => {
+    try {
+      const response = await axiosInstance.delete(
+        `/${user.userId}/grouplist/${groupId}/plan/${planId}/category/${categoryId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        },
+      );
+      console.log('삭제 성공:', response.data);
+      navigate(`/billlist/${groupId}/${planId}`);
+    } catch (error) {
+      console.error('삭제 중 오류 발생:', error);
     }
-    console.log('Delete Bill List:', storedList);
   };
 
   return (
@@ -94,7 +150,7 @@ export default function BillUpdateBtn() {
           <NavListUpdate onClick={handleUpdateStorage}>
             <UpdateBtn onClick={handleUpdateStorage}>수정</UpdateBtn>
           </NavListUpdate>
-          <NavListDel to="/billlist" onClick={handleDeleteStorage}>
+          <NavListDel onClick={handleDeleteStorage}>
             <DelBtn onClick={handleDeleteStorage}>삭제</DelBtn>
           </NavListDel>
         </ButtonContainer>

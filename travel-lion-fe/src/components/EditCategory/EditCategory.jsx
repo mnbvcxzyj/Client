@@ -1,41 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import goBack from '../../images/Newbill/goBackBlack.svg';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const EditCategory = () => {
+const storedCategoryDataset = sessionStorage.getItem('categoryDataset');
+
+// 저장된 데이터를 JavaScript 객체로 파싱
+const parsedCategoryDataset = JSON.parse(storedCategoryDataset);
+
+// 예제: 읽어온 데이터 출력
+console.log(parsedCategoryDataset);
+
+const EditCategory = ({ groupId, planId }) => {
   const navigate = useNavigate();
+  const [updatedCategoryDataset, setUpdatedCategoryDataset] = useState(
+    parsedCategoryDataset,
+  );
 
   const handleRenameCategory = () => {
-    navigate('/renamecate');
+    navigate(`/renamecate/${groupId}/${planId}`);
+  };
+
+  const handleDeleteCategory = (categoryId) => {
+    const newCategoryDataset = updatedCategoryDataset.filter(
+      (category) => category.id !== categoryId,
+    );
+    setUpdatedCategoryDataset(newCategoryDataset);
+
+    sessionStorage.setItem(
+      'categoryDataset',
+      JSON.stringify(newCategoryDataset),
+    );
   };
 
   return (
     <>
       <Container>
-        <GoBack to="/newcate">
+        <GoBack to={`/newcate/${groupId}/${planId}`}>
           <GoBackImg src={goBack} alt="뒤로가기 이미지" />
         </GoBack>
         <Title>카테고리 편집</Title>
         <CategoryItems>
-          <CategoryImg></CategoryImg>
-          <CategoryName>식비</CategoryName>
-          <BtnStyleDiv>
-            <CategoryDelBtn>삭제</CategoryDelBtn>
-            <CategoryEditBtn onClick={handleRenameCategory}>
-              수정
-            </CategoryEditBtn>
-          </BtnStyleDiv>
-          <hr />
-          <CategoryImg></CategoryImg>
-          <CategoryName>교통비</CategoryName>
-          <BtnStyleDiv>
-            <CategoryDelBtn>삭제</CategoryDelBtn>
-            <CategoryEditBtn onClick={handleRenameCategory}>
-              수정
-            </CategoryEditBtn>
-          </BtnStyleDiv>
-          <hr />
+          {parsedCategoryDataset.map((category) => (
+            <React.Fragment key={category.id}>
+              <CategoryImg
+                src={category.img}
+                alt={`Category ${category.name}`}
+              />
+              <CategoryName>{category.name}</CategoryName>
+              <BtnStyleDiv>
+                <CategoryDelBtn
+                  onClick={() => handleDeleteCategory(category.id)}
+                >
+                  삭제
+                </CategoryDelBtn>
+                <CategoryEditBtn onClick={handleRenameCategory}>
+                  수정
+                </CategoryEditBtn>
+              </BtnStyleDiv>
+              <hr />
+            </React.Fragment>
+          ))}
         </CategoryItems>
       </Container>
     </>

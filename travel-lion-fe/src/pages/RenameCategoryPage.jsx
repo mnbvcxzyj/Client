@@ -1,10 +1,13 @@
 import React from 'react';
 import RenameCategory from '../components/EditCategory/RenameCategory';
+import { useParams } from 'react-router-dom';
 
 const RenameCategoryPage = () => {
+  const { groupId, planId } = useParams();
+
   return (
     <div>
-      <RenameCategory />
+      <RenameCategory groupId={groupId} planId={planId} />
     </div>
   );
 };

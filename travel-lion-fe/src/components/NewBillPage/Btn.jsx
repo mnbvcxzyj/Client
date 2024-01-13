@@ -73,7 +73,7 @@ export default function NewBillBtn({ groupId, planId }) {
 
     try {
       const response = await axiosInstance.post(
-        `/${user.userId}/grouplist/${group.groupId}/plan/${planId}/category`,
+        `/${user.userId}/grouplist/${groupId}/plan/${planId}/category`,
         newItem,
         {
           headers: {
@@ -81,11 +81,7 @@ export default function NewBillBtn({ groupId, planId }) {
           },
         },
       );
-
-      console.log('저장성공:', response.data);
-
-      // Navigate to the desired page
-      navigate(`/billlist/${group.groupId}/${plan.planId}`);
+      navigate(`/billlist/${group.groupId}/${planId}`);
     } catch (error) {
       console.error('API 요청 중 오류 발생:', error);
     }
@@ -100,6 +96,8 @@ export default function NewBillBtn({ groupId, planId }) {
           onClickCategory={onClickCategory}
           showAlert={showCategoryAlert}
           setShowAlert={setShowCategoryAlert}
+          groupId={groupId}
+          planId={planId}
         />
         <Bill
           setValue={handleBillValueChange}

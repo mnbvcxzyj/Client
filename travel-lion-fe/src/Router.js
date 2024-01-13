@@ -89,14 +89,20 @@ export default function Router() {
                     />
 
                     {/* 여행별 가계부 페이지 - 카테고리 추가 입력  */}
-                    <Route path="/newcate" element={<NewCategoryPage />} />
+                    <Route
+                      path="/newcate/:groupId/:planId"
+                      element={<NewCategoryPage />}
+                    />
 
                     {/* 여행별 가계부 페이지 - 카테고리 편집 */}
-                    <Route path="/editcate" element={<EditCategoryPage />} />
+                    <Route
+                      path="/editcate/:groupId/:planId"
+                      element={<EditCategoryPage />}
+                    />
 
                     {/* 여행별 가계부 페이지 - 카테고리 수정 */}
                     <Route
-                      path="/renamecate"
+                      path="/renamecate/:groupId/:planId"
                       element={<RenameCategoryPage />}
                     />
 

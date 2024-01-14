@@ -13,7 +13,7 @@ function OldPasswd() {
 
   const handleOldPasswordChange = (e) => {
     setOldPassword(e.target.value);
-    console.log(oldPassword);
+    // console.log(oldPassword);
   };
 
   const goToAccountInfo = () => {
@@ -27,14 +27,14 @@ function OldPasswd() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log(oldPassword); //입력한 비번 잘 들어 옴
-    console.log(userId);
+    console.log(userId); //ok
     try {
       const response = await axios.patch(
         `http://13.125.174.198/profile/${userId}/`,
         {
-          password: oldPassword,
+          passwd: oldPassword,
         },
         {
           headers: {
@@ -42,8 +42,14 @@ function OldPasswd() {
           },
         },
       );
-      console.log('성공');
-      goToChangePasswd();
+      console.log('data:', response.data);
+      console.log(response.status);
+      console.log('비번:', response.data.passwd);
+      //123, 1234 둘 다 200
+      if (oldPassword === response.data.passwd) {
+        console.log('성공');
+        goToChangePasswd();
+      }
     } catch (error) {
       console.error(error);
     }

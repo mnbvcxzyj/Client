@@ -97,7 +97,6 @@ const TravelList = () => {
               key={travel.groupId}
               onClick={() => goToInvite(user.userId, travel.groupId)}
             >
-              <p>{travel.groupId}</p>
               <T.Flag>
                 <span className={getFlagEmoji(travel.nation)}></span>
               </T.Flag>

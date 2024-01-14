@@ -12,6 +12,8 @@ import {
   Text2,
   DropdownContainer,
   Dropdown,
+  GreenBtn,
+  GreenBtnText,
 } from './InviteStyle.js';
 
 //그룹 정보 먼저 불러와서
@@ -124,7 +126,9 @@ function Invite() {
           ))}
         </select>
       </DropdownContainer>
-      <button onClick={changeLeader}>총무 변경</button>
+      <GreenBtn onClick={changeLeader}>
+        <GreenBtnText>확인</GreenBtnText>
+      </GreenBtn>
     </Container>
   );
 }

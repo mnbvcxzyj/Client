@@ -17,47 +17,20 @@ import {
 //그룹 정보 먼저 불러와서
 //총무 수정
 function Invite() {
-  const [nicknames, setNicknames] = useState([]);
-  const { user, refreshAccessToken, setUser } = useAuth();
-  const [leaderNickname, setLeaderNickname] = useState(''); // 리더 닉네임 상태 변수 추가
-  const [newLeaderId, setNewLeaderId] = useState(''); //새로운 리더 ID를 저장할 상태 변수
-
-  // const userId = user?.userId;
-
-  // const { groupId } = useParams(); // URL 경로에서 groupId 취득
+  const { user } = useAuth();
+  const [nicknames, setNicknames] = useState([]); //닉네임 배열
+  // const [leaderNickname, setLeaderNickname] = useState(''); // 리더 닉네임 상태 변수 추가
+  const [newLeaderId, setNewLeaderId] = useState('');
   const location = useLocation();
   const { groupId } = location.state;
   const navigate = useNavigate();
+
   const goToTravellist = () => {
     navigate('/mypage/travellist');
   };
 
-  // useEffect(() => {
-  //   const fetchEditPermission = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://13.125.174.198/group/${groupId}/edit_permission`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${user?.accessToken}`,
-  //           },
-  //         },
-  //       );
-  //       if (response.data) {
-  //         setEditPermission(response.data.editPer);
-  //         setSelectedOption(response.data.editPer ? 'all' : 'private');
-  //       }
-  //     } catch (error) {
-  //       console.error('편집 권한 상태 불러오기 오류:', error);
-  //     }
-  //   };
-
-  //   fetchEditPermission();
-  // }, [groupId, user?.accessToken]);
-
-  //그룹 불러오기 ok
-  //UUID
-  //닉네임
+  //그룹 불러오기
+  //userId추가하고 다시 해보기
   useEffect(() => {
     const fetchGroupInfo = async () => {
       try {
@@ -69,48 +42,28 @@ function Invite() {
             },
           },
         );
-        const groupInfo = response.data;
-        console.log(response.data);
-        if (groupInfo && groupInfo.member) {
-          console.log('그룹존재');
-          // 멤버의 id와 nickname을 저장
+        if (response.data && response.data.member) {
           setNicknames(
-            groupInfo.member.map((member) => ({
-              id: member.id,
+            response.data.member.map((member) => ({
+              id: member.userId,
               nickname: member.nickname,
             })),
           );
-          const leader = groupInfo.leader;
-          if (leader) {
-            setLeaderNickname(leader.nickname); // 현재 리더의 닉네임을 설정합니다.
-          }
-          console.log('멤버 닉네임:', groupInfo.member[0].nickname); //소희 걸푸란
-        } else {
-          console.error('그룹 정보에 회원 목록이 없습니다.');
         }
       } catch (error) {
-        console.error('그룹 정보를 불러오는 중 오류 발생: ', error);
+        console.error('Error fetching group info:', error);
       }
     };
 
     fetchGroupInfo();
   }, [groupId, user?.accessToken]);
 
-  //새로운 총무
   const handleLeaderChange = (event) => {
-    // const selectedMember = nicknames.find(
-    //   (nickname) => nickname.id === event.target.value,
-    // );
-    // setNewLeaderId(selectedMember ? selectedMember.id : '');
     setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감.. 바보
   };
 
-  //총무 변경
-  //리더의 UUID 필요
-  //리더의 닉네임
   const changeLeader = async () => {
     try {
-      console.log('새로운 총무Id', newLeaderId); //닉네임이 들어감
       const response = await axios.post(
         `http://13.125.174.198/group/${groupId}/set_leader`,
         {
@@ -122,11 +75,15 @@ function Invite() {
           },
         },
       );
+
+      // 응답 처리
       console.log('리더 변경 성공: ', response.data);
+      // 필요한 경우 상태 업데이트
+      // 예시: setLeaderNickname(response.data.leader);
       alert('리더가 성공적으로 변경되었습니다.');
     } catch (error) {
       console.error('리더 변경 중 오류 발생: ', error);
-      alert('리더를 변경하는 데 실패했습니다.');
+      alert('리더 변경에 실패했습니다.');
     }
   };
 
@@ -159,13 +116,13 @@ function Invite() {
 
       <Text2>총무 변경</Text2>
       <DropdownContainer>
-        <Dropdown value={newLeaderId} onChange={handleLeaderChange}>
+        <select value={newLeaderId} onChange={handleLeaderChange}>
           {nicknames.map((member, index) => (
             <option key={index} value={member.id}>
               {member.nickname}
             </option>
           ))}
-        </Dropdown>
+        </select>
       </DropdownContainer>
       <button onClick={changeLeader}>총무 변경</button>
     </Container>

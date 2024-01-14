@@ -14,7 +14,7 @@ function OldPasswd() {
   const { user } = useAuth();
 
   const goToCheckPasswd = () => {
-    navigate('mypage/account/existingpasswd');
+    navigate('/mypage/account/existingpasswd');
   };
 
   const goToLogin = () => {

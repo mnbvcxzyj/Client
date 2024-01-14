@@ -155,3 +155,31 @@ export const SelectedValue = styled.div`
   pointer-events: none;
   color: var(--Darkgray, #353a40);
 `;
+
+export const GreenBtn = styled.div`
+  width: 340px;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #00bc78;
+  margin: auto;
+  margin-top: 295px;
+  cursor: pointer;
+`;
+
+export const GreenBtnText = styled.span`
+  color: #fff;
+  font-family: SUIT;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;

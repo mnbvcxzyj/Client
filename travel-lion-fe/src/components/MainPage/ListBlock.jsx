@@ -48,7 +48,11 @@ const TravelItem = ({ travelData, isMinRemainingTime }) => {
         <M.TravelDetail>
           <M.Participants>
             {travelData.member.map((member, index) => (
-              <span key={index}>{(index ? ', ' : '') + member.nickname}</span>
+              <M.ParticipantImg
+                key={index}
+                src={member.profile || null}
+                style={{ marginLeft: index > 0 ? '-10px' : '0' }}
+              />
             ))}
           </M.Participants>
           <M.AmountText>{travelData.budget.toLocaleString()}원</M.AmountText>

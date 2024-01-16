@@ -108,3 +108,12 @@ export const AmountText = styled.div`
   font-weight: 700;
   line-height: normal;
 `;
+
+export const ParticipantImg = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  border: 2px solid #fff;
+  background: ${(props) => (props.src ? 'transparent' : '#D9D9D9')};
+  object-fit: cover;
+`;

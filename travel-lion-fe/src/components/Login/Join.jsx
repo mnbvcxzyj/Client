@@ -1,6 +1,65 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../api/auth/AuthContext';
+
+function Join() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleJoinClick = () => {
+    navigate('/join/normal');
+  };
+
+  const kakaoLogin = async () => {
+    try {
+      const response = await axios.post(
+        'http://13.125.174.198/kakao/login/finish/',
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        },
+      );
+      if (response.data) {
+        console.log(response.status);
+      }
+    } catch (error) {
+      console.error('카카오 실패:', error);
+    }
+  };
+
+  const REST_API_KEY = 'e759fdee9be98fb5ddf70600b0b21aa0';
+  const REDIRECT_URI = 'http://localhost:3000/';
+  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const loginHandler = () => {
+    window.location.href = link;
+  };
+
+  return (
+    <div>
+      <Box onClick={handleJoinClick}>
+        <Text>회원가입</Text>
+      </Box>
+      <Box onClick={loginHandler}>
+        <Image src={`/images/kakao.png`} alt="Kakao"></Image>
+        <Text>카카오톡으로 시작</Text>
+      </Box>
+      <Box>
+        <Image src={`/images/google.png`} alt="Google"></Image>
+        <Text>구글로 시작</Text>
+      </Box>
+      <Box>
+        <Image src={`/images/naver.png`} alt="Naver"></Image>
+        <Text>네이버로 시작</Text>
+      </Box>
+    </div>
+  );
+}
+
+export default Join;
 
 const Box = styled.div`
   position: relative;
@@ -38,33 +97,3 @@ const Image = styled.img`
   left: 10px;
   cursor: pointer;
 `;
-
-function Join() {
-  const navigate = useNavigate();
-
-  const handleJoinClick = () => {
-    navigate('/join/normal');
-  };
-
-  return (
-    <div>
-      <Box onClick={handleJoinClick}>
-        <Text>회원가입</Text>
-      </Box>
-      <Box>
-        <Image src={`/images/kakao.png`} alt="Kakao"></Image>
-        <Text>카카오톡으로 시작</Text>
-      </Box>
-      <Box>
-        <Image src={`/images/google.png`} alt="Google"></Image>
-        <Text>구글로 시작</Text>
-      </Box>
-      <Box>
-        <Image src={`/images/naver.png`} alt="Naver"></Image>
-        <Text>네이버로 시작</Text>
-      </Box>
-    </div>
-  );
-}
-
-export default Join;

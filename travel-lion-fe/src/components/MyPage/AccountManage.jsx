@@ -109,15 +109,53 @@ const AccountManage = () => {
     }
   };
 
+  // const handleProfileImageSubmit = async () => {
+  //   const formData = new FormData();
+  //   formData.append('file', profileImage);
+  //   const userId = localStorage.getItem('userId');
+
+  //   try {
+  //     const response = await axios.patch(
+  //       `http://13.125.174.198/profile/${userId}/`,
+  //       formData,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //           Authorization: `Bearer ${user?.accessToken}`,
+  //         },
+  //       },
+  //       console.log(formData),
+  //     );
+
+  //     for (let [key, value] of formData.entries()) {
+  //       console.log('키, 값', key, value);
+  //     }
+
+  //     if (response.status === 200) {
+  //       console.log('프로필 이미지가 업데이트되었습니다:', response.data);
+
+  //       setUserInfo((prevUserInfo) => ({
+  //         ...prevUserInfo,
+  //         profile: response.data.newProfileImageUrl,
+  //       }));
+
+  //       // 프로필 이미지 상태도 업데이트
+  //       setPreviewImage(response.data.newProfileImageUrl);
+  //     }
+  //   } catch (error) {
+  //     console.error('프로필 이미지 업데이트 중 오류가 발생했습니다:', error);
+  //   }
+  // };
+
   const handleProfileImageSubmit = async () => {
     const formData = new FormData();
     formData.append('file', profileImage);
     const userId = localStorage.getItem('userId');
 
-    // FormData 내용 확인 (선택적)
     for (let [key, value] of formData.entries()) {
-      console.log(key, value);
+      console.log('키, 값', key, value); // formData 내용 확인
     }
+
     try {
       const response = await axios.patch(
         `http://13.125.174.198/profile/${userId}/`,
@@ -125,25 +163,21 @@ const AccountManage = () => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${user?.accessToken}`, // 실제 토큰 값으로 대체해야 합니다.
+            Authorization: `Bearer ${user?.accessToken}`,
           },
         },
       );
 
-      console.log(formData);
       if (response.status === 200) {
-        // 성공적으로 업로드된 경우, 응답을 처리합니다.
         console.log('프로필 이미지가 업데이트되었습니다:', response.data);
-        // 추가적인 상태 업데이트나 사용자에게 알림 등의 처리를 할 수 있습니다.
-        // 여기에 UI 업데이트 로직 추가
         setUserInfo((prevUserInfo) => ({
           ...prevUserInfo,
-          profile: response.data.profile, // 가정: response.data.newProfileImageUrl이 새로운 이미지 URL
+          profile: response.data.newProfileImageUrl,
         }));
+        setPreviewImage(response.data.newProfileImageUrl); // 프로필 이미지 상태도 업데이트
       }
     } catch (error) {
       console.error('프로필 이미지 업데이트 중 오류가 발생했습니다:', error);
-      // 오류 처리 로직
     }
   };
 

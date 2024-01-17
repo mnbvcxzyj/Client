@@ -27,10 +27,18 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axiosInstance.post('/login/', {
-        email: email,
-        password: password,
-      });
+      const response = await axiosInstance.post(
+        '/login/',
+        {
+          email: email,
+          password: password,
+        },
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${user?.accessToken}`,
+        //   },
+        // },
+      );
 
       if (response.data) {
         login(response.data);
@@ -48,7 +56,7 @@ function Login() {
   };
 
   const goToJoin = () => {
-    navigate('/join/normal');
+    navigate('/join');
   };
 
   const goToFind = () => {

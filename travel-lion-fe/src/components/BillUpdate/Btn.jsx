@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import Emoji from '../NewBillPage/Emoji';
-import Who from './Who';
+// import Who from './Who';
+import Who from '../NewBillPage/Who';
 import Category from './Category';
 import Bill from './bill';
 import Memo from './Memo';
@@ -52,36 +53,18 @@ export default function BillUpdateBtn({ groupId, planId, categoryId }) {
           },
         );
         setCategoryData(response.data);
+        console.log(response.data);
+        setSelectedEmoji(response.data.emoji);
+        setWhoValue(response.data.writer);
+        setSelectedCategory(response.data.categoryTitle);
+        setBillValue(response.data.cost);
+        setMemoValue(response.data.memo);
       } catch (error) {
         console.error('수정하려는 Category 데이터 요청 중 오류 발생:', error);
       }
     };
     getCotegory();
   }, [axiosInstance, user, groupId, planId, categoryId]);
-
-  const transformedData = {
-    selectedEmoji: categoryData.emoji,
-    whoValue: categoryData.writer,
-    selectedCategory: categoryData.categoryTitle,
-    billValue: categoryData.cost,
-    memoValue: categoryData.memo,
-  };
-
-  //지출내용 수정하기
-  useEffect(() => {
-    const storedList = transformedData || [];
-    console.log('형태 바꿔서 출력하기', storedList);
-    const itemToUpdate = storedList[index];
-    console.log(itemToUpdate);
-
-    if (itemToUpdate) {
-      setSelectedEmoji(itemToUpdate.selectedEmoji);
-      setWhoValue(itemToUpdate.whoValue);
-      setSelectedCategory(itemToUpdate.selectedCategory);
-      setBillValue(itemToUpdate.billValue);
-      setMemoValue(itemToUpdate.memoValue);
-    }
-  }, [categoryId]);
 
   //수정 기능 구현
   const handleUpdateStorage = async () => {
@@ -136,16 +119,16 @@ export default function BillUpdateBtn({ groupId, planId, categoryId }) {
   return (
     <>
       <Content>
-        <Emoji value={selectedEmoji} onClickEmoji={setSelectedEmoji} />
-        <Who value={whoValue} onClickWho={setWhoValue} />
+        <Emoji value={categoryData.emoji} onClickEmoji={setSelectedEmoji} />
+        <Who value={categoryData.writer} onClickWho={setWhoValue} />
         <Category value={selectedCategory} onClickCategory={onClickCategory} />
         <Bill
-          value={billValue}
+          value={categoryData.cost}
           setValue={handleBillValueChange}
           showAlert={showBillAlert}
           setShowAlert={setShowBillAlert}
         />
-        <Memo value={memoValue} setValue={setMemoValue} />
+        <Memo value={categoryData.memo} setValue={setMemoValue} />
         <ButtonContainer>
           <NavListUpdate onClick={handleUpdateStorage}>
             <UpdateBtn onClick={handleUpdateStorage}>수정</UpdateBtn>

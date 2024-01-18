@@ -131,27 +131,32 @@ const DateContent = ({ groupId }) => {
           </D.TopWrapper>
 
           {plans.map((plan) => (
-            <D.DayWrapper key={plan.planId}>
-              <D.DayText>
-                <div>{plan.nDay}일차</div>
-                <div>
-                  {plan.date}({plan.dayOfWeek})
-                </div>
-              </D.DayText>
+            <Link
+              to={`/billList/${travelDatas.groupId}/${plan.planId}`}
+              key={plan.planId}
+            >
+              <D.DayWrapper key={plan.planId}>
+                <D.DayText>
+                  <div>{plan.nDay}일차</div>
+                  <div>
+                    {plan.date}({plan.dayOfWeek})
+                  </div>
+                </D.DayText>
 
-              {categories[plan.planId] &&
-                categories[plan.planId].map((category) => (
-                  <D.CategoryWrapper key={category.categoryId}>
-                    <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
-                    <D.CategoryText>{category.categoryTitle}</D.CategoryText>
-                    <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
-                  </D.CategoryWrapper>
-                ))}
+                {categories[plan.planId] &&
+                  categories[plan.planId].map((category) => (
+                    <D.CategoryWrapper key={category.categoryId}>
+                      <D.CategoryIcon>{category.emoji}</D.CategoryIcon>
+                      <D.CategoryText>{category.categoryTitle}</D.CategoryText>
+                      <D.Amount>{category.cost.toLocaleString()}원</D.Amount>
+                    </D.CategoryWrapper>
+                  ))}
 
-              <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
-                <D.InputBtn>사용 금액 입력</D.InputBtn>
-              </Link>
-            </D.DayWrapper>
+                <Link to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
+                  <D.InputBtn>사용 금액 입력</D.InputBtn>
+                </Link>
+              </D.DayWrapper>
+            </Link>
           ))}
         </D.Container>
       )}

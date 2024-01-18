@@ -4,10 +4,9 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/plusImg.png';
+// import CategoryImgSelf from '../../images/Newbill/plusImg.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
-import { useNavigate } from 'react-router-dom';
 
 const categoryDataset = [
   {
@@ -30,11 +29,6 @@ const categoryDataset = [
     name: '기타',
     img: CategoryImgEtc,
   },
-  {
-    id: 5,
-    name: '직접 입력하기',
-    img: CategoryImgSelf,
-  },
 ];
 
 export default function Category({ value, onClickCategory }) {
@@ -53,7 +47,6 @@ export default function Category({ value, onClickCategory }) {
 
   const onClickOption = (name) => {
     const selectedCategoryName = name;
-
     const selectedCategoryInfo = categoryDataset.find(
       (category) => category.name === selectedCategoryName,
     );
@@ -69,8 +62,6 @@ export default function Category({ value, onClickCategory }) {
   const onClickSelect = () => {
     setIsDropDown(!isDropDown);
   };
-
-  const navigate = useNavigate();
 
   return (
     <Component>
@@ -112,11 +103,7 @@ export default function Category({ value, onClickCategory }) {
               value={category.name}
               key={category.id}
               onClick={() => {
-                if (category.name === '직접 입력하기') {
-                  navigate('/newcate');
-                } else {
-                  onClickOption(category.name);
-                }
+                onClickOption(category.name);
               }}
               isSelected={category.name === selectedCategory}
             >

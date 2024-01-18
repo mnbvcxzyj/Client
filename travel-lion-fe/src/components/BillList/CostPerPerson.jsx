@@ -1,12 +1,50 @@
-import { React, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import walletImg from '../../images/BillList/wImg.png';
+import { UserContext } from '../../contexts/UserContext';
 import { GroupContext } from '../../contexts/GroupContext';
 import { PlanContext } from '../../contexts/PlanContext';
+import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { createAxiosInstance } from '../../api/auth/Axios';
 
-const CostPerPerson = () => {
+const CostPerPerson = ({ groupId, planId }) => {
+  const [travelDatas, setTravelDatas] = useState([]);
+
+  const { refreshAccessToken } = useAuth();
+
+  const { user } = useContext(UserContext);
   const { group } = useContext(GroupContext);
-  const { plan } = useContext(PlanContext);
+  const { plan, handleChangePlan } = useContext(PlanContext);
+
+  const selectedPlan = plan.find(
+    (item) => item.planId === parseInt(planId, 10),
+  );
+
+  const axiosInstance = useMemo(
+    () => createAxiosInstance(refreshAccessToken),
+    [refreshAccessToken],
+  );
+
+  useEffect(() => {
+    const getCotegory = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/${user.userId}/grouplist/${groupId}/plan`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+            },
+          },
+        );
+        setTravelDatas(response.data);
+        console.log(response.data);
+        handleChangePlan(response.data);
+      } catch (error) {
+        console.error('수정하려는 Category 데이터 요청 중 오류 발생:', error);
+      }
+    };
+    getCotegory();
+  }, [axiosInstance, user, groupId]);
 
   const memCnt = group.member.length;
   console.log('사람수', memCnt);
@@ -17,7 +55,7 @@ const CostPerPerson = () => {
         <ImgStyle>
           <WalletImg src={walletImg} alt="지갑이미지"></WalletImg>
         </ImgStyle>
-        <PersomCost>{plan[0].totalCost / memCnt}원</PersomCost> /&nbsp;
+        <PersomCost>{selectedPlan.individualCost}원</PersomCost> /&nbsp;
         <TotalCost>{group.budget}원</TotalCost>
       </BackgroundDiv>
     </>

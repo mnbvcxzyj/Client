@@ -14,35 +14,22 @@ import { PlanContext } from '../../contexts/PlanContext';
 import { CategoryContext } from '../../contexts/CategoryContext';
 
 export default function BillListBlock({ groupId, planId }) {
-  const categoryImages = {
-    식비: CategoryImgFood,
-    숙소: CategoryImgHotel,
-    교통비: CategoryImgTransportation,
-    기타: CategoryImgEtc,
-    직접입력하기: CategoryImgSelf,
-  };
-
-  //const savedData = JSON.parse(sessionStorage.getItem('billList')) || [];
+  const [travelDatas, setTravelDatas] = useState([]);
 
   const { refreshAccessToken } = useAuth();
 
   const { user } = useContext(UserContext);
   const { group } = useContext(GroupContext);
   const { plan } = useContext(PlanContext);
-  const { category } = useContext(CategoryContext);
 
   const selectedPlan = plan.find(
     (item) => item.planId === parseInt(planId, 10),
   );
 
-  const selectedCategories = selectedPlan ? category[selectedPlan.planId] : [];
-
   const axiosInstance = useMemo(
     () => createAxiosInstance(refreshAccessToken),
     [refreshAccessToken],
   );
-
-  const [travelDatas, setTravelDatas] = useState([]);
 
   useEffect(() => {
     const getCotegory = async () => {
@@ -61,7 +48,15 @@ export default function BillListBlock({ groupId, planId }) {
       }
     };
     getCotegory();
-  }, [axiosInstance, user, groupId, planId, travelDatas]);
+  }, [axiosInstance, user, groupId, planId]);
+
+  const categoryImages = {
+    식비: CategoryImgFood,
+    숙소: CategoryImgHotel,
+    교통비: CategoryImgTransportation,
+    기타: CategoryImgEtc,
+    직접입력하기: CategoryImgSelf,
+  };
 
   return (
     <div>
@@ -69,7 +64,7 @@ export default function BillListBlock({ groupId, planId }) {
         <Container>
           <DateInfo>
             <Day>
-              {selectedPlan.nday}일차
+              {selectedPlan.nDay}일차
               <Date>
                 {selectedPlan.date}({selectedPlan.dayOfWeek})
               </Date>
@@ -252,8 +247,6 @@ const CategoryImgStyle = styled.div`
 const BillImage = styled.img`
   width: 28px;
   margin-top: 8px;
-
-  margin: 0 auto;
 `;
 
 const BillInfo = styled.div``;

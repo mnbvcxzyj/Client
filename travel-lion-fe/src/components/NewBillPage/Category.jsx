@@ -4,83 +4,44 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-import CategoryImgSelf from '../../images/Newbill/plusImg.png';
+// import CategoryImgSelf from '../../images/Newbill/plusImg.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
 import { useNavigate } from 'react-router-dom';
-import { CategoryTitleContext } from '../../contexts/CategoryTitleContext';
-import { CategoryContext } from '../../contexts/CategoryContext';
 
-export default function Category({
-  onClickCategory,
-  showAlert,
-  setShowAlert,
-  groupId,
-  planId,
-}) {
+const categoryDataset = [
+  {
+    id: 1,
+    name: '식비',
+    img: CategoryImgFood,
+  },
+  {
+    id: 2,
+    name: '숙소',
+    img: CategoryImgHotel,
+  },
+  {
+    id: 3,
+    name: '교통비',
+    img: CategoryImgTransportation,
+  },
+  {
+    id: 4,
+    name: '기타',
+    img: CategoryImgEtc,
+  },
+];
+
+export default function Category({ onClickCategory, showAlert, setShowAlert }) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCategoryImg, setSelectedCategoryImg] = useState(null);
-  const navigate = useNavigate();
-
-  const { category, handleChangeCategory } = useContext(CategoryContext);
-  console.log(category);
-  const { categoryTitle, handleChangeCategoryTitle } =
-    useContext(CategoryTitleContext);
-  console.log(categoryTitle);
-
-  // 초기값이 비어있는 경우에만 초기값 설정
-  useEffect(() => {
-    if (categoryTitle.length === 0) {
-      const defaultCategories = [
-        {
-          id: 1,
-          name: '식비',
-          img: CategoryImgFood,
-        },
-        {
-          id: 2,
-          name: '숙소',
-          img: CategoryImgHotel,
-        },
-        {
-          id: 3,
-          name: '교통비',
-          img: CategoryImgTransportation,
-        },
-        {
-          id: 4,
-          name: '기타',
-          img: CategoryImgEtc,
-        },
-      ];
-      handleChangeCategoryTitle(defaultCategories);
-    }
-  }, [categoryTitle, handleChangeCategoryTitle]);
-
-  //초기 카테고리 설정 (카테고리가 비어있지 않은 경우)
-  useEffect(() => {
-    const newCategoryTitles = Object.values(category).flatMap((arr) => {
-      return arr
-        .filter(
-          (item) => !categoryTitle.some((ct) => ct.name === item.categoryTitle),
-        )
-        .map((item) => ({ name: item.categoryTitle }));
-    });
-
-    if (newCategoryTitles.length > 0) {
-      handleChangeCategoryTitle((prev) => [...prev, ...newCategoryTitles]);
-    }
-  }, [category, categoryTitle, handleChangeCategoryTitle]);
-
-  useEffect(() => {
-    handleChangeCategoryTitle(categoryTitle);
-  }, [categoryTitle]);
 
   const onClickOption = (name) => {
     const selectedCategoryName = name;
-    const selectedCategoryInfo = categoryTitle.find(
+
+    const selectedCategoryInfo = categoryDataset.find(
       (category) => category.name === selectedCategoryName,
     );
 
@@ -97,7 +58,8 @@ export default function Category({
     setIsDropDown(!isDropDown);
   };
 
-  console.log('여기서도 카테고리 배열 불러온거 출력해', categoryTitle);
+  const navigate = useNavigate();
+
   return (
     <Component>
       <Demand>
@@ -134,12 +96,16 @@ export default function Category({
       </SelectButton>
       {isDropDown && (
         <DropDown>
-          {categoryTitle.map((category) => (
+          {categoryDataset.map((category) => (
             <Option
               value={category.name}
               key={category.id}
               onClick={() => {
-                onClickOption(category.name);
+                if (category.name === '직접 입력하기') {
+                  navigate('/newcate');
+                } else {
+                  onClickOption(category.name);
+                }
               }}
               isSelected={category.name === selectedCategory}
             >
@@ -160,27 +126,6 @@ export default function Category({
               )}
             </Option>
           ))}
-          <Option
-            value="직접 입력하기"
-            onClick={() => navigate(`/newcate/${groupId}/${planId}`)}
-            isSelected={selectedCategory === '직접 입력하기'}
-          >
-            <tr>
-              <td>
-                <CategoryImgStyle src={CategoryImgSelf} alt="직접 입력하기" />
-              </td>
-              <td
-                style={{
-                  verticalAlign: 'middle',
-                }}
-              >
-                <CategoryNameStyle>직접 입력하기</CategoryNameStyle>
-              </td>
-            </tr>
-            {selectedCategory === '직접 입력하기' && (
-              <CategoryCheaked src={ImgV} />
-            )}
-          </Option>
         </DropDown>
       )}
     </Component>

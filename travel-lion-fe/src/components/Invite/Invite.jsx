@@ -31,24 +31,8 @@ function Invite() {
   const goToTravellist = () => {
     navigate('/mypage/travellist');
   };
-
-  // useEffect(() => {
-  //   if (newLeaderId) {
-  //     const selectedLeader = nicknames.find(
-  //       (member) => member.id === newLeaderId,
-  //     );
-  //     setLeaderName(
-  //       selectedLeader ? selectedLeader.nickname : '리더를 선택해주세요',
-  //     );
-  //   } else {
-  //     // newLeaderId가 없으면 현재 리더의 닉네임을 사용합니다.
-  //     // 현재 리더의 정보를 가져오는 로직을 추가해야 할 수도 있습니다
-  //     setLeaderName('ssndfj');
-  //   }
-  // }, [newLeaderId, nicknames]);
-
+  
   //그룹 불러오기
-  //
   useEffect(() => {
     const fetchGroupInfo = async () => {
       try {
@@ -76,10 +60,6 @@ function Invite() {
             setLeaderName(response.data.leader); // 리더의 닉네임
           }
         }
-
-        // if (response.data.leader) {
-        //   setLeaderName(response.data.leader); // 리더의 닉네임
-        // }
       } catch (error) {
         console.error('Error fetching group info:', error);
       }
@@ -89,8 +69,7 @@ function Invite() {
   }, [groupId, user?.accessToken]);
 
   const handleLeaderChange = (event) => {
-    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감 UUID 들어가야 함
-    console.log('새로운 리더의 뭐?: ', newLeaderId);
+    setNewLeaderId(event.target.value); 
   };
 
   const changeLeader = async () => {

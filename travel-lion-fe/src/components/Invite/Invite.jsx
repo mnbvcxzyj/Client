@@ -20,8 +20,10 @@ import {
 //총무 수정
 function Invite() {
   const { user } = useAuth();
-  const [nicknames, setNicknames] = useState([]);
-  const [newLeaderId, setNewLeaderId] = useState('');
+  const [nicknames, setNicknames] = useState([]); //그룹원의 닉네임
+  const [newLeaderId, setNewLeaderId] = useState(''); //새로운 리더의 UUID
+  const [leaderName, setLeaderName] = useState(''); //리더의 닉네임
+  const [newLeaderName, setNewLeaderName] = useState(''); //새로운 리더의 닉네임
   const location = useLocation();
   const { groupId } = location.state;
   const navigate = useNavigate();
@@ -30,8 +32,23 @@ function Invite() {
     navigate('/mypage/travellist');
   };
 
+  // useEffect(() => {
+  //   if (newLeaderId) {
+  //     const selectedLeader = nicknames.find(
+  //       (member) => member.id === newLeaderId,
+  //     );
+  //     setLeaderName(
+  //       selectedLeader ? selectedLeader.nickname : '리더를 선택해주세요',
+  //     );
+  //   } else {
+  //     // newLeaderId가 없으면 현재 리더의 닉네임을 사용합니다.
+  //     // 현재 리더의 정보를 가져오는 로직을 추가해야 할 수도 있습니다
+  //     setLeaderName('ssndfj');
+  //   }
+  // }, [newLeaderId, nicknames]);
+
   //그룹 불러오기
-  //userId추가하고 다시 해보기
+  //
   useEffect(() => {
     const fetchGroupInfo = async () => {
       try {
@@ -44,13 +61,25 @@ function Invite() {
           },
         );
         if (response.data && response.data.member) {
-          setNicknames(
-            response.data.member.map((member) => ({
-              id: member.userId,
-              nickname: member.nickname,
-            })),
+          const members = response.data.member.map((member) => ({
+            id: member.userId, // UUID
+            nickname: member.nickname, // 닉네임
+          }));
+          setNicknames(members);
+
+          // 멤버 배열을 순회하면서 리더의 UUID 찾기
+          const leaderMember = members.find(
+            (member) => member.nickname === response.data.leader,
           );
+          if (leaderMember) {
+            setNewLeaderId(leaderMember.id); // 리더의 UUID
+            setLeaderName(response.data.leader); // 리더의 닉네임
+          }
         }
+
+        // if (response.data.leader) {
+        //   setLeaderName(response.data.leader); // 리더의 닉네임
+        // }
       } catch (error) {
         console.error('Error fetching group info:', error);
       }
@@ -60,7 +89,8 @@ function Invite() {
   }, [groupId, user?.accessToken]);
 
   const handleLeaderChange = (event) => {
-    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감
+    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감 UUID 들어가야 함
+    console.log('새로운 리더의 뭐?: ', newLeaderId);
   };
 
   const changeLeader = async () => {
@@ -78,9 +108,9 @@ function Invite() {
       );
 
       // 응답 처리
-      console.log('리더 변경 성공: ', response.data);
       // 필요한 경우 상태 업데이트
-      // 예시: setLeaderNickname(response.data.leader);
+      setLeaderName(response.data.leader);
+      console.log('변경된 리더: ', response.data.leader);
       alert('리더가 성공적으로 변경되었습니다.');
     } catch (error) {
       console.error('리더 변경 중 오류 발생: ', error);
@@ -117,7 +147,7 @@ function Invite() {
 
       <Text2>총무 변경</Text2>
       <DropdownContainer>
-        <select value={newLeaderId} onChange={handleLeaderChange}>
+        <select value={newLeaderId || leaderName} onChange={handleLeaderChange}>
           {nicknames.map((member, index) => (
             <option key={index} value={member.id}>
               {member.nickname}

@@ -31,7 +31,7 @@ function Invite() {
   const goToTravellist = () => {
     navigate('/mypage/travellist');
   };
-  
+
   //그룹 불러오기
   useEffect(() => {
     const fetchGroupInfo = async () => {

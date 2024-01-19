@@ -42,7 +42,7 @@ const InviteCodeInput = () => {
         },
       );
       setIsValid(true);
-      navigate('/');
+      navigate('/main');
     } catch (error) {
       if (error.response) {
         setMessage('등록되지 않은 코드입니다.');

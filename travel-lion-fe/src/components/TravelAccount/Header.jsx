@@ -48,7 +48,7 @@ export default function Header({ groupId }) {
   return (
     <>
       <HeaderContainer>
-        <NavLeft to="/">
+        <NavLeft to="/main">
           <GoBackImg src={goBack} />
         </NavLeft>
         <TravelInfoDiv>

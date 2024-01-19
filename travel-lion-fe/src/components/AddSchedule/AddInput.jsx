@@ -79,10 +79,10 @@ const AddInput = () => {
     try {
       const response = await axiosInstance.post('/group', formData, {
         headers: {
-          Authorization: `Bearer ${user.accessToken}`, // 사용자의 액세스 토큰 포함
+          Authorization: `Bearer ${user.accessToken}`,
         },
       });
-      console.log(response.data);
+
       const groupId = response.data.groupId;
       navigate(`/travelaccountbook/${groupId}`);
     } catch (error) {
@@ -209,7 +209,7 @@ const AddInput = () => {
           />
         </F.InputWrapper>
       </F.Wrapper>
-      <F.AddButton to="/" onClick={handleSubmit}>
+      <F.AddButton to="/main" onClick={handleSubmit}>
         확인
       </F.AddButton>
     </F.Container>

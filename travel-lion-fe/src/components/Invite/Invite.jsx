@@ -69,8 +69,7 @@ function Invite() {
   }, [groupId, user?.accessToken]);
 
   const handleLeaderChange = (event) => {
-    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감 UUID 들어가야 함
-    console.log('새로운 리더의 뭐?: ', newLeaderId);
+    setNewLeaderId(event.target.value); 
   };
 
   const changeLeader = async () => {

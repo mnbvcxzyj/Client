@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import Emoji from '../NewBillPage/Emoji';
-// import Who from './Who';
 import Who from '../NewBillPage/Who';
 import Category from './Category';
 import Bill from './bill';
 import Memo from './Memo';
 import { styled } from 'styled-components';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import { UserContext } from '../../contexts/UserContext';
-import axios from 'axios';
 
 export default function BillUpdateBtn({ groupId, planId, categoryId }) {
   const navigate = useNavigate();
@@ -23,7 +21,6 @@ export default function BillUpdateBtn({ groupId, planId, categoryId }) {
 
   const [categoryData, setCategoryData] = useState({});
 
-  const index = '';
   const handleBillValueChange = (value) => {
     setBillValue(value);
   };
@@ -123,7 +120,13 @@ export default function BillUpdateBtn({ groupId, planId, categoryId }) {
         <Who value={categoryData.writer} onClickWho={setWhoValue} />
         <Category value={selectedCategory} onClickCategory={onClickCategory} />
         <Bill
-          value={categoryData.cost}
+          value={
+            (categoryData.cost &&
+              categoryData.cost.toString().slice(0, -3) +
+                ',' +
+                categoryData.cost.toString().slice(-3)) ||
+            ''
+          }
           setValue={handleBillValueChange}
           showAlert={showBillAlert}
           setShowAlert={setShowBillAlert}

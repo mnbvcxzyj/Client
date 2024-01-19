@@ -5,10 +5,9 @@ import Category from './Category';
 import Bill from './Bill';
 import Memo from './Memo';
 import { styled } from 'styled-components';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
-import axios from 'axios';
 
 export default function NewBillBtn({ groupId, planId }) {
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ export default function NewBillBtn({ groupId, planId }) {
   };
 
   const { user } = useContext(AuthContext);
-  const [travelDatas, setTravelDatas] = useState([]);
   const { refreshAccessToken } = useAuth();
 
   const axiosInstance = useMemo(
@@ -47,8 +45,6 @@ export default function NewBillBtn({ groupId, planId }) {
     setShowCategoryAlert(false);
     setShowBillAlert(false);
 
-    //const storedList = JSON.parse(sessionStorage.getItem('billList')) || [];
-
     const newItem = {
       group: groupId,
       plan: planId,
@@ -57,9 +53,6 @@ export default function NewBillBtn({ groupId, planId }) {
       emoji: selectedEmoji,
       cost: billValue,
     };
-
-    //storedList.push(newItem);
-    //sessionStorage.setItem('billList', JSON.stringify(storedList));
 
     try {
       const response = await axiosInstance.post(
@@ -107,15 +100,6 @@ const Content = styled.section`
   margin: 0 auto;
   padding: 0 20px;
   margin-bottom: 32px;
-`;
-
-const NavList = styled(NavLink)`
-  //배치
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
-
-  cursor: pointer;
 `;
 
 const NewBtn = styled.button`

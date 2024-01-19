@@ -4,7 +4,6 @@ import CategoryImgFood from '../../images/Newbill/food.png';
 import CategoryImgHotel from '../../images/Newbill/hotel.png';
 import CategoryImgTransportation from '../../images/Newbill/car.png';
 import CategoryImgEtc from '../../images/Newbill/etc.png';
-// import CategoryImgSelf from '../../images/Newbill/plusImg.png';
 import ImgV from '../../images/Newbill/v.png';
 import Triangle from '../../images/Newbill/triangle.png';
 import Alert from '../../images/Newbill/alert.png';
@@ -204,7 +203,7 @@ const DropDown = styled.div`
   width: 87%;
   position: absolute; */
   position: absolute;
-  top: 396px;
+  top: 418px;
 
   background-color: #ffffff;
   border-radius: 5px;

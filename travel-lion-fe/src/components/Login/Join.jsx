@@ -30,20 +30,12 @@ function Join() {
     }
   };
 
-  const REST_API_KEY = 'e759fdee9be98fb5ddf70600b0b21aa0';
-  const REDIRECT_URI = 'http://13.125.174.198/kakao/callback/';
-  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  const loginHandler = () => {
-    window.location.href = link;
-  };
-
   return (
     <div>
       <Box onClick={handleJoinClick}>
         <Text>회원가입</Text>
       </Box>
-      <Box onClick={loginHandler}>
+      <Box>
         <Image src={`/images/kakao.png`} alt="Kakao"></Image>
         <Text>카카오톡으로 시작</Text>
       </Box>

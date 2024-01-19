@@ -83,18 +83,13 @@ function NormalJoin() {
       // 이미 추가된 상태라면 카운트 다운만 업데이트
       if (!isBoxAlreadyAdded) {
         setBoxes([...boxes, renderBox()]);
-        // setCountdown(300);
-        // setIsCounting(true);
         console.log('전송하는 이메일: ', email);
         sendVerificationEmail(email);
       } else {
-        // setCountdown(300);
-        // setIsCounting(true);
       }
     }
   }, [email, isEmail, boxes]);
 
-  //ols3040015@gmail.com
   const sendVerificationEmail = async (email) => {
     const axiosInstance = createAxiosInstance(refreshAccessToken);
 

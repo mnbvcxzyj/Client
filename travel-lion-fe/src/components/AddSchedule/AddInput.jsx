@@ -82,7 +82,7 @@ const AddInput = () => {
           Authorization: `Bearer ${user.accessToken}`,
         },
       });
-      console.log(response.data);
+
       const groupId = response.data.groupId;
       navigate(`/travelaccountbook/${groupId}`);
     } catch (error) {

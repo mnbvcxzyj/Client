@@ -14,7 +14,7 @@ const TravelList = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const goToInvite = (userId, groupId) => {
-    navigate('/mypage/travellist/invite/${groupId}', {
+    navigate(`/mypage/travellist/invite/${groupId}`, {
       state: { userId, groupId },
     });
   };

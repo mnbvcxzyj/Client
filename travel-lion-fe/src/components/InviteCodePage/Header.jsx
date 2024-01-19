@@ -6,7 +6,7 @@ import arrow from '../../images/TravelAccount/backarrow.svg';
 const Header = () => {
   return (
     <>
-      <BackDiv to="/">
+      <BackDiv to="/main">
         <img src={arrow} alt="<" />
       </BackDiv>
     </>

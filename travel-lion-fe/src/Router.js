@@ -48,12 +48,12 @@ export default function Router() {
                   <BrowserRouter>
                     <Routes>
                       {/* 메인페이지 */}
-                      {/* <Route
+                      <Route
                         path="/"
                         element={<Navigate to="/login" replace />}
-                      /> */}
+                      />
 
-                      <Route path="/" element={<MainPage />} />
+                      <Route path="/main" element={<MainPage />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/join" element={<Join />} />
                       <Route path="/join/normal" element={<NormalJoin />} />
@@ -144,10 +144,7 @@ export default function Router() {
                         element={<NoAccount />}
                       />
                       <Route path="/selectunit" element={<ModalExtend />} />
-                      <Route
-                        path="/addSchedule"
-                        element={<AddSchedulePage />}
-                      />
+
                       <Route path="/currencymodal" element={<BottomModal />} />
                       <Route
                         path="/mypage/travellist"

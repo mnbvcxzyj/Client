@@ -48,7 +48,7 @@ function Login() {
         handleChangeUser(response.data); //컨텍스트에 로그인정보 저장
         console.log('저장된 userId: ' + uuid);
         console.log('로그인 성공!');
-        navigate('/');
+        navigate('/main');
       }
     } catch (error) {
       console.error('로그인 실패:', error);

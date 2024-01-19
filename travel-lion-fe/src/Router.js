@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import MyPage from './pages/MyPage';
 import NewBillPage from './pages/NewBillPage';
@@ -48,6 +48,11 @@ export default function Router() {
                   <BrowserRouter>
                     <Routes>
                       {/* 메인페이지 */}
+                      {/* <Route
+                        path="/"
+                        element={<Navigate to="/login" replace />}
+                      /> */}
+
                       <Route path="/" element={<MainPage />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/join" element={<Join />} />

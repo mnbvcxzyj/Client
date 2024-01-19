@@ -109,57 +109,35 @@ const AccountManage = () => {
     }
   };
 
-  // const handleProfileImageSubmit = async () => {
-  //   const formData = new FormData();
-  //   formData.append('file', profileImage);
-  //   const userId = localStorage.getItem('userId');
-
-  //   try {
-  //     const response = await axios.patch(
-  //       `http://13.125.174.198/profile/${userId}/`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //           Authorization: `Bearer ${user?.accessToken}`,
-  //         },
-  //       },
-  //       console.log(formData),
-  //     );
-
-  //     for (let [key, value] of formData.entries()) {
-  //       console.log('키, 값', key, value);
-  //     }
-
-  //     if (response.status === 200) {
-  //       console.log('프로필 이미지가 업데이트되었습니다:', response.data);
-
-  //       setUserInfo((prevUserInfo) => ({
-  //         ...prevUserInfo,
-  //         profile: response.data.newProfileImageUrl,
-  //       }));
-
-  //       // 프로필 이미지 상태도 업데이트
-  //       setPreviewImage(response.data.newProfileImageUrl);
-  //     }
-  //   } catch (error) {
-  //     console.error('프로필 이미지 업데이트 중 오류가 발생했습니다:', error);
-  //   }
-  // };
-
   const handleProfileImageSubmit = async () => {
-    const formData = new FormData();
-    formData.append('file', profileImage);
+    if (!profileImage) {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
+
+    if (!profileImage.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드할 수 있습니다.');
+      return;
+    }
+
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+    if (profileImage.size > maxFileSize) {
+      alert('파일 크기가 너무 큽니다. 5MB 이하의 파일을 업로드해주세요.');
+      return;
+    }
+
+    const formData = new FormData(); //객체 생성
+    formData.append('file', profileImage); //키,값 쌍 추가
     const userId = localStorage.getItem('userId');
 
     for (let [key, value] of formData.entries()) {
-      console.log('키, 값', key, value); // formData 내용 확인
+      console.log('키, 값', key, value); // formData 내용 확인 ok
     }
 
     try {
       const response = await axios.patch(
         `http://13.125.174.198/profile/${userId}/`,
-        formData,
+        formData, // 직접 formData 객체를 전달
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -168,13 +146,39 @@ const AccountManage = () => {
         },
       );
 
+      console.log('서버 응답:', response.data); // 서버 응답 구조 확인
+
       if (response.status === 200) {
-        console.log('프로필 이미지가 업데이트되었습니다:', response.data);
-        setUserInfo((prevUserInfo) => ({
-          ...prevUserInfo,
-          profile: response.data.newProfileImageUrl,
-        }));
-        setPreviewImage(response.data.newProfileImageUrl); // 프로필 이미지 상태도 업데이트
+        // console.log('프로필 이미지가 업데이트되었습니다:', response.data);
+        // const updatedImageUrl = `${
+        //   response.data.newProfileImageUrl
+        // }?${new Date().getTime()}`;
+        // setUserInfo((prevUserInfo) => ({
+        //   ...prevUserInfo,
+        //   profile: updatedImageUrl,
+        // }));
+        // setPreviewImage(updatedImageUrl);
+
+        // setUserInfo((prevUserInfo) => ({
+        //   ...prevUserInfo,
+        //   profile: response.data.newProfileImageUrl,
+        // }));
+        // setPreviewImage(response.data.newProfileImageUrl);
+
+        const updatedImageUrl = `${
+          response.data.profile
+        }?${new Date().getTime()}`;
+
+        setUserInfo((prevUserInfo) => {
+          const updatedUserInfo = { ...prevUserInfo, profile: updatedImageUrl };
+          console.log('Updated User Info:', updatedUserInfo); // 새로운 상태 확인
+          return updatedUserInfo;
+        });
+
+        setPreviewImage(updatedImageUrl);
+        console.log('Updated Preview Image:', updatedImageUrl); // 미리보기 이미지 URL 확인
+
+        alert('프로필 이미지가 업데이트 되었습니다.');
       }
     } catch (error) {
       console.error('프로필 이미지 업데이트 중 오류가 발생했습니다:', error);

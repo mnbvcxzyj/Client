@@ -116,6 +116,23 @@ export const DropdownContainer = styled.div`
     top: 50%;
     transform: translateY(-50%);
   }
+
+  &:focus {
+    outline: none; // 포커스 시 테두리 제거
+    box-shadow: none; // 박스 그림자 제거 (선택적)
+  }
+
+  select {
+    background-color: #f3f3f3;
+    color: #333;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    -webkit-appearance: none; // 기본 디자인 제거 (iOS)
+    -moz-appearance: none; // 기본 디자인 제거 (Firefox)
+    appearance: none; // 기본 디자인 제거
+  }
 `;
 
 export const Dropdown = styled.select`

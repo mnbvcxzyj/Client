@@ -31,7 +31,7 @@ function Join() {
   };
 
   const REST_API_KEY = 'e759fdee9be98fb5ddf70600b0b21aa0';
-  const REDIRECT_URI = 'http://localhost:3000/';
+  const REDIRECT_URI = 'http://13.125.174.198/kakao/callback/';
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {

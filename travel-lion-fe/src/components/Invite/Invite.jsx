@@ -20,8 +20,7 @@ import {
 //총무 수정
 function Invite() {
   const { user } = useAuth();
-  const [nicknames, setNicknames] = useState([]); //닉네임 배열
-  // const [leaderNickname, setLeaderNickname] = useState(''); // 리더 닉네임 상태 변수 추가
+  const [nicknames, setNicknames] = useState([]);
   const [newLeaderId, setNewLeaderId] = useState('');
   const location = useLocation();
   const { groupId } = location.state;
@@ -61,7 +60,7 @@ function Invite() {
   }, [groupId, user?.accessToken]);
 
   const handleLeaderChange = (event) => {
-    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감.. 바보
+    setNewLeaderId(event.target.value); //일케 하면 닉네임 들어감
   };
 
   const changeLeader = async () => {

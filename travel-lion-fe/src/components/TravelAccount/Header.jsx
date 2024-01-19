@@ -1,7 +1,7 @@
 import goBack from '../../images/goBack.png';
 import share from '../../images/share.png';
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AuthContext, useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
@@ -11,6 +11,15 @@ export default function Header({ groupId }) {
   const { user } = useContext(AuthContext);
   const [travelDatas, setTravelDatas] = useState([]);
   const { refreshAccessToken } = useAuth();
+
+  const navigate = useNavigate();
+
+  const goToShare = (event) => {
+    event.stopPropagation();
+    navigate('/mypage/travellist/invite/${groupId}', {
+      state: { groupId: groupId },
+    });
+  };
 
   const axiosInstance = useMemo(
     () => createAxiosInstance(refreshAccessToken),
@@ -66,8 +75,8 @@ export default function Header({ groupId }) {
             </TravelDate>
           </Wrapper2>
         </TravelInfoDiv>
-        <Share to="">
-          <ShareImg src={share} />
+        <Share onClick={goToShare}>
+          <ShareImg src={share} onClick={goToShare} />
         </Share>
       </HeaderContainer>
     </>
@@ -95,7 +104,7 @@ const GoBackImg = styled.img`
   width: 22px;
 `;
 
-const Share = styled(NavLink)`
+const Share = styled.div`
   float: right;
   margin: 20px;
 `;

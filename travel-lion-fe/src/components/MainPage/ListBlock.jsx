@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import shareLogoWhite from '../../images/MainPage/share_white.svg';
 import shareLogoGreen from '../../images/MainPage/share_green.svg';
 import * as M from './MainPageStyle';
@@ -9,6 +10,17 @@ import { getFlagEmoji } from '../../utils/flagEmoji';
 import Loading from '../../pages/Loading';
 
 const TravelItem = ({ travelData, isMinRemainingTime }) => {
+  const navigate = useNavigate();
+
+  const goToShare = (event) => {
+    //이벤트 버블링 조절
+    event.preventDefault();
+    event.stopPropagation();
+    navigate('/mypage/travellist/invite/${groupId}', {
+      state: { groupId: travelData.groupId },
+    });
+  };
+
   return (
     <Link to={`/travelaccountbook/${travelData.groupId}`}>
       <M.TravelItem
@@ -18,7 +30,7 @@ const TravelItem = ({ travelData, isMinRemainingTime }) => {
       >
         <M.TopDiv>
           <M.DdayText>{travelData.dday.replace('일', '')}</M.DdayText>
-          <M.ShareLogo>
+          <M.ShareLogo onClick={goToShare}>
             <img
               src={isMinRemainingTime ? shareLogoWhite : shareLogoGreen}
               alt="sharelogo"

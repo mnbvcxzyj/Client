@@ -13,7 +13,6 @@ function OldPasswd() {
 
   const handleOldPasswordChange = (e) => {
     setOldPassword(e.target.value);
-    // console.log(oldPassword);
   };
 
   const goToAccountInfo = () => {

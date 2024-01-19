@@ -149,22 +149,6 @@ const AccountManage = () => {
       console.log('서버 응답:', response.data); // 서버 응답 구조 확인
 
       if (response.status === 200) {
-        // console.log('프로필 이미지가 업데이트되었습니다:', response.data);
-        // const updatedImageUrl = `${
-        //   response.data.newProfileImageUrl
-        // }?${new Date().getTime()}`;
-        // setUserInfo((prevUserInfo) => ({
-        //   ...prevUserInfo,
-        //   profile: updatedImageUrl,
-        // }));
-        // setPreviewImage(updatedImageUrl);
-
-        // setUserInfo((prevUserInfo) => ({
-        //   ...prevUserInfo,
-        //   profile: response.data.newProfileImageUrl,
-        // }));
-        // setPreviewImage(response.data.newProfileImageUrl);
-
         const updatedImageUrl = `${
           response.data.profile
         }?${new Date().getTime()}`;
@@ -190,7 +174,6 @@ const AccountManage = () => {
       <MyPageHeader />
       <Container>
         <ProfileImg
-          //원래 src={profileImage}
           src={
             profileImage
               ? URL.createObjectURL(profileImage)

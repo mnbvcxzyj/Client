@@ -11,7 +11,6 @@ import { createAxiosInstance } from '../../api/auth/Axios';
 import { UserContext } from '../../contexts/UserContext';
 import { GroupContext } from '../../contexts/GroupContext';
 import { PlanContext } from '../../contexts/PlanContext';
-import { CategoryContext } from '../../contexts/CategoryContext';
 
 export default function BillListBlock({ groupId, planId }) {
   const [travelDatas, setTravelDatas] = useState([]);

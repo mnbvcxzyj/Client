@@ -42,11 +42,11 @@ function Login() {
 
       if (response.data) {
         login(response.data);
-        console.log(response.data);
+        // console.log(response.data);
         const uuid = response.data.userId; // UUID 추출
         localStorage.setItem('userId', uuid); // 로컬 저장소에 저장
         handleChangeUser(response.data); //컨텍스트에 로그인정보 저장
-        console.log('저장된 userId: ' + uuid);
+        // console.log('저장된 userId: ' + uuid);
         console.log('로그인 성공!');
         navigate('/main');
       }

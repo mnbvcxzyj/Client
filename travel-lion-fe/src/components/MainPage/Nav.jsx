@@ -7,13 +7,13 @@ import MypageGreen from '../../images/MainPage/MypageGreen.svg';
 import MypageGray from '../../images/MainPage/MypageGray.svg';
 
 export default function Nav() {
-  const homeMatch = useMatch('/');
+  const homeMatch = useMatch('/main');
   const mypageMatch = useLocation().pathname.startsWith('/mypage');
 
   return (
     <NavContainer>
       <NavBtn>
-        <NavStyle to="/" isActive={homeMatch}>
+        <NavStyle to="/main" isActive={homeMatch}>
           <img src={homeMatch ? HomeGreen : HomeGray} alt="home" />
         </NavStyle>
 

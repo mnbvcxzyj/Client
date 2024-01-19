@@ -22,14 +22,10 @@ const MyPageMain = () => {
     profile: '',
   });
 
-  //백엔드에서 사용자 정보를 가져오는 함수
-  //기본 이미지 필요 함 -> basicProfile.jpg
-  //로그인 할때 UUID 가져와야 함 -> Login.jsx
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const userId = localStorage.getItem('userId');
-        // console.log('내가 불러 온 userId: ' + userId); //ok
 
         if (!userId) {
           console.error('No userId found');

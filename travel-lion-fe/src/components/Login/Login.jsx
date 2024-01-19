@@ -51,6 +51,7 @@ function Login() {
         navigate('/main');
       }
     } catch (error) {
+      alert('이메일이나 비밀번호가 올바르지 않습니다.');
       console.error('로그인 실패:', error);
     }
   };

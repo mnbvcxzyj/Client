@@ -33,6 +33,7 @@ function InviteAuthority({ groupId, userAccessToken }) {
     fetchEditPermission();
   }, [groupId, userAccessToken]);
 
+  //버튼 클릭
   const handleButtonClick = async (permission) => {
     // 현재 상태와 같은 버튼이 눌렸다면 아무것도 하지 않음
     if (permission === editPermission) return;
@@ -56,22 +57,28 @@ function InviteAuthority({ groupId, userAccessToken }) {
         '공유 범위:',
         editPermission ? '총무만 수정 가능' : '모두 수정 가능',
       );
+      if (editPermission == true) {
+        alert('공유 범위: 총무만 수정 가능');
+      }
+      if (editPermission == false) {
+        alert('공유 범위: 모두 수정 가능');
+      }
     } catch (error) {
-      // if (error.response && error.response.status === 403) {
-      //   // 토큰 만료 오류 처리
-      //   try {
-      //     const newTokens = await refreshAccessToken();
-      //     if (newTokens && newTokens.accessToken) {
-      //       setUser({ ...user, accessToken: newTokens.accessToken });
-      //       handleButtonClick(permission); // 갱신된 토큰으로 재시도
-      //     }
-      //   } catch (refreshError) {
-      //     console.error('세션 만료 또는 토큰 갱신 오류', refreshError);
-      //     // 추가적인 오류 처리 (예: 로그인 페이지로 리디렉션)
-      //   }
-      // } else {
-      //   console.error('편집 권한 변경 중 오류 발생: ', error);
-      // }
+      if (error.response && error.response.status === 401) {
+        // 토큰 만료 오류 처리
+        try {
+          const newTokens = await refreshAccessToken();
+          if (newTokens && newTokens.accessToken) {
+            setUser({ ...user, accessToken: newTokens.accessToken });
+            handleButtonClick(permission); // 갱신된 토큰으로 재시도
+          }
+        } catch (refreshError) {
+          console.error('세션 만료 또는 토큰 갱신 오류', refreshError);
+          // 추가적인 오류 처리 (예: 로그인 페이지로 리디렉션)
+        }
+      } else {
+        console.error('편집 권한 변경 중 오류 발생: ', error);
+      }
     }
   };
 

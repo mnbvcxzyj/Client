@@ -6,7 +6,7 @@ export default function NewBillBtn() {
   return (
     <>
       <NewBtn>
-        <NavList to={`/newbill/${travelDatas.groupId}/${plan.planId}`}>
+        <NavList to={`/newbill/${groupId}/${planId}`}>
           <Plus>+</Plus>
         </NavList>
       </NewBtn>

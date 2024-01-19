@@ -8,11 +8,23 @@ export default function Bill({ value, setValue, showAlert, setShowAlert }) {
   useEffect(() => {
     setInputBill(value);
   }, [value]);
+
   const handleBillChange = (e) => {
-    const value = e.target.value;
-    setInputBill(value);
-    setValue(value);
-    if (value !== '') setShowAlert(false);
+    const rawValue = e.target.value;
+
+    const numericValue = parseFloat(rawValue.replace(/[^0-9]/g, ''));
+
+    if (!isNaN(numericValue)) {
+      const formattedValue = numericValue.toLocaleString();
+
+      setInputBill(formattedValue);
+      setValue(numericValue);
+      setShowAlert(false);
+    } else {
+      setInputBill('');
+      setValue(null);
+      setShowAlert(true);
+    }
   };
 
   return (
@@ -23,7 +35,7 @@ export default function Bill({ value, setValue, showAlert, setShowAlert }) {
         </Demand>
         <InputBillWrapper>
           <InputBill
-            type="number"
+            type="text"
             value={inputBill}
             onChange={handleBillChange}
             $error={showAlert}
@@ -97,6 +109,7 @@ const InputBill = styled.input`
   line-height: 19px;
   letter-spacing: 0em;
   text-align: left;
+  padding: 17px;
 `;
 
 const Alertimg = styled.img`

@@ -4,7 +4,7 @@ import walletImg from '../../images/BillList/wImg.png';
 import { UserContext } from '../../contexts/UserContext';
 import { GroupContext } from '../../contexts/GroupContext';
 import { PlanContext } from '../../contexts/PlanContext';
-import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 
 const CostPerPerson = ({ groupId, planId }) => {
@@ -49,14 +49,17 @@ const CostPerPerson = ({ groupId, planId }) => {
   const memCnt = group.member.length;
   console.log('사람수', memCnt);
 
+  const formattedIndividualCost = selectedPlan.individualCost.toLocaleString();
+  const formattedTotalCost = group.budget.toLocaleString();
+
   return (
     <>
       <BackgroundDiv>
         <ImgStyle>
           <WalletImg src={walletImg} alt="지갑이미지"></WalletImg>
         </ImgStyle>
-        <PersomCost>{selectedPlan.individualCost}원</PersomCost> /&nbsp;
-        <TotalCost>{group.budget}원</TotalCost>
+        <PersomCost>{formattedIndividualCost}원</PersomCost> /&nbsp;
+        <TotalCost>{formattedTotalCost}원</TotalCost>
       </BackgroundDiv>
     </>
   );

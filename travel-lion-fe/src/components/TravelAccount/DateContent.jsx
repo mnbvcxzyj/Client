@@ -9,6 +9,7 @@ import { PlanContext } from '../../contexts/PlanContext';
 import { CategoryContext } from '../../contexts/CategoryContext';
 import { GroupContext } from '../../contexts/GroupContext';
 import Loading from '../../pages/Loading';
+
 const DateContent = ({ groupId }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('KRW');

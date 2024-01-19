@@ -6,7 +6,7 @@ import CategoryImgSelf from '../../images/Newbill/white.png';
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { AuthContext, useAuth } from '../../api/auth/AuthContext';
+import { useAuth } from '../../api/auth/AuthContext';
 import { createAxiosInstance } from '../../api/auth/Axios';
 import { UserContext } from '../../contexts/UserContext';
 import { GroupContext } from '../../contexts/GroupContext';
@@ -119,11 +119,13 @@ export default function BillListBlock({ groupId, planId }) {
                                 borderBottom: '0.4px solid #ADB6BD',
                               }}
                             >
-                              <BillAmount>{`${
-                                category.cost >= 10000000
-                                  ? '9999999+'
-                                  : category.cost + '원'
-                              }`}</BillAmount>
+                              <BillAmount
+                                value={
+                                  category.cost >= 10000000
+                                    ? '9999999+'
+                                    : category.cost + '원'
+                                }
+                              />
                             </td>
                           </tr>
                           <tr>
@@ -282,6 +284,10 @@ const BillAmount = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  &:after {
+    content: '${(props) => props.value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}';
+  }
 `;
 
 const BillMemo = styled.span`
